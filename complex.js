@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.0.0 01/06/2015
+ * @license Complex.js v1.1.0 22/06/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -76,9 +76,9 @@
                 case "string":
 
                     P['i'] = /* void */
-                    P['r'] = 0;
+                            P['r'] = 0;
 
-                    for (var reg = /[+-]?[\di]+/g, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
+                    for (var reg = /[+-]?[\di.]+/g, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
 
                         if (tmp[0].indexOf("i") !== -1) {
 
@@ -189,6 +189,10 @@
         b = P['i'];
 
         var t = a * a + b * b;
+
+        if (0 === t) {
+            throw "DIV/0";
+        }
 
         return new Complex(
                 (a * this['r'] + b * this['i']) / t,
@@ -371,11 +375,80 @@
     };
 
     /**
+     * Calculate the complex sinh
+     * 
+     * @returns {Complex}
+     */
+    Complex.prototype['sinh'] = function() {
+
+        var a = this['r'];
+        var b = this['i'];
+
+        return new Complex(
+                sinh(a) * Math.cos(b),
+                cosh(a) * Math.sin(b)
+                );
+    };
+
+    /**
+     * Calculate the complex cosh
+     * 
+     * @returns {Complex}
+     */
+    Complex.prototype['cosh'] = function() {
+
+        var a = this['r'];
+        var b = this['i'];
+
+        return new Complex(
+                cosh(a) * Math.cos(b),
+                sinh(a) * Math.sin(b)
+                );
+    };
+
+    /**
+     * Calculate the complex tanh
+     * 
+     * @returns {Complex}
+     */
+    Complex.prototype['tanh'] = function() {
+
+        var a = this['r'];
+        var b = this['i'];
+
+        var d = cosh(2 * a) + Math.cos(2 * b);
+
+        return new Complex(
+                sinh(2 * a) / d,
+                Math.sin(2 * b) / d
+                );
+    };
+
+    /**
+     * Calculate the complex inverse 1/z
+     * 
+     * @returns {Complex}
+     */
+    Complex.prototype['inverse'] = function() {
+
+        var a = this['r'];
+        var b = this['i'];
+
+        var t = a * a + b * b;
+
+        if (0 === t) {
+            throw "DIV/0";
+        }
+        return new Complex(a / t, -b / t);
+    };
+
+    /**
      * Returns the complex conjugate
      * 
      * @returns {Complex}
      */
     Complex.prototype['conjugate'] = function() {
+
         return new Complex(this['r'], -this['i']);
     };
 
@@ -395,7 +468,9 @@
      * @returns {boolean}
      */
     Complex.prototype['equals'] = function(a, b) {
+
         parse(a, b);
+
         return (P['r'] === this['r'] && P['i'] === this['i']);
     };
 
@@ -405,6 +480,7 @@
      * @returns {Complex}
      */
     Complex.prototype['clone'] = function() {
+
         return new Complex(this['r'], this['i']);
     };
 
@@ -444,6 +520,16 @@
             return "0";
 
         return ret;
+    };
+
+    /**
+     * Returns the actual number as a vector
+     * 
+     * @returns {Array}
+     */
+    Complex.prototype['toVector'] = function() {
+
+        return [this.r, this.i];
     };
 
     /**

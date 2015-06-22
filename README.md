@@ -100,6 +100,18 @@ Complex tan()
 ---
 Calculates the tangent of the complex number
 
+Complex sinh()
+---
+Calculates the hyperbolic sine of the complex number
+
+Complex cosh()
+---
+Calculates the hyperbolic cosine of the complex number
+
+Complex tanh()
+---
+Calculates the hyperbolic tangent of the complex number
+
 Complex asin()
 ---
 Calculates the arcus sine of the complex number
@@ -111,6 +123,10 @@ Calculates the arcus cosine of the complex number
 Complex atan()
 ---
 Calculates the arcus tangent of the complex number
+
+Complex inverse()
+---
+Calculates the complex inverse of the number (1 / z)
 
 Complex conjugate()
 ---
@@ -127,6 +143,10 @@ Checks if both numbers are exactly the same
 Complex clone()
 ---
 Returns a new Complex instance with the same real and imaginary properties
+
+Array toVector()
+---
+Returns a Vector of the actual complex number with two components
 
 String toString()
 ---

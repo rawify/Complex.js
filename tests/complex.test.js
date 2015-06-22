@@ -9,6 +9,9 @@ var tests = [{
         set: {},
         expect: "Invalid Param"
     }, {
+        set: "2.3",
+        expect: "2.3"
+    }, {
         set: Complex.I,
         fn: "mul",
         param: Complex(Math.PI).exp(),
@@ -252,6 +255,34 @@ var tests = [{
         set: {r: 1, i: 2},
         fn: "tan",
         expect: "0.0338128260798967+1.0147936161466335i"
+    }, {
+        set: {r: 1, i: 3},
+        fn: "sinh",
+        expect: "-1.1634403637032504+0.21775955162215221i"
+    }, {
+        set: {r: 1, i: 3},
+        fn: "cosh",
+        expect: "-1.5276382501165433+0.1658444019189788i"
+    }, {
+        set: {r: 1, i: 3},
+        fn: "tanh",
+        expect: "0.7680176472869112-0.05916853956605073i"
+    }, {
+        set: {r: 1, i: 3},
+        fn: "inverse",
+        expect: "0.1-0.3i"
+    }, {
+        set: {r: 0.5, i: -0.5},
+        fn: "inverse",
+        expect: "1+i"
+    }, {
+        set: "1+i",
+        fn: "inverse",
+        expect: "0.5-0.5i"
+    }, {
+        set: "0",
+        fn: "inverse",
+        expect: "DIV/0"
     }
 ];
 
@@ -318,9 +349,9 @@ describe("Complex Details", function() {
         assert.equal(one.div(2).toString(), "0.5+0.5i");
         assert.equal(one.div(one).toString(), "1");
         try {
-            assert.equal(one.div(0).toString(), "Invalid Param");
+            assert.equal(one.div(0).toString(), "DIV/0");
         } catch (e) {
-            assert.equal(e, "Invalid Param");
+            assert.equal(e, "DIV/0");
         }
         assert.equal(one.exp().toString(), "1.4686939399158851+2.2873552871788423i");
         assert.equal(one.log().toString(), "0.34657359027997264+0.7853981633974483i");
