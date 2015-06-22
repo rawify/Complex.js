@@ -1,0 +1,32 @@
+{
+    "name": "complex.js",
+    "homepage": "https://github.com/infusion/Complex.js",
+    "bugs": "https://github.com/infusion/Complex.js/issues",
+    "title": "complex.js",
+    "version": "1.0.0",
+    "description": "A complex number library",
+    "keywords": ["math", "complex", "number", "calculus"],
+    "author": "Robert Eisele <robert@xarg.org>",
+    "main": "complex",
+    "readmeFilename": "README.md",
+    "licenses": [{
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/MIT"
+        }, {
+            "type": "GPL",
+            "url": "http://www.opensource.org/licenses/GPL-2.0"
+        }],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/infusion/Complex.js.git"
+    },
+    "engines": {
+        "node": "*"
+    },
+    "scripts": {
+        "test": "mocha tests/*.js"
+    },
+    "devDependencies": {
+        "mocha": "*"
+    }
+}
