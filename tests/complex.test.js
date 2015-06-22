@@ -323,7 +323,7 @@ describe("Complex Details", function() {
             assert.equal(e, "Invalid Param");
         }
         assert.equal(one.exp().toString(), "1.4686939399158851+2.2873552871788423i");
-        assert.equal(one.log().toString(), "0.3465735902799727+0.7853981633974483i");
+        assert.equal(one.log().toString(), "0.34657359027997264+0.7853981633974483i");
         assert.equal(one.pow(one).toString(), "0.27395725383012104+0.5837007587586146i");
         assert.equal(one.pow(zero).toString(), "1");
         assert.equal(one.sqrt().toString(), "1.09868411346781+0.4550898605622274i");
@@ -332,7 +332,7 @@ describe("Complex Details", function() {
         assert.equal(one.tan().toString(), "0.2717525853195118+1.0839233273386948i");
         assert.equal(one.asin().toString(), "0.6662394324925153+1.0612750619050355i");
         assert.equal(one.acos().toString(), "0.9045568943023813-1.0612750619050357i");
-        assert.equal(one.atan().toString(), "1.0172219678978514+0.4023594781085251i");
+        assert.equal(one.atan().toString(), "1.0172219678978514+0.40235947810852507i");
     });
 
     it("should handle inverse trig fns", function() {

@@ -13,7 +13,6 @@
  * Object form
  * { r: <real>, i: <imaginary> }
  * { arg: <angle>, abs: <radius> }
- * { phi: <angle>, radius: <radius> }
  *
  * Double form
  * 99.3 - Single double value
@@ -56,16 +55,16 @@
     var parse = function(a, b) {
 
         if (b !== undefined) {
-            P['r'] = parseFloat(a);
-            P['i'] = parseFloat(b);
+            P['r'] = (a);
+            P['i'] = (b);
         } else
             switch (typeof a) {
 
                 case "object":
 
                     if ('i' in a && 'r' in a) {
-                        P['r'] = parseFloat(a['r']);
-                        P['i'] = parseFloat(a['i']);
+                        P['r'] = (a['r']);
+                        P['i'] = (a['i']);
                     } else if ('abs' in a && 'arg' in a) {
                         P['r'] = a['abs'] * Math.cos(a['arg']);
                         P['i'] = a['abs'] * Math.sin(a['arg']);
@@ -77,23 +76,20 @@
                 case "string":
 
                     P['i'] = /* void */
-                            P['r'] = 0;
+                    P['r'] = 0;
 
-                    var reg = /[+-]?[\di]+/g, tmp, tr = -1;
-                    var i = 0;
-                    while (null !== (tmp = reg.exec(a))) {
+                    for (var reg = /[+-]?[\di]+/g, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
 
                         if (tmp[0].indexOf("i") !== -1) {
 
                             tr = tmp[0].replace("i", "");
                             if (tr === "+" || tr === "-" || tr === "")
-                                tr += "1";
+                                tr+= "1";
 
-                            P['i'] += parseFloat(tr);
+                            P['i']+= parseFloat(tr);
                         } else {
-                            P['r'] += parseFloat(tmp[0]);
+                            P['r']+= parseFloat(tmp[0]);
                         }
-                        i = 1;
                     }
 
                     // No single iteration
@@ -260,9 +256,12 @@
      */
     Complex.prototype['log'] = function() {
 
+        var a = this['r'];
+        var b = this['i'];
+
         return new Complex(
-                Math.log(this['abs']()),
-                this['arg']());
+                Math.log(a * a + b * b) / 2,
+                Math.atan2(b, a));
     };
 
     /**
@@ -423,22 +422,22 @@
         var ret = "";
 
         if (this['r'] !== 0) {
-            ret += this['r'];
+            ret+= this['r'];
         }
 
         if (this['i'] !== 0) {
 
             if (this['i'] > 0 && this['r'] !== 0)
-                ret += "+";
+                ret+= "+";
 
             if (this['i'] === 1) {
 
             } else if (this['i'] === -1) {
-                ret += "-";
+                ret+= "-";
             } else {
-                ret += this['i'];
+                ret+= this['i'];
             }
-            ret += "i";
+            ret+= "i";
         }
 
         if (ret === "")
