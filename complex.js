@@ -491,27 +491,30 @@
      */
     Complex.prototype['toString'] = function() {
 
-        if (isNaN(this['r'] * this['i'])) {
+        var a = this['r'];
+        var b = this['i'];
+
+        if (isNaN(a * b)) {
             return 'NaN';
         }
 
         var ret = "";
 
-        if (this['r'] !== 0) {
-            ret+= this['r'];
+        if (a !== 0) {
+            ret+= a;
         }
 
-        if (this['i'] !== 0) {
+        if (b !== 0) {
 
-            if (this['i'] > 0 && this['r'] !== 0)
+            if (b > 0 && a !== 0)
                 ret+= "+";
 
-            if (this['i'] === 1) {
+            if (b === 1) {
 
-            } else if (this['i'] === -1) {
+            } else if (b === -1) {
                 ret+= "-";
             } else {
-                ret+= this['i'];
+                ret+= b;
             }
             ret+= "i";
         }

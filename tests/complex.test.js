@@ -114,6 +114,10 @@ var tests = [{
         fn: "log",
         expect: "1"
     }, {
+        set: "-1",
+        fn: "log",
+        expect: Math.PI + "i"
+    },{
         set: "i",
         fn: "log",
         expect: (Math.PI / 2) + "i"
@@ -220,6 +224,21 @@ var tests = [{
         param: new Complex(3, 4),
         expect: "0.129009594074467+0.03392409290517003i"
     }, {
+        set: "i",
+        fn: "pow",
+        param: 7,
+        expect: "-4.286263797015736e-16-i" // TODO: Fix precision
+    }, {
+        set: "i",
+        fn: "pow",
+        param: 4,
+        expect: "1-2.4492935982947064e-16i" // TODO: Fix precision
+    }, {
+        set: "i",
+        fn: "pow",
+        param: 5,
+        expect: "3.061616997868383e-16+i"
+    }, {
         set: "1+4i",
         fn: "sqrt",
         expect: "1.600485180440241+1.2496210676876531i"
@@ -248,6 +267,14 @@ var tests = [{
         fn: "sin",
         expect: "3.1657785132161678+1.959601041421606i"
     }, {
+        set: "i",
+        fn: "cos",
+        expect: "1.5430806348152437"
+    },{
+        set: "i",
+        fn: "acos",
+        expect: "1.5707963267948966-0.881373587019543i"
+    },{
         set: {r: 1, i: 2},
         fn: "cos",
         expect: "2.0327230070196656-3.0518977991517997i"
