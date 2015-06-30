@@ -45,6 +45,12 @@ new Complex("15+3i");
 new Complex("i");
 ```
 
+Two arguments
+---
+```javascript
+new Complex(3, 2); // 3+2i
+```
+
 Functions
 ===
 
