@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.1.0 22/06/2015
+ * @license Complex.js v1.2.0 22/06/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -348,8 +348,8 @@
      */
     Complex.prototype['asin'] = function() {
 
-        return this['mul'](this)['negate']()['add'](1)['sqrt']()
-                ['add'](this['mul'](Complex['I']))['log']()['mul'](Complex['I'])['negate']();
+        return this['mul'](this)['neg']()['add'](1)['sqrt']()
+                ['add'](this['mul'](Complex['I']))['log']()['mul'](Complex['I'])['neg']();
     };
 
     /**
@@ -359,8 +359,8 @@
      */
     Complex.prototype['acos'] = function() {
 
-        return this['mul'](this)['negate']()['add'](1)['sqrt']()
-                ['mul'](Complex['I'])['add'](this)['log']()['mul'](Complex['I'])['negate']();
+        return this['mul'](this)['neg']()['add'](1)['sqrt']()
+                ['mul'](Complex['I'])['add'](this)['log']()['mul'](Complex['I'])['neg']();
     };
 
     /**
@@ -457,7 +457,7 @@
      * 
      * @returns {Complex}
      */
-    Complex.prototype['negate'] = function() {
+    Complex.prototype['neg'] = function() {
         return new Complex(-this['r'], -this['i']);
     };
 

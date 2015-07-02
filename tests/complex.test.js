@@ -171,7 +171,7 @@ var tests = [{
         expect: "1+4i"
     }, {
         set: {r: -7.1, i: 2.5},
-        fn: "negate",
+        fn: "neg",
         expect: "7.1-2.5i"
     }, {
         set: {r: 1, i: 1},
@@ -365,7 +365,7 @@ describe("Complex Details", function() {
 
         assert.equal(zero.toString(), "0");
         assert.equal(one.toString(), "1+i");
-        assert(one.negate().equals(Complex(-1, -1)));
+        assert(one.neg().equals(Complex(-1, -1)));
         assert(one.conjugate().equals(Complex(1, -1)));
         assert.equal(one.abs(), Math.SQRT2);
         assert.equal(one.arg(), Math.PI / 4);

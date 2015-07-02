@@ -138,7 +138,7 @@ Complex conjugate()
 ---
 Calculates the conjugate of the complex number (multiplies the imaginary part with -1)
 
-Complex negate()
+Complex neg()
 ---
 Negates the number (multiplies both the real and imaginary part with -1)
 
