@@ -9,6 +9,12 @@ var tests = [{
         set: {},
         expect: "Invalid Param"
     }, {
+        set: "+i",
+        expect: "i"
+    }, {
+        set: "3",
+        expect: "3"
+    }, {
         set: "2.3",
         expect: "2.3"
     }, {
