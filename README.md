@@ -207,6 +207,24 @@ or
 npm install complex.js
 ```
 
+Using Complex.js at the browser
+===
+    <script src="complex.js"></script>
+    <script>
+        console.log(Complex("4+3i"));
+    </script>
+
+
+Using Complex.js with require.js
+===
+    <script src="require.js"></script>
+    <script>
+    requirejs(['complex.js'],
+    function(Complex) {
+        console.log(Complex("4+3i"));
+    });
+    </script>
+
 
 Coding Style
 ===
