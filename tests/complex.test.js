@@ -123,7 +123,7 @@ var tests = [{
         set: "-1",
         fn: "log",
         expect: Math.PI + "i"
-    },{
+    }, {
         set: "i",
         fn: "log",
         expect: (Math.PI / 2) + "i"
@@ -156,6 +156,16 @@ var tests = [{
         fn: "pow",
         param: "3",
         expect: "27"
+    }, {
+        set: 7,
+        fn: "pow",
+        param: 2,
+        expect: 49
+    }, {
+        set: 0,
+        fn: "pow",
+        param: 2,
+        expect: 0
     }, {
         set: "3i",
         fn: "pow",
@@ -276,11 +286,11 @@ var tests = [{
         set: "i",
         fn: "cos",
         expect: "1.5430806348152437"
-    },{
+    }, {
         set: "i",
         fn: "acos",
         expect: "1.5707963267948966-0.881373587019543i"
-    },{
+    }, {
         set: {r: 1, i: 2},
         fn: "cos",
         expect: "2.0327230070196656-3.0518977991517997i"

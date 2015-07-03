@@ -100,7 +100,7 @@
 
                 case "number":
                     P['i'] = 0;
-                    P['r'] = parseFloat(a);
+                    P['r'] = (a);
                     break;
 
                 default:
@@ -214,6 +214,10 @@
 
         var abs = a * a + b * b;
         var arg = Math.atan2(b, a);
+
+        if (abs === 0) {
+            return new Complex(0);
+        }
 
         var A = Math.pow(abs, P['r'] / 2) * Math.exp(-P['i'] * arg);
         var B = P['i'] * Math.log(abs) / 2 + P['r'] * arg;
