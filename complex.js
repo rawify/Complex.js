@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.2.0 22/06/2015
+ * @license Complex.js v1.4.0 22/06/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -54,7 +54,10 @@
 
     var parse = function(a, b) {
 
-        if (b !== undefined) {
+        if (a === null || a === undefined) {
+            P['r'] = 0;
+            P['i'] = 0;
+        } else if (b !== undefined) {
             P['r'] = (a);
             P['i'] = (b);
         } else

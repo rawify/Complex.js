@@ -3,6 +3,12 @@ var assert = require("assert");
 var Complex = require("../complex.min");
 
 var tests = [{
+        set: null,
+        expect: "0"
+    }, {
+        set: undefined,
+        expect: "0"
+    }, {
         set: "foo",
         expect: "Invalid Param"
     }, {
