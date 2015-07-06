@@ -132,7 +132,7 @@ Calculates the arcus tangent of the complex number
 
 Complex inverse()
 ---
-Calculates the complex inverse of the number (1 / z)
+Calculates the multiplicative inverse of the complex number (1 / z)
 
 Complex conjugate()
 ---
@@ -140,7 +140,7 @@ Calculates the conjugate of the complex number (multiplies the imaginary part wi
 
 Complex neg()
 ---
-Negates the number (multiplies both the real and imaginary part with -1)
+Negates the number (multiplies both the real and imaginary part with -1) in order to get the additive inverse
 
 boolean equals(n)
 ---
