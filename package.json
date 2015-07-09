@@ -6,7 +6,7 @@
     "version": "1.4.0",
     "description": "A complex number library",
     "keywords": ["math", "complex", "number", "calculus"],
-    "author": "Robert Eisele <robert@xarg.org>",
+    "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "complex",
     "readmeFilename": "README.md",
     "licenses": [{
