@@ -33,6 +33,14 @@
 
     "use strict";
 
+    /**
+     * Comparision epsilon
+     * 
+     * @const
+     * @type Number
+     */
+    var EPSILON = 1e-16;
+
     var P = {r: 0, i: 0};
 
     // Heaviside-Function
@@ -471,14 +479,13 @@
     /**
      * Compares two complex numbers
      * 
-     * @TODO Epsilon comparison
      * @returns {boolean}
      */
     Complex.prototype['equals'] = function(a, b) {
 
         parse(a, b);
 
-        return (P['r'] === this['r'] && P['i'] === this['i']);
+        return (P['r'] - this['r']) <= EPSILON && (P['i'] - this['i'] <= EPSILON);
     };
 
     /**
