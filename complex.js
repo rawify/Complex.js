@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.4.0 22/06/2015
+ * @license Complex.js v1.5.0 13/07/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.

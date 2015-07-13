@@ -332,6 +332,36 @@ var tests = [{
         set: "0",
         fn: "inverse",
         expect: "DIV/0"
+    }, {
+        set: 0,
+        fn: "equals",
+        param: "5i",
+        expect: "false"
+    }, {
+        set: 5,
+        fn: "equals",
+        param: "5i",
+        expect: "false"
+    }, {
+        set: 5,
+        fn: "equals",
+        param: 5,
+        expect: "true"
+    }, {
+        set: "10i",
+        fn: "equals",
+        param: "10i",
+        expect: "true"
+    }, {
+        set: "2+3i",
+        fn: "equals",
+        param: "2+3i",
+        expect: "true"
+    }, {
+        set: "2+3i",
+        fn: "equals",
+        param: "5i",
+        expect: "false"
     }
 ];
 
