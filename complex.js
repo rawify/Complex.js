@@ -485,7 +485,7 @@
 
         parse(a, b);
 
-        return (P['r'] - this['r']) <= EPSILON && (P['i'] - this['i'] <= EPSILON);
+        return Math.abs(P['r'] - this['r']) <= EPSILON && Math.abs(P['i'] - this['i'] <= EPSILON);
     };
 
     /**
