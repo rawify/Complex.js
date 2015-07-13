@@ -443,6 +443,9 @@ describe("Complex Details", function() {
         assert.equal(one.asin().toString(), "0.6662394324925153+1.0612750619050355i");
         assert.equal(one.acos().toString(), "0.9045568943023813-1.0612750619050357i");
         assert.equal(one.atan().toString(), "1.0172219678978514+0.40235947810852507i");
+        
+        assert.equal(Complex("5i+3").log().exp().toString(), "3+5i")
+        assert.equal(Complex("-2i-1").log().exp().toString(), "-1-2i")
     });
 
     it("should handle inverse trig fns", function() {
