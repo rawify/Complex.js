@@ -207,7 +207,7 @@ or
 npm install complex.js
 ```
 
-Using Complex.js at the browser
+Using Complex.js with the browser
 ===
     <script src="complex.js"></script>
     <script>
