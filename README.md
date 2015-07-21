@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/infusion/Complex.js.svg?branch=master)](https://travis-ci.org/infusion/Complex.js)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-Complex.js is a JavaScript library to work with complex number arithmetic in JavaScript. It implements every elementary complex number manipulation function and the API is intentionally similar to [Fraction.js](https://github.com/infusion/Fraction.js). 
+Complex.js is a JavaScript library to work with complex number arithmetic in JavaScript. It implements every elementary complex number manipulation function and the API is intentionally similar to [Fraction.js](https://github.com/infusion/Fraction.js). Furthermore, it's the basis of [Polynomial.js](https://github.com/infusion/Polynomial.js).
 
 
 Example
