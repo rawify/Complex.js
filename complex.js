@@ -230,12 +230,12 @@
             return new Complex(0);
         }
 
-        var A = Math.pow(abs, P['r'] / 2) * Math.exp(-P['i'] * arg);
-        var B = P['i'] * Math.log(abs) / 2 + P['r'] * arg;
+        a = Math.pow(abs, P['r'] / 2) * Math.exp(-P['i'] * arg);
+        b = P['i'] * Math.log(abs) / 2 + P['r'] * arg;
 
         return new Complex(
-                A * Math.cos(B),
-                A * Math.sin(B)
+                a * Math.cos(b),
+                a * Math.sin(b)
                 );
     };
 
