@@ -5,7 +5,7 @@
     "homepage": "https://github.com/infusion/Complex.js",
     "description": "A complex number library",
     "keywords": [
-       "math", "complex", "number", "calculus"
+       "math", "complex", "number", "calculus", "parser"
     ],
     "authors": [
         "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)"
