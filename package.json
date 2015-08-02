@@ -5,7 +5,7 @@
     "title": "complex.js",
     "version": "1.5.0",
     "description": "A complex number library",
-    "keywords": ["math", "complex", "number", "calculus"],
+    "keywords": ["math", "complex", "number", "calculus", "parser"],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "complex",
     "readmeFilename": "README.md",
