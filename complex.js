@@ -565,7 +565,7 @@
         }
     };
 
-    Complex["ZERO"] = new Complex(0, 0);
+    Complex["ZERO"] = new Complex;
     Complex["ONE"] = new Complex(1, 0);
     Complex["I"] = new Complex(0, 1);
     Complex["PI"] = new Complex(Math.PI, 0);
