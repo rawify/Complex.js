@@ -29,7 +29,7 @@
  *
  */
 
-(function(root) {
+(function(root) {   
 
     "use strict";
 
@@ -48,11 +48,11 @@
         return x < 0 ? -1 : 1;
     };
 
-    var cosh = function(x) {
+    Math.cosh = Math.cosh || function(x) {
         return (Math.exp(x) + Math.exp(-x)) / 2;
     };
 
-    var sinh = function(x) {
+    Math.sinh = Math.sinh || function(x) {
         return (Math.exp(x) - Math.exp(-x)) / 2;
     };
 
@@ -319,8 +319,8 @@
             var b = this["i"];
 
             return new Complex(
-                    Math.sin(a) * cosh(b),
-                    Math.cos(a) * sinh(b)
+                    Math.sin(a) * Math.cosh(b),
+                    Math.cos(a) * Math.sinh(b)
                     );
         },
 
@@ -335,8 +335,8 @@
             var b = this["i"];
 
             return new Complex(
-                    Math.cos(a) * cosh(b),
-                    -Math.sin(a) * sinh(b)
+                     Math.cos(a) * Math.cosh(b),
+                    -Math.sin(a) * Math.sinh(b)
                     );
         },
 
@@ -350,11 +350,11 @@
             var a = this["r"];
             var b = this["i"];
 
-            var d = Math.cos(2 * a) + cosh(2 * b);
+            var d = Math.cos(2 * a) + Math.cosh(2 * b);
 
             return new Complex(
                     Math.sin(2 * a) / d,
-                    sinh(2 * b) / d
+                    Math.sinh(2 * b) / d
                     );
         },
 
@@ -402,8 +402,8 @@
             var b = this["i"];
 
             return new Complex(
-                    sinh(a) * Math.cos(b),
-                    cosh(a) * Math.sin(b)
+                    Math.sinh(a) * Math.cos(b),
+                    Math.cosh(a) * Math.sin(b)
                     );
         },
 
@@ -418,8 +418,8 @@
             var b = this["i"];
 
             return new Complex(
-                    cosh(a) * Math.cos(b),
-                    sinh(a) * Math.sin(b)
+                    Math.cosh(a) * Math.cos(b),
+                    Math.sinh(a) * Math.sin(b)
                     );
         },
 
@@ -433,10 +433,10 @@
             var a = this["r"];
             var b = this["i"];
 
-            var d = cosh(2 * a) + Math.cos(2 * b);
+            var d = Math.cosh(2 * a) + Math.cos(2 * b);
 
             return new Complex(
-                    sinh(2 * a) / d,
+                    Math.sinh(2 * a) / d,
                     Math.sin(2 * b) / d
                     );
         },
