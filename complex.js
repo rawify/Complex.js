@@ -525,11 +525,9 @@
                 if (b > 0 && a !== 0)
                     ret+= "+";
 
-                if (b === 1) {
-
-                } else if (b === -1) {
+                if (b === -1) {
                     ret+= "-";
-                } else {
+                } else if (b !== 1) {
                     ret+= b;
                 }
                 ret+= "i";
