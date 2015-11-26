@@ -175,23 +175,23 @@ Constants
 
 Complex.ZERO
 ---
-A complex zero shortcut
+A complex zero instance
 
 Complex.ONE
 ---
-A complex one shortcut
+A complex one instance
 
 Complex.I
 ---
-The imaginary number i shortcut
+An imaginary number i instance
 
 Complex.PI
 ---
-A complex PI shortcut
+A complex PI instance
 
 Complex.E
 ---
-A complex euler number shortcut
+A complex euler number instance
 
 
 Installation
