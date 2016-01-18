@@ -45,7 +45,7 @@
     var P = {r: 0, i: 0};
 
     // Heaviside-Function
-    var H = function(x) {
+    var heaviside = function(x) {
         return x < 0 ? -1 : 1;
     };
 
@@ -165,6 +165,19 @@
         "i": 0,
         
         /**
+         * Calculates the sign of a complex number
+         * 
+         * @returns {Complex}
+         */
+        "sign": function() {
+            
+            // Doesn't overflow
+            
+            var abs = this['abs']();
+            return new Complex(this['r'] / abs, this['i'] / abs);
+        },
+        
+        /**
          * Adds two complex numbers
          *
          * @returns {Complex}
@@ -240,15 +253,14 @@
                 return new Complex(
                         (a * x + b) / t,
                         (b * x - a) / t);
-
-            } else {
-                x = d / c;
-                t = d * x + c;
-
-                return new Complex(
-                        (a + b * x) / t,
-                        (b - a * x) / t);
             }
+
+            x = d / c;
+            t = d * x + c;
+
+            return new Complex(
+                    (a + b * x) / t,
+                    (b - a * x) / t);
         },
         
         /**
@@ -292,7 +304,7 @@
 
             return new Complex(
                     Math.sqrt((r + this["r"]) * 0.5),
-                    Math.sqrt((r - this["r"]) * 0.5) * H(this["i"])
+                    Math.sqrt((r - this["r"]) * 0.5) * heaviside(this["i"])
                     );
         },
         

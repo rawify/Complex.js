@@ -182,6 +182,10 @@ var tests = [{
         fn: "abs",
         expect: "5"
     }, {
+        set: {r: 10, i: 24},
+        fn: "abs",
+        expect: "26"
+    }, {
         set: "1+4i",
         fn: "mul",
         param: "3+2i",
@@ -362,16 +366,26 @@ var tests = [{
         fn: "equals",
         param: "5i",
         expect: "false"
-    },{
+    }, {
         set: "2+3i",
         fn: "round",
         param: "0",
         expect: "2+3i"
-    },{
+    }, {
         set: "2.5+3.5i",
         fn: "round",
         param: "1",
         expect: "2.5+3.5i"
+    }, {
+        set: "2.5+3.5i",
+        fn: "sign",
+        param: null,
+        expect: "0.5812381937190965+0.813733471206735i"
+    }, {
+        set: "10+24i",
+        fn: "sign",
+        param: null,
+        expect: "0.38461538461538464+0.9230769230769231i"
     }
 ];
 
@@ -453,7 +467,7 @@ describe("Complex Details", function() {
         assert.equal(one.asin().toString(), "0.6662394324925153+1.0612750619050355i");
         assert.equal(one.acos().toString(), "0.9045568943023813-1.0612750619050357i");
         assert.equal(one.atan().toString(), "1.0172219678978514+0.40235947810852507i");
-        
+
         assert.equal(Complex("5i+3").log().exp().toString(), "3+5i")
         assert.equal(Complex("-2i-1").log().exp().toString(), "-1-2i")
     });

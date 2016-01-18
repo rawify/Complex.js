@@ -139,6 +139,10 @@ Complex conjugate()
 ---
 Calculates the conjugate of the complex number (multiplies the imaginary part with -1)
 
+Complex sign()
+---
+Calculates the sign of the complex number
+
 Complex neg()
 ---
 Negates the number (multiplies both the real and imaginary part with -1) in order to get the additive inverse
