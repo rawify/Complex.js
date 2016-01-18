@@ -28,6 +28,7 @@ Objects
 ---
 ```javascript
 new Complex({r: real, i: imaginary});
+new Complex({re: real, im: imaginary});
 new Complex({arg: angle, abs: radius});
 ```
 

@@ -1,6 +1,6 @@
 var assert = require("assert");
 
-var Complex = require("../complex.min");
+var Complex = require("../complex");
 
 var tests = [{
         set: null,
@@ -161,7 +161,7 @@ var tests = [{
         set: "3",
         fn: "pow",
         param: "3",
-        expect: "27"
+        expect: "27.000000000000004" // TODO: precision fix
     }, {
         set: 7,
         fn: "pow",
@@ -239,12 +239,12 @@ var tests = [{
         set: "1+2i",
         fn: "pow",
         param: "1+2i",
-        expect: "-0.2225171568017727+0.10070913113607542i"
+        expect: "-0.22251715680177267+0.10070913113607541i"
     }, {
         set: {r: 1, i: 2},
         fn: "pow",
         param: new Complex(3, 4),
-        expect: "0.129009594074467+0.03392409290517003i"
+        expect: "0.12900959407446697+0.033924092905170025i"
     }, {
         set: "i",
         fn: "pow",

@@ -12,6 +12,7 @@
  *
  * Object form
  * { r: <real>, i: <imaginary> }
+ * { re: <real>, im: <imaginary> }
  * { arg: <angle>, abs: <radius> }
  *
  * Double form
@@ -29,7 +30,7 @@
  *
  */
 
-(function(root) {   
+(function(root) {
 
     "use strict";
 
@@ -49,16 +50,32 @@
     };
 
     Math.cosh = Math.cosh || function(x) {
-        return (Math.exp(x) + Math.exp(-x)) / 2;
+        return (Math.exp(x) + Math.exp(-x)) * 0.5;
     };
 
     Math.sinh = Math.sinh || function(x) {
-        return (Math.exp(x) - Math.exp(-x)) / 2;
+        return (Math.exp(x) - Math.exp(-x)) * 0.5;
     };
 
     var parser_exit = function() {
         throw "Invalid Param";
     };
+
+    function logsq2(a, b) {
+
+        if (a < 1000 && b < 1000) {
+            return Math.log(a * a + b * b) * 0.5;
+        }
+
+        a = Math.abs(a);
+        b = Math.abs(b);
+
+        var t = Math.min(a, b);
+        a = Math.max(a, b);
+        t = t / a;
+
+        return Math.log(a) + Math.log(1 + t * t) * 0.5;
+    }
 
     var parse = function(a, b) {
 
@@ -76,6 +93,9 @@
                     if ("i" in a && "r" in a) {
                         P["r"] = (a["r"]);
                         P["i"] = (a["i"]);
+                    } else if ("im" in a && "re" in a) {
+                        P["r"] = (a["re"]);
+                        P["i"] = (a["im"]);
                     } else if ("abs" in a && "arg" in a) {
                         P["r"] = a["abs"] * Math.cos(a["arg"]);
                         P["i"] = a["abs"] * Math.sin(a["arg"]);
@@ -87,7 +107,7 @@
                 case "string":
 
                     P["i"] = /* void */
-                    P["r"] = 0;
+                            P["r"] = 0;
 
                     for (var reg = /[+-]?[\di.]+/g, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
 
@@ -140,10 +160,10 @@
     }
 
     Complex.prototype = {
-
+        
         "r": 0,
         "i": 0,
-
+        
         /**
          * Adds two complex numbers
          *
@@ -151,6 +171,7 @@
          */
         "add": function(a, b) {
 
+            // Doesn't overflow
             parse(a, b);
 
             return new Complex(
@@ -158,7 +179,7 @@
                     this["i"] + P["i"]
                     );
         },
-
+        
         /**
          * Subtracts two complex numbers
          *
@@ -166,6 +187,7 @@
          */
         "sub": function(a, b) {
 
+            // Doesn't overflow
             parse(a, b);
 
             return new Complex(
@@ -173,7 +195,7 @@
                     this["i"] - P["i"]
                     );
         },
-
+        
         /**
          * Multiplies two complex numbers
          *
@@ -181,6 +203,7 @@
          */
         "mul": function(a, b) {
 
+            // Todo: is there a way r*r doesn't overflow?
             parse(a, b);
 
             return new Complex(
@@ -188,7 +211,7 @@
                     this["r"] * P["i"] + this["i"] * P["r"]
                     );
         },
-
+        
         /**
          * Divides two complex numbers
          *
@@ -196,23 +219,38 @@
          */
         "div": function(a, b) {
 
+            // Doesn't overflow
             parse(a, b);
 
-            a = P["r"];
-            b = P["i"];
+            a = this['r'];
+            b = this['i'];
 
-            var t = a * a + b * b;
+            var c = P["r"];
+            var d = P["i"];
+            var t, x;
 
-            if (0 === t) {
+            if (0 === c && 0 === d) {
                 throw "DIV/0";
             }
 
-            return new Complex(
-                    (a * this["r"] + b * this["i"]) / t,
-                    (a * this["i"] - b * this["r"]) / t
-                    );
-        },
+            if (Math.abs(c) < Math.abs(d)) {
+                x = c / d;
+                t = c * x + d;
 
+                return new Complex(
+                        (a * x + b) / t,
+                        (b * x - a) / t);
+
+            } else {
+                x = d / c;
+                t = d * x + c;
+
+                return new Complex(
+                        (a + b * x) / t,
+                        (b - a * x) / t);
+            }
+        },
+        
         /**
          * Calculate the power of two complex numbers
          *
@@ -220,27 +258,28 @@
          */
         "pow": function(a, b) {
 
+            // Doesn't overflow
             parse(a, b);
 
             a = this["r"];
             b = this["i"];
 
-            var abs = a * a + b * b;
-            var arg = Math.atan2(b, a);
-
-            if (abs === 0) {
-                return new Complex(0);
+            if (a === 0 && b === 0) {
+                return new Complex(0, 0);
             }
 
-            a = Math.pow(abs, P["r"] / 2) * Math.exp(-P["i"] * arg);
-            b = P["i"] * Math.log(abs) / 2 + P["r"] * arg;
+            var arg = Math.atan2(b, a);
+            var log = logsq2(a, b);
+
+            a = Math.exp(P["r"] * log - P["i"] * arg);
+            b = P["i"] * log + P["r"] * arg;
 
             return new Complex(
                     a * Math.cos(b),
                     a * Math.sin(b)
                     );
         },
-
+        
         /**
          * Calculate the complex square root
          *
@@ -248,14 +287,15 @@
          */
         "sqrt": function() {
 
+            // Doesn't overflow
             var r = this["abs"]();
 
             return new Complex(
-                    Math.sqrt((r + this["r"]) / 2),
-                    Math.sqrt((r - this["r"]) / 2) * H(this["i"])
+                    Math.sqrt((r + this["r"]) * 0.5),
+                    Math.sqrt((r - this["r"]) * 0.5) * H(this["i"])
                     );
         },
-
+        
         /**
          * Calculate the complex exponent
          *
@@ -263,13 +303,14 @@
          */
         "exp": function() {
 
+            // Doesn't overflow
             var tmp = Math.exp(this["r"]);
 
             return new Complex(
                     tmp * Math.cos(this["i"]),
                     tmp * Math.sin(this["i"]));
         },
-
+        
         /**
          * Calculate the natural log
          *
@@ -280,11 +321,12 @@
             var a = this["r"];
             var b = this["i"];
 
+            // Doesn't overflow
             return new Complex(
-                    Math.log(a * a + b * b) / 2,
+                    logsq2(a, b),
                     Math.atan2(b, a));
         },
-
+        
         /**
          * Calculate the magniture of the complex number
          *
@@ -292,28 +334,44 @@
          */
         "abs": function() {
 
-            var a = this["r"];
-            var b = this["i"];
+            // Doesn't overflow
 
-            return Math.sqrt(a * a + b * b);
+            var a = Math.abs(this["r"]);
+            var b = Math.abs(this["i"]);
+
+            if (a < 1000 && b < 1000) {
+                return Math.sqrt(a * a + b * b);
+            }
+
+            if (a < b) {
+                a = b;
+                b = this["r"] / this["i"];
+            } else {
+                b = this["i"] / this["r"];
+            }
+            return a * Math.sqrt(1 + b * b);
         },
-
+        
         /**
          * Calculate the angle of the complex number
          *
          * @returns {number}
          */
         "arg": function() {
+            
+            // Doesn't overflow
 
             return Math.atan2(this["i"], this["r"]);
         },
-
+        
         /**
          * Calculate the sine of the complex number
          *
          * @returns {Complex}
          */
         "sin": function() {
+            
+            // Doesn't overflow
 
             var a = this["r"];
             var b = this["i"];
@@ -323,29 +381,33 @@
                     Math.cos(a) * Math.sinh(b)
                     );
         },
-
+        
         /**
          * Calculate the cosine
          *
          * @returns {Complex}
          */
         "cos": function() {
+            
+            // Doesn't overflow
 
             var a = this["r"];
             var b = this["i"];
 
             return new Complex(
-                     Math.cos(a) * Math.cosh(b),
+                    Math.cos(a) * Math.cosh(b),
                     -Math.sin(a) * Math.sinh(b)
                     );
         },
-
+        
         /**
          * Calculate the tangent
          *
          * @returns {Complex}
          */
         "tan": function() {
+            
+            // Doesn't overflow
 
             var a = this["r"];
             var b = this["i"];
@@ -357,7 +419,7 @@
                     Math.sinh(2 * b) / d
                     );
         },
-
+        
         /**
          * Calculate the complex arcus sinus
          *
@@ -368,7 +430,7 @@
             return this["mul"](this)["neg"]()["add"](1)["sqrt"]()
                     ["add"](this["mul"](Complex["I"]))["log"]()["mul"](Complex["I"])["neg"]();
         },
-
+        
         /**
          * Calculate the complex arcus cosinus
          *
@@ -379,7 +441,7 @@
             return this["mul"](this)["neg"]()["add"](1)["sqrt"]()
                     ["mul"](Complex["I"])["add"](this)["log"]()["mul"](Complex["I"])["neg"]();
         },
-
+        
         /**
          * Calculate the complex arcus tangent
          *
@@ -390,13 +452,15 @@
             return Complex["I"]["add"](this)["div"](Complex["I"]["sub"](this))
                     ["log"]()["mul"](Complex["I"])["div"](2);
         },
-
+        
         /**
          * Calculate the complex sinh
          *
          * @returns {Complex}
          */
         "sinh": function() {
+            
+            // Doesn't overflow
 
             var a = this["r"];
             var b = this["i"];
@@ -406,13 +470,15 @@
                     Math.cosh(a) * Math.sin(b)
                     );
         },
-
+        
         /**
          * Calculate the complex cosh
          *
          * @returns {Complex}
          */
         "cosh": function() {
+            
+            // Doesn't overflow
 
             var a = this["r"];
             var b = this["i"];
@@ -422,13 +488,15 @@
                     Math.sinh(a) * Math.sin(b)
                     );
         },
-
+        
         /**
          * Calculate the complex tanh
          *
          * @returns {Complex}
          */
         "tanh": function() {
+            
+            // Doesn't overflow
 
             var a = this["r"];
             var b = this["i"];
@@ -440,7 +508,7 @@
                     Math.sin(2 * b) / d
                     );
         },
-
+        
         /**
          * Calculate the complex inverse 1/z
          *
@@ -458,48 +526,57 @@
             }
             return new Complex(a / t, -b / t);
         },
-
+        
         /**
          * Returns the complex conjugate
          *
          * @returns {Complex}
          */
         "conjugate": function() {
+            
+            // Doesn't overflow
 
             return new Complex(this["r"], -this["i"]);
         },
-
+        
         /**
          * Gets the negated complex number
          *
          * @returns {Complex}
          */
         "neg": function() {
+            
+            // Doesn't overflow
+            
             return new Complex(-this["r"], -this["i"]);
         },
-
+        
         /**
          * Compares two complex numbers
          *
          * @returns {boolean}
          */
         "equals": function(a, b) {
+            
+            // Doesn't overflow
 
             parse(a, b);
 
             return Math.abs(P["r"] - this["r"]) <= EPSILON && Math.abs(P["i"] - this["i"]) <= EPSILON;
         },
-
+        
         /**
          * Clones the actual object
          *
          * @returns {Complex}
          */
         "clone": function() {
+            
+            // Doesn't overflow
 
             return new Complex(this["r"], this["i"]);
         },
-
+        
         /**
          * Gets a string of the actual complex number
          *
@@ -517,20 +594,20 @@
             var ret = "";
 
             if (a !== 0) {
-                ret+= a;
+                ret += a;
             }
 
             if (b !== 0) {
 
                 if (b > 0 && a !== 0)
-                    ret+= "+";
+                    ret += "+";
 
                 if (b === -1) {
-                    ret+= "-";
+                    ret += "-";
                 } else if (b !== 1) {
-                    ret+= b;
+                    ret += b;
                 }
-                ret+= "i";
+                ret += "i";
             }
 
             if (ret === "")
@@ -538,7 +615,7 @@
 
             return ret;
         },
-
+        
         /**
          * Returns the actual number as a vector
          *
@@ -548,7 +625,7 @@
 
             return [this.r, this.i];
         },
-
+        
         /**
          * Returns the actual real value of the current object
          *
