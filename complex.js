@@ -552,6 +552,48 @@
         },
         
         /**
+         * Ceils the actual complex number
+         * 
+         * @returns {Complex}
+         */
+        "ceil": function(places) {
+            
+            // Doesn't overflow
+            
+            places = Math.pow(10, places || 0);
+            
+            return new Complex(Math.ceil(this["r"] * places) / places, Math.ceil(this["i"] * places) / places);
+        },
+        
+        /**
+         * Floors the actual complex number
+         * 
+         * @returns {Complex}
+         */
+        "floor": function(places) {
+            
+            // Doesn't overflow
+            
+            places = Math.pow(10, places || 0);
+            
+            return new Complex(Math.floor(this["r"] * places) / places, Math.floor(this["i"] * places) / places);
+        },
+        
+        /**
+         * Ceils the actual complex number
+         * 
+         * @returns {Complex}
+         */
+        "round": function(places) {
+            
+            // Doesn't overflow
+            
+            places = Math.pow(10, places || 0);
+            
+            return new Complex(Math.round(this["r"] * places) / places, Math.round(this["i"] * places) / places);
+        },
+        
+        /**
          * Compares two complex numbers
          *
          * @returns {boolean}

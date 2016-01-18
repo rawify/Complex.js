@@ -143,6 +143,18 @@ Complex neg()
 ---
 Negates the number (multiplies both the real and imaginary part with -1) in order to get the additive inverse
 
+Complex floor([places=0])
+---
+Floors the complex number parts towards zero
+
+Complex ceil([places=0])
+---
+Ceils the complex number parts off zero
+
+Complex round([places=0])
+---
+Rounds the complex number parts
+
 boolean equals(n)
 ---
 Checks if both numbers are exactly the same

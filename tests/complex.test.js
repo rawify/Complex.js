@@ -362,6 +362,16 @@ var tests = [{
         fn: "equals",
         param: "5i",
         expect: "false"
+    },{
+        set: "2+3i",
+        fn: "round",
+        param: "0",
+        expect: "2+3i"
+    },{
+        set: "2.5+3.5i",
+        fn: "round",
+        param: "1",
+        expect: "2.5+3.5i"
     }
 ];
 
