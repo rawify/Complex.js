@@ -386,6 +386,11 @@ var tests = [{
         fn: "sign",
         param: null,
         expect: "0.38461538461538464+0.9230769230769231i"
+    }, {
+        set: "1e3i",
+        fn: "add",
+        param: "3e-3+1e2i",
+        expect: "0.003+1100i"
     }
 ];
 

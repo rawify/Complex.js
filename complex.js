@@ -107,9 +107,9 @@
                 case "string":
 
                     P["i"] = /* void */
-                            P["r"] = 0;
+                    P["r"] = 0;
 
-                    for (var reg = /[+-]?[\di.]+/g, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
+                    for (var reg = /[+-]?(?:[\di.]e[+-]?[\di]+|[\di.]+)/ig, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
 
                         if (tmp[0].indexOf("i") !== -1) {
 
