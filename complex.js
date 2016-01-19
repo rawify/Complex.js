@@ -61,6 +61,13 @@
         throw "Invalid Param";
     };
 
+    /**
+     * Calculates log(sqrt(a^2+b^2)) in a way to avoid overflows
+     * 
+     * @param {number} a
+     * @param {number} b
+     * @returns {number}
+     */
     function logsq2(a, b) {
 
         if (a < 1000 && b < 1000) {
@@ -640,12 +647,11 @@
 
             var a = this["r"];
             var b = this["i"];
-
+            var ret = "";
+            
             if (isNaN(a * b)) {
                 return "NaN";
             }
-
-            var ret = "";
 
             if (a !== 0) {
                 ret += a;
@@ -664,7 +670,7 @@
                 ret += "i";
             }
 
-            if (ret === "")
+            if (!ret)
                 return "0";
 
             return ret;
@@ -677,7 +683,7 @@
          */
         "toVector": function() {
 
-            return [this.r, this.i];
+            return [this['r'], this['i']];
         },
         
         /**
