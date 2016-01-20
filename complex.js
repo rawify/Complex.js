@@ -50,11 +50,11 @@
     };
 
     Math.cosh = Math.cosh || function(x) {
-        return (Math.exp(x) + Math.exp(-x)) * 0.5;
+        return (Math.exp(x) + Math.exp(-x)) / 2;
     };
 
     Math.sinh = Math.sinh || function(x) {
-        return (Math.exp(x) - Math.exp(-x)) * 0.5;
+        return (Math.exp(x) - Math.exp(-x)) / 2;
     };
 
     var parser_exit = function() {
@@ -70,18 +70,47 @@
      */
     function logsq2(a, b) {
 
-        if (a < 1000 && b < 1000) {
-            return Math.log(a * a + b * b) * 0.5;
+        if (Math.abs(a) < 1000 && Math.abs(b) < 1000) {
+            return Math.log(a * a + b * b) / 2;
         }
+        
+        /* I got 4 ideas to compute this property without overflow:
+         * 
+         * Testing 1000000 times with random samples for a,b ∈ [1, 1000000000]
+         * 
+         * 1. Only eliminate the square root: 4. place (OVERALL ERROR: 3.9122483030951116e-11)
+         
+         Math.log(a * a + b * b) / 2
+        
+         * 
+         * 
+         * 2. Try to use the non-overflowing pythagoras: 3. place (OVERALL ERROR: 8.889760039210159e-10)
 
-        a = Math.abs(a);
-        b = Math.abs(b);
+        var fn = function(a, b) {
+            a = Math.abs(a);
+            b = Math.abs(b);
+            var t = Math.min(a, b);
+            a = Math.max(a, b);
+            t = t / a;
 
-        var t = Math.min(a, b);
-        a = Math.max(a, b);
-        t = t / a;
+            return Math.log(a) + Math.log(1 + t * t) / 2;
+        };
 
-        return Math.log(a) + Math.log(1 + t * t) * 0.5;
+         * 3. Abuse the identity cos(atan(y/x) = x / sqrt(x^2+y^2): 2. place (OVERALL ERROR: 3.4780178737037204e-10)
+
+         Math.log(a / Math.cos(Math.atan2(b, a)))
+        
+        * 4. Use 3. and apply log rules: 1. place (OVERALL ERROR: 1.2014087502620896e-9)
+
+        Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)))
+
+         */
+        
+        if (a === 0) {
+            return Math.log(b) - Math.log(Math.sin(Math.atan2(b, a)));
+        } else {
+            return Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)));
+        }
     }
 
     var parse = function(a, b) {
@@ -310,8 +339,8 @@
             var r = this["abs"]();
 
             return new Complex(
-                    Math.sqrt((r + this["r"]) * 0.5),
-                    Math.sqrt((r - this["r"]) * 0.5) * heaviside(this["i"])
+                    Math.sqrt((r + this["r"]) / 2),
+                    Math.sqrt((r - this["r"]) / 2) * heaviside(this["i"])
                     );
         },
         
@@ -355,20 +384,18 @@
 
             // Doesn't overflow
 
-            var a = Math.abs(this["r"]);
-            var b = Math.abs(this["i"]);
-
-            if (a < 1000 && b < 1000) {
+            var a = this["r"];
+            var b = this["i"];
+            
+            if (Math.abs(a) < 1000 && Math.abs(b) < 1000) {
                 return Math.sqrt(a * a + b * b);
             }
-
-            if (a < b) {
-                a = b;
-                b = this["r"] / this["i"];
+            
+            if (a === 0) {
+                return b / Math.sin(Math.atan2(b, a));
             } else {
-                b = this["i"] / this["r"];
+                return a / Math.cos(Math.atan2(b, a));
             }
-            return a * Math.sqrt(1 + b * b);
         },
         
         /**
