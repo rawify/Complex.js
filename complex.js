@@ -50,11 +50,11 @@
     };
 
     Math.cosh = Math.cosh || function(x) {
-        return (Math.exp(x) + Math.exp(-x)) / 2;
+        return (Math.exp(x) + Math.exp(-x)) * 0.5;
     };
 
     Math.sinh = Math.sinh || function(x) {
-        return (Math.exp(x) - Math.exp(-x)) / 2;
+        return (Math.exp(x) - Math.exp(-x)) * 0.5;
     };
 
     var parser_exit = function() {
@@ -70,11 +70,8 @@
      */
     function logsq2(a, b) {
 
-        a = Math.abs(a);
-        b = Math.abs(b);
-
-        if (a < 1000 && b < 1000) {
-            return Math.log(a * a + b * b) / 2;
+        if (Math.abs(a) < 1000 && Math.abs(b) < 1000) {
+            return Math.log(a * a + b * b) * 0.5;
         }
         
         /* I got 4 ideas to compute this property without overflow:
@@ -108,12 +105,12 @@
         Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)))
 
          */
-
-        var t = Math.min(a, b);
-        a = Math.max(a, b);
-        t = t / a;
-
-        return Math.log(a) + Math.log(1 + t * t) / 2;
+       
+        if (a === 0) {
+            return Math.log(b / Math.sin(Math.atan2(b, a)));
+        } else {
+            return Math.log(a / Math.cos(Math.atan2(b, a)));
+        }
     }
 
     var parse = function(a, b) {
@@ -361,8 +358,8 @@
             var r = this["abs"]();
 
             return new Complex(
-                    Math.sqrt((r + this["r"]) / 2),
-                    Math.sqrt((r - this["r"]) / 2) * heaviside(this["i"])
+                    Math.sqrt((r + this["r"]) * 0.5),
+                    Math.sqrt((r - this["r"]) * 0.5) * heaviside(this["i"])
                     );
         },
         

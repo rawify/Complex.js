@@ -158,6 +158,11 @@ var tests = [{
         fn: "exp",
         expect: "-8.358532650935372-18.263727040666765i"
     }, {
+        set: "i",
+        fn: "pow",
+        param: "2",
+        expect: "-1+1.2246467991473532e-16i" // TODO: precision fix
+    }, {
         set: "3",
         fn: "pow",
         param: "3",
