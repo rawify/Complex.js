@@ -158,15 +158,45 @@ var tests = [{
         fn: "exp",
         expect: "-8.358532650935372-18.263727040666765i"
     }, {
-        set: "i",
-        fn: "pow",
-        param: "2",
-        expect: "-1+1.2246467991473532e-16i" // TODO: precision fix
-    }, {
         set: "3",
         fn: "pow",
         param: "3",
-        expect: "27.000000000000004" // TODO: precision fix
+        expect: "27"
+    }, {
+        set: "i",
+        fn: "pow",
+        param: "0",
+        expect: "1"
+    }, {
+        set: "87",
+        fn: "pow",
+        param: "3",
+        expect: "658503"
+    }, {
+        set: "i",
+        fn: "pow",
+        param: "1",
+        expect: "i"
+    }, {
+        set: "i",
+        fn: "pow",
+        param: "2",
+        expect: "-1"
+    }, {
+        set: "i",
+        fn: "pow",
+        param: "3",
+        expect: "-i"
+    }, {
+        set: "i",
+        fn: "pow",
+        param: "4",
+        expect: "1"
+    }, {
+        set: "i",
+        fn: "pow",
+        param: "5",
+        expect: "i"
     }, {
         set: 7,
         fn: "pow",
@@ -258,17 +288,17 @@ var tests = [{
         set: "i",
         fn: "pow",
         param: 7,
-        expect: "-4.286263797015736e-16-i" // TODO: Fix precision
+        expect: "-i"
     }, {
         set: "i",
         fn: "pow",
         param: 4,
-        expect: "1-2.4492935982947064e-16i" // TODO: Fix precision
+        expect: "1"
     }, {
         set: "i",
         fn: "pow",
         param: 5,
-        expect: "3.061616997868383e-16+i"
+        expect: "i"
     }, {
         set: "1+4i",
         fn: "sqrt",
@@ -407,7 +437,7 @@ describe("Complex", function() {
 
             if (tests[i].fn) {
 
-                it((tests[i].fn || "") + "" + tests[i].set, function() {
+                it((tests[i].fn || "") + " " + tests[i].set + ", " + (tests[i].param || ""), function() {
                     try {
                         assert.equal(tests[i].expect, new Complex(tests[i].set)[tests[i].fn](tests[i].param).toString());
                     } catch (e) {

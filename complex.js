@@ -315,7 +315,31 @@
             if (a === 0 && b === 0) {
                 return new Complex(0, 0);
             }
-            
+
+            var arg = Math.atan2(b, a);
+            var log = logsq2(a, b);
+
+            if (P['i'] === 0) {
+                
+                if (b === 0 && a >= 0) {
+
+                    return new Complex(Math.pow(a, P['r']), 0);
+
+                } else if (a === 0) {
+                    
+                    switch (P['r'] % 4) {
+                        case 0:
+                            return new Complex(Math.pow(b, P['r']), 0);
+                        case 1:
+                            return new Complex(0, Math.pow(b, P['r']));
+                        case 2:
+                            return new Complex(-Math.pow(b, P['r']), 0);
+                        case 3:
+                            return new Complex(0, -Math.pow(b, P['r']));
+                    }
+                }
+            }
+
             /* I couldn't find a good formula, so here is a derivation and optimization
              * 
              * z_1^z_2 = (a + bi)^(c + di)
@@ -334,9 +358,6 @@
              * Im = exp(c * logsq2 - d * arg(z_1)) * sin(d * logsq2 + c * arg(z_1))
              * 
              */
-
-            var arg = Math.atan2(b, a);
-            var log = logsq2(a, b);
 
             a = Math.exp(P["r"] * log - P["i"] * arg);
             b = P["i"] * log + P["r"] * arg;
