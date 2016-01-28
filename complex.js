@@ -149,6 +149,8 @@
                     P["im"] = /* void */
                     P["re"] = 0;
 
+                    a = a.replace(/\s+/g, '');
+
                     for (var reg = /[+-]?(?:[\di.]e[+-]?[\di]+|[\di.]+)/ig, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
 
                         if (tmp[0].indexOf("i") !== -1) {
