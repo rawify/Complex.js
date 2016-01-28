@@ -69,14 +69,25 @@
      * @returns {number}
      */
     function logsq2(a, b) {
+        
+        var _a = Math.abs(a);
+        var _b = Math.abs(b);
+        
+        if (a === 0) {
+            return Math.log(_b);
+        }
+        
+        if (b === 0) {
+            return Math.log(_a);
+        }
 
-        if (Math.abs(a) < 1000 && Math.abs(b) < 1000) {
+        if (_a < 1000 && _b < 1000) {
             return Math.log(a * a + b * b) * 0.5;
         }
         
         /* I got 4 ideas to compute this property without overflow:
          * 
-         * Testing 1000000 times with random samples for a,b ∈ [1, 1000000000] to get an error estimate
+         * Testing 1000000 times with random samples for a,b ∈ [1, 1000000000] against a big decimal library to get an error estimate
          * 
          * 1. Only eliminate the square root: (OVERALL ERROR: 3.9122483030951116e-11)
          
@@ -104,13 +115,9 @@
 
         Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)))
 
-         */
-       
-        if (a === 0) {
-            return Math.log(b / Math.sin(Math.atan2(b, a)));
-        } else {
-            return Math.log(a / Math.cos(Math.atan2(b, a)));
-        }
+        */
+
+        return Math.log(a / Math.cos(Math.atan2(b, a)));
     }
 
     var parse = function(a, b) {
