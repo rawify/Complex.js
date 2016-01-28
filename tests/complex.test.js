@@ -213,11 +213,11 @@ var tests = [{
         param: "3i",
         expect: "-0.008876640735623675-0.0013801328997494896i"
     }, {
-        set: {r: 3, i: 4},
+        set: {re: 3, im: 4},
         fn: "abs",
         expect: "5"
     }, {
-        set: {r: 10, i: 24},
+        set: {re: 10, im: 24},
         fn: "abs",
         expect: "26"
     }, {
@@ -231,27 +231,27 @@ var tests = [{
         param: "4.0000",
         expect: "1+4i"
     }, {
-        set: {r: -7.1, i: 2.5},
+        set: {re: -7.1, im: 2.5},
         fn: "neg",
         expect: "7.1-2.5i"
     }, {
-        set: {r: 1, i: 1},
+        set: {re: 1, im: 1},
         fn: "arg",
         expect: "" + Math.PI / 4
     }, {
-        set: {r: -1, i: -1},
+        set: {re: -1, im: -1},
         fn: "arg",
         expect: "" + -3 * Math.PI / 4
     }, {
-        set: {r: 0, i: 1},
+        set: {re: 0, im: 1},
         fn: "arg",
         expect: "" + Math.PI / 2
     }, {
-        set: {r: 1, i: 0.5 * Math.sqrt(4 / 3)},
+        set: {re: 1, im: 0.5 * Math.sqrt(4 / 3)},
         fn: "arg",
         expect: "" + Math.PI / 6
     }, {
-        set: {r: 99, i: 50},
+        set: {re: 99, im: 50},
         fn: "conjugate",
         expect: "99-50i"
     }, {
@@ -260,12 +260,12 @@ var tests = [{
         param: new Complex(1, 2),
         expect: "3.6+0.8i"
     }, {
-        set: {r: 1, i: 2},
+        set: {re: 1, im: 2},
         fn: "add",
         param: "4+6i",
         expect: "5+8i"
     }, {
-        set: {r: 5, i: 8},
+        set: {re: 5, im: 8},
         fn: "sub",
         param: "4+6i",
         expect: "1+2i"
@@ -280,7 +280,7 @@ var tests = [{
         param: "1+2i",
         expect: "-0.22251715680177267+0.10070913113607541i"
     }, {
-        set: {r: 1, i: 2},
+        set: {re: 1, im: 2},
         fn: "pow",
         param: new Complex(3, 4),
         expect: "0.12900959407446697+0.033924092905170025i"
@@ -304,15 +304,15 @@ var tests = [{
         fn: "sqrt",
         expect: "1.600485180440241+1.2496210676876531i"
     }, {
-        set: {r: -3, i: 4},
+        set: {re: -3, im: 4},
         fn: "sqrt",
         expect: "1+2i"
     }, {
-        set: {r: 3, i: -4},
+        set: {re: 3, im: -4},
         fn: "sqrt",
         expect: "2-i"
     }, {
-        set: {r: -3, i: -4},
+        set: {re: -3, im: -4},
         fn: "sqrt",
         expect: "1-2i"
     }, {
@@ -324,7 +324,7 @@ var tests = [{
         fn: "exp",
         expect: "-54.05175886107815+7.7048913727311525i"
     }, {
-        set: {r: 1, i: 2},
+        set: {re: 1, im: 2},
         fn: "sin",
         expect: "3.1657785132161678+1.9596010414216063i"
     }, {
@@ -336,31 +336,31 @@ var tests = [{
         fn: "acos",
         expect: "1.5707963267948966-0.8813735870195429i"
     }, {
-        set: {r: 1, i: 2},
+        set: {re: 1, im: 2},
         fn: "cos",
         expect: "2.0327230070196656-3.0518977991518i"
     }, {
-        set: {r: 1, i: 2},
+        set: {re: 1, im: 2},
         fn: "tan",
         expect: "0.0338128260798967+1.0147936161466335i"
     }, {
-        set: {r: 1, i: 3},
+        set: {re: 1, im: 3},
         fn: "sinh",
         expect: "-1.1634403637032504+0.21775955162215221i"
     }, {
-        set: {r: 1, i: 3},
+        set: {re: 1, im: 3},
         fn: "cosh",
         expect: "-1.5276382501165433+0.1658444019189788i"
     }, {
-        set: {r: 1, i: 3},
+        set: {re: 1, im: 3},
         fn: "tanh",
         expect: "0.7680176472869114-0.05916853956605073i"
     }, {
-        set: {r: 1, i: 3},
+        set: {re: 1, im: 3},
         fn: "inverse",
         expect: "0.1-0.3i"
     }, {
-        set: {r: 0.5, i: -0.5},
+        set: {re: 0.5, im: -0.5},
         fn: "inverse",
         expect: "1+i"
     }, {
@@ -472,7 +472,7 @@ describe("Complex Details", function() {
         assert.equal(Complex("3-4i").toString(), "3-4i");
         assert.equal(Complex("5").toString(), "5");
         assert.equal(Complex(0, -2).toString(), "-2i");
-        assert.equal(Complex({r: 0, i: -2}).toString(), "-2i");
+        assert.equal(Complex({re: 0, im: -2}).toString(), "-2i");
     });
 
     it("Complex Combinations", function() {
@@ -530,7 +530,7 @@ describe("Complex Details", function() {
 
                 var res = values[i];
 
-                assert(Math.abs(a.r - res.r) < 1e-12 && Math.abs(a.i - res.i) < 1e-12);
+                assert(Math.abs(a.re - res.re) < 1e-12 && Math.abs(a.im - res.im) < 1e-12);
             }
         }
     });

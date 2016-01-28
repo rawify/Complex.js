@@ -14,7 +14,7 @@ Example
 var Complex = require('complex.js');
 
 var c = new Complex("99.3+8i");
-c.mul({r: 3, i: 9}).div(4.9).sub(3, 2);
+c.mul({re: 3, im: 9}).div(4.9).sub(3, 2);
 ```
 
 Parser
@@ -27,9 +27,9 @@ You can pass either Objects, Doubles or Strings.
 Objects
 ---
 ```javascript
-new Complex({r: real, i: imaginary});
 new Complex({re: real, im: imaginary});
 new Complex({arg: angle, abs: radius});
+new Complex({phi: angle, r: radius});
 ```
 
 Doubles
