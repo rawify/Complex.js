@@ -334,7 +334,7 @@ var tests = [{
     }, {
         set: "i",
         fn: "acos",
-        expect: "1.5707963267948966-0.8813735870195429i"
+        expect: "1.5707963267948966-0.8813735870195428i"
     }, {
         set: {re: 1, im: 2},
         fn: "cos",
@@ -342,7 +342,7 @@ var tests = [{
     }, {
         set: {re: 1, im: 2},
         fn: "tan",
-        expect: "0.0338128260798967+1.0147936161466335i"
+        expect: "0.03381282607989669+1.0147936161466335i"
     }, {
         set: {re: 1, im: 3},
         fn: "sinh",
@@ -354,7 +354,7 @@ var tests = [{
     }, {
         set: {re: 1, im: 3},
         fn: "tanh",
-        expect: "0.7680176472869114-0.05916853956605073i"
+        expect: "0.7680176472869114-0.05916853956605075i"
     }, {
         set: {re: 1, im: 3},
         fn: "inverse",
@@ -491,21 +491,17 @@ describe("Complex Details", function() {
         assert.equal(one.mul(one).toString(), Complex(0, 2).toString());
         assert.equal(one.div(2).toString(), "0.5+0.5i");
         assert.equal(one.div(one).toString(), "1");
-        try {
-            assert.equal(one.div(0).toString(), "DIV/0");
-        } catch (e) {
-            assert.equal(e, "DIV/0");
-        }
+        assert.equal(one.div(0).toString(), "Infinity+Infinityi");
         assert.equal(one.exp().toString(), "1.4686939399158851+2.2873552871788423i");
         assert.equal(one.log().toString(), "0.34657359027997264+0.7853981633974483i");
         assert.equal(one.pow(one).toString(), "0.27395725383012104+0.5837007587586146i");
         assert.equal(one.pow(zero).toString(), "1");
-        assert.equal(one.sqrt().toString(), "1.09868411346781+0.4550898605622274i");
+        assert.equal(one.sqrt().toString(), "1.09868411346781+0.45508986056222733i");
         assert.equal(one.sin().toString(), "1.2984575814159773+0.6349639147847361i");
         assert.equal(one.cos().toString(), "0.8337300251311491-0.9888977057628651i");
-        assert.equal(one.tan().toString(), "0.2717525853195118+1.0839233273386948i");
+        assert.equal(one.tan().toString(), "0.27175258531951174+1.0839233273386946i");
         assert.equal(one.asin().toString(), "0.6662394324925153+1.0612750619050355i");
-        assert.equal(one.acos().toString(), "0.9045568943023813-1.0612750619050357i");
+        assert.equal(one.acos().toString(), "0.9045568943023813-1.0612750619050355i");
         assert.equal(one.atan().toString(), "1.0172219678978514+0.40235947810852507i");
 
         assert.equal(Complex("5i+3").log().exp().toString(), "3+5i")
