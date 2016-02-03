@@ -24,6 +24,9 @@ var tests = [{
         set: "2.3",
         expect: "2.3"
     }, {
+        set: {re: -Infinity, im: 0},
+        expect: "-Infinity"
+    },{
         set: Complex.I,
         fn: "mul",
         param: Complex(Math.PI).exp(),

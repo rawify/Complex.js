@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.7.0 13/07/2015
+ * @license Complex.js v1.8.0 13/07/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -174,7 +174,7 @@
                 parser_exit();
         }
 
-        if (isNaN(P["re"] * P["im"])) {
+        if (isNaN(P["re"]) || isNaN(P["im"])) {
             parser_exit();
         }
     };
@@ -1079,7 +1079,7 @@
             var b = this["im"];
             var ret = "";
             
-            if (isNaN(a * b)) {
+            if (isNaN(a) || isNaN(b)) {
                 return "NaN";
             }
 
