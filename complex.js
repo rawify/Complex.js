@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.6.0 13/07/2015
+ * @license Complex.js v1.7.0 13/07/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -42,7 +42,7 @@
      */
     var EPSILON = 1e-16;
     
-    var P = {r: 0, i: 0};
+    var P = {'re': 0, 'im': 0};
     
     Math.cosh = Math.cosh || function(x) {
         return (Math.exp(x) + Math.exp(-x)) * 0.5;
@@ -123,57 +123,56 @@
         } else if (b !== undefined) {
             P["re"] = a;
             P["im"] = b;
-        } else
-            switch (typeof a) {
+        } else switch (typeof a) {
 
-                case "object":
+            case "object":
 
-                    if ("im" in a && "re" in a) {
-                        P["re"] = (a["re"]);
-                        P["im"] = (a["im"]);
-                    } else if ("abs" in a && "arg" in a) {
-                        P["re"] = a["abs"] * Math.cos(a["arg"]);
-                        P["im"] = a["abs"] * Math.sin(a["arg"]);
-                    } else {
-                        parser_exit();
-                    }
-                    break;
-                    
-                case "string":
-
-                    P["im"] = /* void */
-                    P["re"] = 0;
-                    
-                    a = a.replace(/\s+/g, "");
-                    
-                    for (var reg = /[+-]?(?:[\di.]e[+-]?[\di]+|[\di.]+)/ig, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
-
-                        if (tmp[0].indexOf("i") !== -1) {
-
-                            tr = tmp[0].replace("i", "");
-                            if (tr === "+" || tr === "-" || tr === "")
-                                tr+= "1";
-                            
-                            P["im"]+= parseFloat(tr);
-                        } else {
-                            P["re"]+= parseFloat(tmp[0]);
-                        }
-                    }
-
-                    // No single iteration
-                    if (i === 0) {
-                        parser_exit();
-                    }
-                    break;
-                    
-                case "number":
-                    P["im"] = 0;
-                    P["re"] = a;
-                    break;
-                    
-                default:
+                if ("im" in a && "re" in a) {
+                    P["re"] = (a["re"]);
+                    P["im"] = (a["im"]);
+                } else if ("abs" in a && "arg" in a) {
+                    P["re"] = a["abs"] * Math.cos(a["arg"]);
+                    P["im"] = a["abs"] * Math.sin(a["arg"]);
+                } else {
                     parser_exit();
-            }
+                }
+                break;
+
+            case "string":
+
+                P["im"] = /* void */
+                P["re"] = 0;
+
+                a = a.replace(/\s+/g, "");
+
+                for (var reg = /[+-]?(?:[\di.]e[+-]?[\di]+|[\di.]+)/ig, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
+
+                    if (tmp[0].indexOf("i") !== -1) {
+
+                        tr = tmp[0].replace("i", "");
+                        if (tr === "+" || tr === "-" || tr === "")
+                            tr+= "1";
+
+                        P["im"]+= parseFloat(tr);
+                    } else {
+                        P["re"]+= parseFloat(tmp[0]);
+                    }
+                }
+
+                // No single iteration
+                if (i === 0) {
+                    parser_exit();
+                }
+                break;
+
+            case "number":
+                P["im"] = 0;
+                P["re"] = a;
+                break;
+
+            default:
+                parser_exit();
+        }
 
         if (isNaN(P["re"] * P["im"])) {
             parser_exit();
@@ -985,11 +984,10 @@
             var b = this["im"];
             
             var d = a * a + b * b;
-            
-            if (0 === d) {
-                throw "DIV/0";
-            }
-            return new Complex(a / d, -b / d);
+
+            return new Complex(
+              a !== 0 ? a / d : 0, 
+              b !== 0 ? -b / d : 0);
         },
         
         /**

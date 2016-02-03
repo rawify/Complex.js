@@ -66,6 +66,11 @@ var tests = [{
         set: "-36i",
         fn: "sqrt",
         expect: "4.242640687119285-4.242640687119285i"
+    },{
+        set: "4+2i",
+        fn: "div",
+        param: "0",
+        expect: "Infinity+Infinityi"
     }, {
         set: "4+2i",
         fn: "div",
@@ -370,7 +375,7 @@ var tests = [{
     }, {
         set: "0",
         fn: "inverse",
-        expect: "DIV/0"
+        expect: "0"
     }, {
         set: 0,
         fn: "equals",
