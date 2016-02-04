@@ -134,25 +134,65 @@
 
                 P["im"] = /* void */
                 P["re"] = 0;
+                
 
-                a = a.replace(/\s+/g, "");
 
-                for (var reg = /[+-]?(?:[\di.]e[+-]?[\di]+|[\di.]+)/ig, tmp, tr, i = 0; null !== (tmp = reg.exec(a)); i = 1) {
 
-                    if (tmp[0].indexOf("i") !== -1) {
 
-                        tr = tmp[0].replace("i", "");
-                        if (tr === "+" || tr === "-" || tr === "")
-                            tr+= "1";
 
-                        P["im"]+= parseFloat(tr);
-                    } else {
-                        P["re"]+= parseFloat(tmp[0]);
-                    }
-                }
+var match = a.match(/[\d.]e[+-]?\d+|[\d.]+|./g);
+var plus = 1;
+var minus = 0;
+
+for (var i = 0; i < match.length; i++) {
+
+	var c = match[i];
+
+	if (c === ' ' || c === '\t') {
+
+	} else if (c === '+') {
+		plus++;
+	} else if (c === '-') {
+		minus++;
+	} else if (!isNaN(c)) {
+
+		if (plus+minus === 0) {
+			parser_exit();
+		}
+
+		if (match[i + 1] === 'i' || match[i + 1] === 'j') {
+			P["im"]+= parseFloat((minus % 2 ? "-" : "+") + c);
+			i++;
+		} else {
+			P["re"]+= parseFloat((minus % 2 ? "-" : "+") + c);
+		}
+		plus = minus = 0;
+	} else if (c === 'i' || c === 'j') {
+		
+		if (plus+minus === 0) {
+			parser_exit();
+		}
+
+		if (match[i + 1] !== ' ' && !isNaN(match[i + 1])) {
+			P["im"]+= parseFloat((minus % 2 ? "-" : "+") + match[i + 1]);
+			i++;
+		} else {
+			P["im"]+= parseFloat((minus % 2 ? "-" : "+") + "1");
+		}
+		plus = minus = 0;
+	} else {
+      parser_exit();
+    }
+}
+
+
+
+
+
 
                 // No single iteration
-                if (i === 0) {
+                if (plus+minus > 0) {
+                  console.log("STILL ON STACK", plus, minus)
                     parser_exit();
                 }
                 break;
@@ -1145,5 +1185,7 @@
     } else {
         root["Complex"] = Complex;
     }
+    
+    Complex("1e3i")
 
 })(this);

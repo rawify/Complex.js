@@ -439,6 +439,24 @@ var tests = [{
     fn: "add",
     param: "3e-3+1e2i",
     expect: "0.003+1100i"
+  }, {
+    set: "+7 -i + 3i  -++++43 + 2i - i4 +- 33 + 65-1	",
+    expect: "-5"
+  }, {
+    set: "+7 -i + 3i  -++++43 + 2i - i4 +- 33 + 65-1	+",
+    expect: "Invalid Param"
+  }, {
+    set: "-3x+4",
+    expect: "Invalid Param"
+  }, {
+    set: "-+7",
+    expect: "-7"
+  }, {
+    set: "4 5i",
+    expect: "Invalid Param"
+  }, {
+    set: "-",
+    expect: "Invalid Param"
   }
 ];
 
