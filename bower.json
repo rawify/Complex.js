@@ -1,7 +1,7 @@
 {
     "name": "complex.js",
     "main": "complex.js",
-    "version": "1.8.2",
+    "version": "1.8.5",
     "homepage": "https://github.com/infusion/Complex.js",
     "description": "A complex number library",
     "keywords": [
