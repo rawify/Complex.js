@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.8.0 13/07/2015
+ * @license Complex.js v1.8.2 13/07/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -33,14 +33,6 @@
 (function(root) {
 
     "use strict";
-    
-    /**
-     * Comparision epsilon
-     *
-     * @const
-     * @type number
-     */
-    var EPSILON = 1e-16;
     
     var P = {'re': 0, 'im': 0};
     
@@ -1019,7 +1011,9 @@
 
             places = Math.pow(10, places || 0);
             
-            return new Complex(Math.ceil(this["re"] * places) / places, Math.ceil(this["im"] * places) / places);
+            return new Complex(
+                Math.ceil(this["re"] * places) / places, 
+                Math.ceil(this["im"] * places) / places);
         },
         
         /**
@@ -1031,7 +1025,9 @@
 
             places = Math.pow(10, places || 0);
             
-            return new Complex(Math.floor(this["re"] * places) / places, Math.floor(this["im"] * places) / places);
+            return new Complex(
+                Math.floor(this["re"] * places) / places, 
+                Math.floor(this["im"] * places) / places);
         },
         
         /**
@@ -1043,7 +1039,9 @@
 
             places = Math.pow(10, places || 0);
             
-            return new Complex(Math.round(this["re"] * places) / places, Math.round(this["im"] * places) / places);
+            return new Complex(
+                Math.round(this["re"] * places) / places, 
+                Math.round(this["im"] * places) / places);
         },
         
         /**
@@ -1055,7 +1053,8 @@
 
             parse(a, b);
             
-            return Math.abs(P["re"] - this["re"]) <= EPSILON && Math.abs(P["im"] - this["im"]) <= EPSILON;
+            return Math.abs(P["re"] - this["re"]) <= Complex["EPSILON"] && 
+                    Math.abs(P["im"] - this["im"]) <= Complex["EPSILON"];
         },
         
         /**
@@ -1135,6 +1134,7 @@
     Complex["I"] = new Complex(0, 1);
     Complex["PI"] = new Complex(Math.PI, 0);
     Complex["E"] = new Complex(Math.E, 0);
+    Complex['EPSILON'] = 1e-16;
     
     if (typeof define === "function" && define["amd"]) {
         define([], function() {
