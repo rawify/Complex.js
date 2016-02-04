@@ -181,7 +181,7 @@
             return new Complex(a, b);
         }
 
-        parse(a, b);
+        parse(a, b); // mutates P
         
         this["re"] = P["re"];
         this["im"] = P["im"];
@@ -213,7 +213,7 @@
          */
         "add": function(a, b) {
 
-            parse(a, b);
+            parse(a, b); // mutates P
             
             return new Complex(
                 this["re"] + P["re"],
@@ -227,7 +227,7 @@
          */
         "sub": function(a, b) {
 
-            parse(a, b);
+            parse(a, b); // mutates P
             
             return new Complex(
                 this["re"] - P["re"],
@@ -241,7 +241,7 @@
          */
         "mul": function(a, b) {
 
-            parse(a, b);
+            parse(a, b); // mutates P
             
             return new Complex(
                 this["re"] * P["re"] - this["im"] * P["im"],
@@ -255,7 +255,7 @@
          */
         "div": function(a, b) {
 
-            parse(a, b);
+            parse(a, b); // mutates P
 
             a = this["re"];
             b = this["im"];
@@ -303,7 +303,7 @@
          */
         "pow": function(a, b) {
 
-            parse(a, b);
+            parse(a, b); // mutates P
             
             a = this["re"];
             b = this["im"];
@@ -629,7 +629,7 @@
          */
         "atan2": function(u, v) {
 
-            parse(u, v);
+            parse(u, v); // mutates P
             
             return new Complex(this["re"] / P["re"], this["im"] / P["im"]).atan();
         },
@@ -1051,7 +1051,7 @@
          */
         "equals": function(a, b) {
 
-            parse(a, b);
+            parse(a, b); // mutates P
             
             return Math.abs(P["re"] - this["re"]) <= Complex["EPSILON"] && 
                     Math.abs(P["im"] - this["im"]) <= Complex["EPSILON"];
