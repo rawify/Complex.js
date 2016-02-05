@@ -416,11 +416,7 @@
         im = Math.abs(b) / Math.sqrt(2 * (r + a));
       }
 
-      if (b >= 0) {
-        return new Complex(re, im);
-      } else {
-        return new Complex(re, -im);
-      }
+      return new Complex(re, b >= 0 ? im : -im);
     },
     
     /**
