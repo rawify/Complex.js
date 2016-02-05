@@ -324,6 +324,10 @@ var tests = [{
     fn: "sqrt",
     expect: "1-2i"
   }, {
+    set: -Complex.E.pow(2),
+    fn: "log",
+    expect: "2+3.141592653589793i"
+  }, {
     set: "4+3i",
     fn: "log",
     expect: "1.6094379124341003+0.6435011087932844i"
