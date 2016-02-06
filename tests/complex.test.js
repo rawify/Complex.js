@@ -461,6 +461,18 @@ var tests = [{
   }, {
     set: "-",
     expect: "Invalid Param"
+  }, {
+    set: "2.2e-1-3.2e-1i",
+    expect: "0.22 - 0.32i"
+  },{
+    set: "2.2.",
+    expect: "Invalid Param"
+  }, {
+    set: {r: 0, phi: 4},
+    expect: "0"
+  }, {
+    set: {r: 1, phi: 1},
+    expect: "0.5403023058681398 + 0.8414709848078965i"
   }
 ];
 

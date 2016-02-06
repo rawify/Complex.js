@@ -125,6 +125,9 @@
         } else if ("abs" in a && "arg" in a) {
           P["re"] = a["abs"] * Math.cos(a["arg"]);
           P["im"] = a["abs"] * Math.sin(a["arg"]);
+        } else if ("r" in a && "phi" in a) {
+          P["re"] = a["r"] * Math.cos(a["phi"]);
+          P["im"] = a["r"] * Math.sin(a["phi"]);
         } else {
           parser_exit();
         }
@@ -135,7 +138,7 @@
         P["im"] = /* void */
         P["re"] = 0;
 
-        var match = a.match(/[\d.]e[+-]?\d+|[\d.]+|./g);
+        var match = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|./g);
         var plus = 1;
         var minus = 0;
 
