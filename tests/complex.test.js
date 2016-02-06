@@ -15,7 +15,7 @@ var tests = [{
     set: {},
     expect: "Invalid Param"
   }, {
-    set: "+i",
+    set: " + i",
     expect: "i"
   }, {
     set: "3",
@@ -35,10 +35,10 @@ var tests = [{
     set: 0,
     expect: "0"
   }, {
-    set: "4+3i",
+    set: "4 + 3i",
     fn: "add",
-    param: "-3-2i",
-    expect: "1+i"
+    param: "-3 - 2i",
+    expect: "1 + i"
   }, {
     set: "3i",
     fn: "add",
@@ -64,67 +64,67 @@ var tests = [{
   }, {
     set: "36i",
     fn: "sqrt",
-    expect: "4.242640687119285+4.242640687119285i"
+    expect: "4.242640687119285 + 4.242640687119285i"
   }, {
     set: "-36i",
     fn: "sqrt",
-    expect: "4.242640687119285-4.242640687119285i"
+    expect: "4.242640687119285 - 4.242640687119285i"
   }, {
-    set: "4+2i",
+    set: "4 + 2i",
     fn: "div",
     param: "0",
-    expect: "Infinity+Infinityi"
+    expect: "Infinity + Infinityi"
   }, {
-    set: "4+2i",
+    set: "4 + 2i",
     fn: "div",
-    param: "1+i",
-    expect: "3-i"
+    param: "1 + i",
+    expect: "3 - i"
   }, {
     set: "25",
     fn: "div",
-    param: "3-4i",
-    expect: "3+4i"
+    param: "3 - 4i",
+    expect: "3 + 4i"
   }, {
-    set: "3-2i",
+    set: "3 - 2i",
     fn: "div",
     param: "i",
-    expect: "-2-3i"
+    expect: "-2 - 3i"
   }, {
     set: "4i",
     fn: "mul",
     param: "-5i",
     expect: "20"
   }, {
-    set: "3-6i",
+    set: "3 - 6i",
     fn: "mul",
     param: "i",
-    expect: "6+3i"
+    expect: "6 + 3i"
   }, {
-    set: "3+4i",
+    set: "3 + 4i",
     fn: "add",
-    param: "5-7i",
-    expect: "8-3i"
+    param: "5 - 7i",
+    expect: "8 - 3i"
   }, {
     set: "6i",
     fn: "div",
-    param: "3-12i",
-    expect: "-0.47058823529411764+0.11764705882352941i"
+    param: "3 - 12i",
+    expect: "-0.47058823529411764 + 0.11764705882352941i"
   }, {
-    set: "36+36i",
+    set: "36 + 36i",
     fn: "sqrt",
-    expect: "6.59210468080686+2.730539163373364i"
+    expect: "6.59210468080686 + 2.730539163373364i"
   }, {
-    set: "36-36i",
+    set: "36 - 36i",
     fn: "sqrt",
-    expect: "6.59210468080686-2.730539163373364i"
+    expect: "6.59210468080686 - 2.730539163373364i"
   }, {
-    set: "-36+36i",
+    set: "-36 + 36i",
     fn: "sqrt",
-    expect: "2.730539163373364+6.59210468080686i"
+    expect: "2.730539163373364 + 6.59210468080686i"
   }, {
-    set: "-36-36i",
+    set: "-36 - 36i",
     fn: "sqrt",
-    expect: "2.730539163373364-6.59210468080686i"
+    expect: "2.730539163373364 - 6.59210468080686i"
   }, {
     set: "0",
     fn: "sqrt",
@@ -142,13 +142,13 @@ var tests = [{
     fn: "log",
     expect: (Math.PI / 2) + "i"
   }, {
-    set: "3+2i",
+    set: "3 + 2i",
     fn: "log",
-    expect: Math.log(13) / 2 + "+" + Math.atan2(2, 3) + "i"
+    expect: Math.log(13) / 2 + " + " + Math.atan2(2, 3) + "i"
   }, {
-    set: "3-2i",
+    set: "3 - 2i",
     fn: "log",
-    expect: Math.log(13) / 2 + "-" + Math.atan2(2, 3) + "i"
+    expect: Math.log(13) / 2 + " - " + Math.atan2(2, 3) + "i"
   }, {
     set: 1,
     fn: "exp",
@@ -156,15 +156,15 @@ var tests = [{
   }, {
     set: "i",
     fn: "exp",
-    expect: Math.cos(1) + "+" + Math.sin(1) + "i"
+    expect: Math.cos(1) + " + " + Math.sin(1) + "i"
   }, {
-    set: "3+2i",
+    set: "3 + 2i",
     fn: "exp",
-    expect: "-8.358532650935372+18.263727040666765i"
+    expect: "-8.358532650935372 + 18.263727040666765i"
   }, {
-    set: "3-2i",
+    set: "3 - 2i",
     fn: "exp",
-    expect: "-8.358532650935372-18.263727040666765i"
+    expect: "-8.358532650935372 - 18.263727040666765i"
   }, {
     set: "3",
     fn: "pow",
@@ -219,7 +219,7 @@ var tests = [{
     set: "3i",
     fn: "pow",
     param: "3i",
-    expect: "-0.008876640735623675-0.0013801328997494896i"
+    expect: "-0.008876640735623675 - 0.0013801328997494896i"
   }, {
     set: {re: 3, im: 4},
     fn: "abs",
@@ -229,19 +229,19 @@ var tests = [{
     fn: "abs",
     expect: "26"
   }, {
-    set: "1+4i",
+    set: "1 + 4i",
     fn: "mul",
-    param: "3+2i",
-    expect: "-5+14i"
+    param: "3 + 2i",
+    expect: "-5 + 14i"
   }, {
-    set: "4+16i",
+    set: "4 + 16i",
     fn: "div",
     param: "4.0000",
-    expect: "1+4i"
+    expect: "1 + 4i"
   }, {
     set: {re: -7.1, im: 2.5},
     fn: "neg",
-    expect: "7.1-2.5i"
+    expect: "7.1 - 2.5i"
   }, {
     set: {re: 1, im: 1},
     fn: "arg",
@@ -261,37 +261,37 @@ var tests = [{
   }, {
     set: {re: 99, im: 50},
     fn: "conjugate",
-    expect: "99-50i"
+    expect: "99 - 50i"
   }, {
-    set: "2+8i",
+    set: "2 + 8i",
     fn: "div",
     param: new Complex(1, 2),
-    expect: "3.6+0.8i"
+    expect: "3.6 + 0.8i"
   }, {
     set: {re: 1, im: 2},
     fn: "add",
-    param: "4+6i",
-    expect: "5+8i"
+    param: "4 + 6i",
+    expect: "5 + 8i"
   }, {
     set: {re: 5, im: 8},
     fn: "sub",
-    param: "4+6i",
-    expect: "1+2i"
+    param: "4 + 6i",
+    expect: "1 + 2i"
   }, {
-    set: "1+2i",
+    set: "1 + 2i",
     fn: "pow",
     param: "2",
-    expect: "-2.999999999999999+4.000000000000001i"
+    expect: "-2.999999999999999 + 4.000000000000001i"
   }, {
-    set: "1+2i",
+    set: "1 + 2i",
     fn: "pow",
-    param: "1+2i",
-    expect: "-0.22251715680177267+0.10070913113607541i"
+    param: "1 + 2i",
+    expect: "-0.22251715680177267 + 0.10070913113607541i"
   }, {
     set: {re: 1, im: 2},
     fn: "pow",
     param: new Complex(3, 4),
-    expect: "0.12900959407446697+0.033924092905170025i"
+    expect: "0.12900959407446697 + 0.033924092905170025i"
   }, {
     set: "i",
     fn: "pow",
@@ -308,37 +308,37 @@ var tests = [{
     param: 5,
     expect: "i"
   }, {
-    set: "1+4i",
+    set: "1 + 4i",
     fn: "sqrt",
-    expect: "1.600485180440241+1.2496210676876531i"
+    expect: "1.600485180440241 + 1.2496210676876531i"
   }, {
     set: {re: -3, im: 4},
     fn: "sqrt",
-    expect: "1+2i"
+    expect: "1 + 2i"
   }, {
     set: {re: 3, im: -4},
     fn: "sqrt",
-    expect: "2-i"
+    expect: "2 - i"
   }, {
     set: {re: -3, im: -4},
     fn: "sqrt",
-    expect: "1-2i"
+    expect: "1 - 2i"
   }, {
     set: -Complex.E.pow(2),
     fn: "log",
-    expect: "2+3.141592653589793i"
+    expect: "2 + 3.141592653589793i"
   }, {
-    set: "4+3i",
+    set: "4 + 3i",
     fn: "log",
-    expect: "1.6094379124341003+0.6435011087932844i"
+    expect: "1.6094379124341003 + 0.6435011087932844i"
   }, {
-    set: "4+3i",
+    set: "4 + 3i",
     fn: "exp",
-    expect: "-54.05175886107815+7.7048913727311525i"
+    expect: "-54.05175886107815 + 7.7048913727311525i"
   }, {
     set: {re: 1, im: 2},
     fn: "sin",
-    expect: "3.1657785132161678+1.9596010414216063i"
+    expect: "3.1657785132161678 + 1.9596010414216063i"
   }, {
     set: "i",
     fn: "cos",
@@ -346,39 +346,39 @@ var tests = [{
   }, {
     set: "i",
     fn: "acos",
-    expect: "1.5707963267948966-0.8813735870195428i"
+    expect: "1.5707963267948966 - 0.8813735870195428i"
   }, {
     set: {re: 1, im: 2},
     fn: "cos",
-    expect: "2.0327230070196656-3.0518977991518i"
+    expect: "2.0327230070196656 - 3.0518977991518i"
   }, {
     set: {re: 1, im: 2},
     fn: "tan",
-    expect: "0.03381282607989669+1.0147936161466335i"
+    expect: "0.03381282607989669 + 1.0147936161466335i"
   }, {
     set: {re: 1, im: 3},
     fn: "sinh",
-    expect: "-1.1634403637032504+0.21775955162215221i"
+    expect: "-1.1634403637032504 + 0.21775955162215221i"
   }, {
     set: {re: 1, im: 3},
     fn: "cosh",
-    expect: "-1.5276382501165433+0.1658444019189788i"
+    expect: "-1.5276382501165433 + 0.1658444019189788i"
   }, {
     set: {re: 1, im: 3},
     fn: "tanh",
-    expect: "0.7680176472869114-0.05916853956605075i"
+    expect: "0.7680176472869114 - 0.05916853956605075i"
   }, {
     set: {re: 1, im: 3},
     fn: "inverse",
-    expect: "0.1-0.3i"
+    expect: "0.1 - 0.3i"
   }, {
     set: {re: 0.5, im: -0.5},
     fn: "inverse",
-    expect: "1+i"
+    expect: "1 + i"
   }, {
-    set: "1+i",
+    set: "1 + i",
     fn: "inverse",
-    expect: "0.5-0.5i"
+    expect: "0.5 - 0.5i"
   }, {
     set: "0",
     fn: "inverse",
@@ -409,51 +409,51 @@ var tests = [{
     param: "10i",
     expect: "true"
   }, {
-    set: "2+3i",
+    set: "2 + 3i",
     fn: "equals",
-    param: "2+3i",
+    param: "2 + 3i",
     expect: "true"
   }, {
-    set: "2+3i",
+    set: "2 + 3i",
     fn: "equals",
     param: "5i",
     expect: "false"
   }, {
-    set: "2+3i",
+    set: "2 + 3i",
     fn: "round",
     param: "0",
-    expect: "2+3i"
+    expect: "2 + 3i"
   }, {
-    set: "2.5+3.5i",
+    set: "2.5 + 3.5i",
     fn: "round",
     param: "1",
-    expect: "2.5+3.5i"
+    expect: "2.5 + 3.5i"
   }, {
-    set: "2.5+3.5i",
+    set: "2.5 + 3.5i",
     fn: "sign",
     param: null,
-    expect: "0.5812381937190965+0.813733471206735i"
+    expect: "0.5812381937190965 + 0.813733471206735i"
   }, {
-    set: "10+24i",
+    set: "10 + 24i",
     fn: "sign",
     param: null,
-    expect: "0.38461538461538464+0.9230769230769231i"
+    expect: "0.38461538461538464 + 0.9230769230769231i"
   }, {
     set: "1e3i",
     fn: "add",
-    param: "3e-3+1e2i",
-    expect: "0.003+1100i"
+    param: "3e-3 + 1e2i",
+    expect: "0.003 + 1100i"
   }, {
-    set: "+7 -i + 3i  -++++43 + 2i - i4 +- 33 + 65-1	",
+    set: " + 7  - i  +  3i   -  +  +  +  + 43  +  2i  -  i4  +  -  33  +  65 - 1	",
     expect: "-5"
   }, {
-    set: "+7 -i + 3i  -++++43 + 2i - i4 +- 33 + 65-1	+",
+    set: " + 7  - i  +  3i   -  +  +  +  + 43  +  2i  -  i4  +  -  33  +  65 - 1	 + ",
     expect: "Invalid Param"
   }, {
-    set: "-3x+4",
+    set: "-3x + 4",
     expect: "Invalid Param"
   }, {
-    set: "-+7",
+    set: "- + 7",
     expect: "-7"
   }, {
     set: "4 5i",
@@ -498,13 +498,14 @@ describe("Complex", function() {
 describe("Complex Details", function() {
 
   it("should work with different params", function() {
-    assert.equal(Complex(1, -1).toString(), "1-i");
+    assert.equal(Complex(1, -1).toString(), "1 - i");
     assert.equal(Complex(0, 0).toString(), "0");
     assert.equal(Complex(0, 2).toString(), "2i");
-    assert.equal(Complex("3+4i").toString(), "3+4i");
-    assert.equal(Complex("1+i").toString(), "1+i");
+    assert.equal(Complex("3 + 4i").toString(), "3 + 4i");
+    assert.equal(Complex("1 + i").toString(), "1 + i");
     assert.equal(Complex("i").toString(), "i");
-    assert.equal(Complex("3-4i").toString(), "3-4i");
+    assert.equal(Complex.I.toString(), "i");
+    assert.equal(Complex("3 - 4i").toString(), "3 - 4i");
     assert.equal(Complex("5").toString(), "5");
     assert.equal(Complex(0, -2).toString(), "-2i");
     assert.equal(Complex({re: 0, im: -2}).toString(), "-2i");
@@ -515,7 +516,7 @@ describe("Complex Details", function() {
     var zero = Complex(0, 0), one = Complex(1, 1), two = Complex(2, 2);
 
     assert.equal(zero.toString(), "0");
-    assert.equal(one.toString(), "1+i");
+    assert.equal(one.toString(), "1 + i");
     assert(one.neg().equals(Complex(-1, -1)));
     assert(one.conjugate().equals(Complex(1, -1)));
     assert.equal(one.abs(), Math.SQRT2);
@@ -524,23 +525,23 @@ describe("Complex Details", function() {
     assert.equal(one.sub(one).toString(), zero.toString());
     assert.equal(one.mul(2).toString(), two.toString());
     assert.equal(one.mul(one).toString(), Complex(0, 2).toString());
-    assert.equal(one.div(2).toString(), "0.5+0.5i");
+    assert.equal(one.div(2).toString(), "0.5 + 0.5i");
     assert.equal(one.div(one).toString(), "1");
-    assert.equal(one.div(0).toString(), "Infinity+Infinityi");
-    assert.equal(one.exp().toString(), "1.4686939399158851+2.2873552871788423i");
-    assert.equal(one.log().toString(), "0.34657359027997264+0.7853981633974483i");
-    assert.equal(one.pow(one).toString(), "0.27395725383012104+0.5837007587586146i");
+    assert.equal(one.div(0).toString(), "Infinity + Infinityi");
+    assert.equal(one.exp().toString(), "1.4686939399158851 + 2.2873552871788423i");
+    assert.equal(one.log().toString(), "0.34657359027997264 + 0.7853981633974483i");
+    assert.equal(one.pow(one).toString(), "0.27395725383012104 + 0.5837007587586146i");
     assert.equal(one.pow(zero).toString(), "1");
-    assert.equal(one.sqrt().toString(), "1.09868411346781+0.45508986056222733i");
-    assert.equal(one.sin().toString(), "1.2984575814159773+0.6349639147847361i");
-    assert.equal(one.cos().toString(), "0.8337300251311491-0.9888977057628651i");
-    assert.equal(one.tan().toString(), "0.27175258531951174+1.0839233273386946i");
-    assert.equal(one.asin().toString(), "0.6662394324925153+1.0612750619050355i");
-    assert.equal(one.acos().toString(), "0.9045568943023813-1.0612750619050355i");
-    assert.equal(one.atan().toString(), "1.0172219678978514+0.40235947810852507i");
+    assert.equal(one.sqrt().toString(), "1.09868411346781 + 0.45508986056222733i");
+    assert.equal(one.sin().toString(), "1.2984575814159773 + 0.6349639147847361i");
+    assert.equal(one.cos().toString(), "0.8337300251311491 - 0.9888977057628651i");
+    assert.equal(one.tan().toString(), "0.27175258531951174 + 1.0839233273386946i");
+    assert.equal(one.asin().toString(), "0.6662394324925153 + 1.0612750619050355i");
+    assert.equal(one.acos().toString(), "0.9045568943023813 - 1.0612750619050355i");
+    assert.equal(one.atan().toString(), "1.0172219678978514 + 0.40235947810852507i");
 
-    assert.equal(Complex("5i+3").log().exp().toString(), "3+5i")
-    assert.equal(Complex("-2i-1").log().exp().toString(), "-1-2i")
+    assert.equal(Complex("5i + 3").log().exp().toString(), "3 + 5i")
+    assert.equal(Complex("-2i - 1").log().exp().toString(), "-1 - 2i")
   });
 
   it("should handle inverse trig fns", function() {
@@ -564,5 +565,14 @@ describe("Complex Details", function() {
         assert(Math.abs(a.re - res.re) < 1e-12 && Math.abs(a.im - res.im) < 1e-12);
       }
     }
+  });
+
+  it("should eat it's own dog food", function() {
+
+    var a = Complex(1, -5).toString();
+    var b = Complex(a).toString();
+    var c = Complex(b).mul(a);
+
+    assert.equal(c.toString(), '-24 - 10i');
   });
 });

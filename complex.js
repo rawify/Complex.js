@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.8.5 13/07/2015
+ * @license Complex.js v1.9.0 13/07/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -1113,12 +1113,15 @@
 
       if (b !== 0) {
 
-        if (b > 0 && a !== 0)
-          ret+= "+";
-
-        if (b === -1) {
+        if (a !== 0) {
+          ret+= b < 0 ? " - " : " + ";
+        } else if (b < 0) {
           ret+= "-";
-        } else if (b !== 1) {
+        }
+
+        b = Math.abs(b);
+
+        if (1 !== b) {
           ret+= b;
         }
         ret+= "i";

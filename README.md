@@ -173,13 +173,13 @@ Returns a Vector of the actual complex number with two components
 
 String toString()
 ---
-Returns a string representation of the actual number
+Returns a string representation of the actual number. As of v1.9.0 the output is a bit more human readable
 
 ```javascript
-new Complex(1, 2).toString(); // 1+2i
+new Complex(1, 2).toString(); // 1 + 2i
 new Complex(0, 1).toString(); // i
 new Complex(9, 0).toString(); // 9
-new Complex(1, 1).toString(); // 1+i
+new Complex(1, 1).toString(); // 1 + i
 ```
 
 double valueOf()
