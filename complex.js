@@ -44,8 +44,8 @@
     return (Math.exp(x) - Math.exp(-x)) * 0.5;
   };
 
-  var parser_exit = function(a,b) {
-    throw "Invalid Param" ;
+  var parser_exit = function() {
+    throw "Invalid Param";
   };
 
   /**
@@ -129,7 +129,7 @@
           P["re"] = a["r"] * Math.cos(a["phi"]);
           P["im"] = a["r"] * Math.sin(a["phi"]);
         } else {
-          parser_exit(a,b);
+          parser_exit();
         }
         break;
 
@@ -155,7 +155,7 @@
           } else if (!isNaN(c)) {
 
             if (plus + minus === 0) {
-              parser_exit(a,b);
+              parser_exit();
             }
 
             if (match[i + 1] === 'i') {
@@ -168,7 +168,7 @@
           } else if (c === 'i') {
 
             if (plus + minus === 0) {
-              parser_exit(a,b);
+              parser_exit();
             }
 
             if (match[i + 1] !== ' ' && !isNaN(match[i + 1])) {
@@ -179,13 +179,13 @@
             }
             plus = minus = 0;
           } else {
-            parser_exit(a,b);
+            parser_exit();
           }
         }
 
         // Still something on the stack
         if (plus + minus > 0) {
-          parser_exit(a,b);
+          parser_exit();
         }
         break;
 
@@ -195,11 +195,11 @@
         break;
 
       default:
-        parser_exit(a,b);
+        parser_exit();
     }
 
     if (isNaN(P["re"]) || isNaN(P["im"])) {
-      parser_exit(a,b);
+      parser_exit();
     }
   };
 
