@@ -65,6 +65,11 @@ var tests = [{
     set: "36i",
     fn: "sqrt",
     expect: "4.242640687119285 + 4.242640687119285i"
+  },{
+    set: Infinity,
+    fn: "mul",
+    param: "i",
+    expect: "NaN"
   }, {
     set: "-36i",
     fn: "sqrt",

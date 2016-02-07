@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.9.1 13/07/2015
+ * @license Complex.js v1.9.2 13/07/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -141,6 +141,10 @@
         var match = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|./g);
         var plus = 1;
         var minus = 0;
+        
+        if (match === null) {
+          parser_exit();
+        }
 
         for (var i = 0; i < match.length; i++) {
 
@@ -199,7 +203,8 @@
     }
 
     if (isNaN(P["re"]) || isNaN(P["im"])) {
-      parser_exit();
+      // If a calculation is NaN, we treat it as NaN and don't throw
+      //parser_exit();
     }
   };
 
