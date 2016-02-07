@@ -134,6 +134,15 @@ var tests = [{
     fn: "log",
     expect: "1"
   }, {
+    set: 0,
+    fn: "log",
+    expect: "-Infinity"
+  }, {
+    set: Infinity,
+    fn: "mul",
+    param: 3,
+    expect: "Infinity"
+  }, {
     set: "-1",
     fn: "log",
     expect: Math.PI + "i"
@@ -268,6 +277,11 @@ var tests = [{
     param: new Complex(1, 2),
     expect: "3.6 + 0.8i"
   }, {
+    set: -Infinity,
+    fn: "div",
+    param: 3,
+    expect: "-Infinity"
+  }, {
     set: {re: 1, im: 2},
     fn: "add",
     param: "4 + 6i",
@@ -308,6 +322,16 @@ var tests = [{
     param: 5,
     expect: "i"
   }, {
+    set: "0-0i",
+    fn: "pow",
+    param: 2,
+    expect: "0"
+  }, {
+    set: "0-0i",
+    fn: "pow",
+    param: 0,
+    expect: "0"
+  }, {
     set: "1 + 4i",
     fn: "sqrt",
     expect: "1.600485180440241 + 1.2496210676876531i"
@@ -335,6 +359,10 @@ var tests = [{
     set: "4 + 3i",
     fn: "exp",
     expect: "-54.05175886107815 + 7.7048913727311525i"
+  },{
+    set: "1-2i",
+    fn: "sqrt",
+    expect: "1.272019649514069 - 0.7861513777574233i"
   }, {
     set: {re: 1, im: 2},
     fn: "sin",
@@ -464,7 +492,7 @@ var tests = [{
   }, {
     set: "2.2e-1-3.2e-1i",
     expect: "0.22 - 0.32i"
-  },{
+  }, {
     set: "2.2.",
     expect: "Invalid Param"
   }, {

@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v1.9.0 13/07/2015
+ * @license Complex.js v1.9.1 13/07/2015
  *
  * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -44,8 +44,8 @@
     return (Math.exp(x) - Math.exp(-x)) * 0.5;
   };
 
-  var parser_exit = function() {
-    throw "Invalid Param";
+  var parser_exit = function(a,b) {
+    throw "Invalid Param" ;
   };
 
   /**
@@ -129,7 +129,7 @@
           P["re"] = a["r"] * Math.cos(a["phi"]);
           P["im"] = a["r"] * Math.sin(a["phi"]);
         } else {
-          parser_exit();
+          parser_exit(a,b);
         }
         break;
 
@@ -155,7 +155,7 @@
           } else if (!isNaN(c)) {
 
             if (plus + minus === 0) {
-              parser_exit();
+              parser_exit(a,b);
             }
 
             if (match[i + 1] === 'i') {
@@ -168,7 +168,7 @@
           } else if (c === 'i') {
 
             if (plus + minus === 0) {
-              parser_exit();
+              parser_exit(a,b);
             }
 
             if (match[i + 1] !== ' ' && !isNaN(match[i + 1])) {
@@ -179,13 +179,13 @@
             }
             plus = minus = 0;
           } else {
-            parser_exit();
+            parser_exit(a,b);
           }
         }
 
         // Still something on the stack
         if (plus + minus > 0) {
-          parser_exit();
+          parser_exit(a,b);
         }
         break;
 
@@ -195,11 +195,11 @@
         break;
 
       default:
-        parser_exit();
+        parser_exit(a,b);
     }
 
     if (isNaN(P["re"]) || isNaN(P["im"])) {
-      parser_exit();
+      parser_exit(a,b);
     }
   };
 
@@ -274,6 +274,11 @@
     "mul": function(a, b) {
 
       parse(a, b); // mutates P
+
+      // Besides the addition/subtraction, this helps having a solution for rational Infinity
+      if (P['im'] === 0 && this['im'] === 0) {
+        return new Complex(this['re'] * P['re'], 0);
+      }
 
       return new Complex(
               this["re"] * P["re"] - this["im"] * P["im"],
@@ -590,13 +595,13 @@
 
       var t1 = new Complex(
               b * b - a * a + 1,
-              -2 * a * b).sqrt();
+              -2 * a * b)['sqrt']();
 
       var t2 = new Complex(
-              t1.re - b,
-              t1.im + a).log();
+              t1['re'] - b,
+              t1['im'] + a)['log']();
 
-      return new Complex(t2.im, -t2.re);
+      return new Complex(t2['im'], -t2['re']);
     },
     
     /**
@@ -611,15 +616,15 @@
 
       var t1 = new Complex(
               b * b - a * a + 1,
-              -2 * a * b).sqrt();
+              -2 * a * b)['sqrt']();
 
       var t2 = new Complex(
               t1["re"] - b,
-              t1["im"] + a).log();
+              t1["im"] + a)['log']();
 
       return new Complex(Math.PI / 2 - t2["im"], t2["re"]);
     },
-    
+
     /**
      * Calculate the complex arcus tangent
      *
@@ -1176,5 +1181,5 @@
   } else {
     root["Complex"] = Complex;
   }
-
+  
 })(this);
