@@ -45,7 +45,7 @@
   };
 
   var parser_exit = function() {
-    throw "Invalid Param";
+    throw SyntaxError("Invalid Param");
   };
 
   /**

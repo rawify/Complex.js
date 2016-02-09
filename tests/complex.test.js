@@ -10,10 +10,10 @@ var tests = [{
     expect: "0"
   }, {
     set: "foo",
-    expect: "Invalid Param"
+    expect: "SyntaxError: Invalid Param"
   }, {
     set: {},
-    expect: "Invalid Param"
+    expect: "SyntaxError: Invalid Param"
   }, {
     set: " + i",
     expect: "i"
@@ -481,25 +481,25 @@ var tests = [{
     expect: "-5"
   }, {
     set: " + 7  - i  +  3i   -  +  +  +  + 43  +  2i  -  i4  +  -  33  +  65 - 1	 + ",
-    expect: "Invalid Param"
+    expect: "SyntaxError: Invalid Param"
   }, {
     set: "-3x + 4",
-    expect: "Invalid Param"
+    expect: "SyntaxError: Invalid Param"
   }, {
     set: "- + 7",
     expect: "-7"
   }, {
     set: "4 5i",
-    expect: "Invalid Param"
+    expect: "SyntaxError: Invalid Param"
   }, {
     set: "-",
-    expect: "Invalid Param"
+    expect: "SyntaxError: Invalid Param"
   }, {
     set: "2.2e-1-3.2e-1i",
     expect: "0.22 - 0.32i"
   }, {
     set: "2.2.",
-    expect: "Invalid Param"
+    expect: "SyntaxError: Invalid Param"
   }, {
     set: {r: 0, phi: 4},
     expect: "0"

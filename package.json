@@ -3,7 +3,7 @@
     "homepage": "https://github.com/infusion/Complex.js",
     "bugs": "https://github.com/infusion/Complex.js/issues",
     "title": "complex.js",
-    "version": "1.9.2",
+    "version": "1.9.3",
     "description": "A complex number library",
     "keywords": ["math", "complex", "number", "calculus", "parser"],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
