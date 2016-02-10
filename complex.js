@@ -441,6 +441,9 @@
 
       var tmp = Math.exp(this["re"]);
 
+      if (this["im"] === 0) {
+        //return new Complex(tmp, 0);
+      }
       return new Complex(
               tmp * Math.cos(this["im"]),
               tmp * Math.sin(this["im"]));
@@ -800,7 +803,7 @@
      * @returns {Complex}
      */
     "coth": function() {
-
+      
       var a = this["re"];
       var b = this["im"];
 
@@ -1167,6 +1170,15 @@
         return this["re"];
       }
       return null;
+    },
+    
+    /**
+     * Checks if the given complex number is not a number
+     * 
+     * @returns {boolean}
+     */
+    isNaN: function() {
+      return isNaN(this['re']) || isNaN(this['im']);
     }
   };
 
