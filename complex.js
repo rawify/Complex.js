@@ -138,17 +138,17 @@
         P["im"] = /* void */
         P["re"] = 0;
 
-        var match = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|./g);
+        var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
         var plus = 1;
         var minus = 0;
 
-        if (match === null) {
+        if (tokens === null) {
           parser_exit();
         }
 
-        for (var i = 0; i < match.length; i++) {
+        for (var i = 0; i < tokens.length; i++) {
 
-          var c = match[i];
+          var c = tokens[i];
 
           if (c === ' ' || c === '\t' || c === '\n') {
             /* void */
@@ -156,14 +156,14 @@
             plus++;
           } else if (c === '-') {
             minus++;
-          } else if (c === 'i') {
+          } else if (c === 'i' || c === 'I') {
 
             if (plus + minus === 0) {
               parser_exit();
             }
 
-            if (match[i + 1] !== ' ' && !isNaN(match[i + 1])) {
-              P["im"]+= parseFloat((minus % 2 ? "-" : "") + match[i + 1]);
+            if (tokens[i + 1] !== ' ' && !isNaN(tokens[i + 1])) {
+              P["im"]+= parseFloat((minus % 2 ? "-" : "") + tokens[i + 1]);
               i++;
             } else {
               P["im"]+= parseFloat((minus % 2 ? "-" : "") + "1");
@@ -176,7 +176,7 @@
               parser_exit();
             }
 
-            if (match[i + 1] === 'i') {
+            if (tokens[i + 1] === 'i' || tokens[i + 1] === 'I') {
               P["im"]+= parseFloat((minus % 2 ? "-" : "") + c);
               i++;
             } else {
