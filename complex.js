@@ -68,40 +68,40 @@
       return Math.log(_a);
     }
 
-    if (_a < 1000 && _b < 1000) {
+    if (_a < 3000 && _b < 3000) {
       return Math.log(a * a + b * b) * 0.5;
     }
 
     /* I got 4 ideas to compute this property without overflow:
-     * 
+     *
      * Testing 1000000 times with random samples for a,b ∈ [1, 1000000000] against a big decimal library to get an error estimate
-     * 
+     *
      * 1. Only eliminate the square root: (OVERALL ERROR: 3.9122483030951116e-11)
-     
+
      Math.log(a * a + b * b) / 2
-     
-     * 
-     * 
+
+     *
+     *
      * 2. Try to use the non-overflowing pythagoras: (OVERALL ERROR: 8.889760039210159e-10)
-     
+
      var fn = function(a, b) {
      a = Math.abs(a);
      b = Math.abs(b);
      var t = Math.min(a, b);
      a = Math.max(a, b);
      t = t / a;
-     
+
      return Math.log(a) + Math.log(1 + t * t) / 2;
      };
-     
+
      * 3. Abuse the identity cos(atan(y/x) = x / sqrt(x^2+y^2): (OVERALL ERROR: 3.4780178737037204e-10)
-     
+
      Math.log(a / Math.cos(Math.atan2(b, a)))
-     
+
      * 4. Use 3. and apply log rules: (OVERALL ERROR: 1.2014087502620896e-9)
-     
+
      Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)))
-     
+
      */
 
     return Math.log(a / Math.cos(Math.atan2(b, a)));
@@ -109,8 +109,8 @@
 
   var parse = function(a, b) {
 
-    if (a === null || a === undefined) {
-      P["re"] = 0;
+    if (a === undefined || a === null) {
+      P["re"] =
       P["im"] = 0;
     } else if (b !== undefined) {
       P["re"] = a;
@@ -120,8 +120,8 @@
       case "object":
 
         if ("im" in a && "re" in a) {
-          P["re"] = (a["re"]);
-          P["im"] = (a["im"]);
+          P["re"] = a["re"];
+          P["im"] = a["im"];
         } else if ("abs" in a && "arg" in a) {
           P["re"] = a["abs"] * Math.cos(a["arg"]);
           P["im"] = a["abs"] * Math.sin(a["arg"]);
@@ -141,7 +141,7 @@
         var match = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|./g);
         var plus = 1;
         var minus = 0;
-        
+
         if (match === null) {
           parser_exit();
         }
@@ -156,19 +156,6 @@
             plus++;
           } else if (c === '-') {
             minus++;
-          } else if (!isNaN(c)) {
-
-            if (plus + minus === 0) {
-              parser_exit();
-            }
-
-            if (match[i + 1] === 'i') {
-              P["im"]+= parseFloat((minus % 2 ? "-" : "+") + c);
-              i++;
-            } else {
-              P["re"]+= parseFloat((minus % 2 ? "-" : "+") + c);
-            }
-            plus = minus = 0;
           } else if (c === 'i') {
 
             if (plus + minus === 0) {
@@ -176,14 +163,26 @@
             }
 
             if (match[i + 1] !== ' ' && !isNaN(match[i + 1])) {
-              P["im"]+= parseFloat((minus % 2 ? "-" : "+") + match[i + 1]);
+              P["im"]+= parseFloat((minus % 2 ? "-" : "") + match[i + 1]);
               i++;
             } else {
-              P["im"]+= parseFloat((minus % 2 ? "-" : "+") + "1");
+              P["im"]+= parseFloat((minus % 2 ? "-" : "") + "1");
             }
             plus = minus = 0;
+
           } else {
-            parser_exit();
+
+            if (plus + minus === 0 || isNaN(c)) {
+              parser_exit();
+            }
+
+            if (match[i + 1] === 'i') {
+              P["im"]+= parseFloat((minus % 2 ? "-" : "") + c);
+              i++;
+            } else {
+              P["re"]+= parseFloat((minus % 2 ? "-" : "") + c);
+            }
+            plus = minus = 0;
           }
         }
 
@@ -231,7 +230,7 @@
 
     /**
      * Calculates the sign of a complex number
-     * 
+     *
      * @returns {Complex}
      */
     "sign": function() {
@@ -270,7 +269,7 @@
               this["re"] - P["re"],
               this["im"] - P["im"]);
     },
-    
+
     /**
      * Multiplies two complex numbers
      *
@@ -337,7 +336,7 @@
                 (b - a * x) / t);
       }
     },
-    
+
     /**
      * Calculate the power of two complex numbers
      *
@@ -379,22 +378,22 @@
       }
 
       /* I couldn"t find a good formula, so here is a derivation and optimization
-       * 
+       *
        * z_1^z_2 = (a + bi)^(c + di)
        *         = exp((c + di) * log(a + bi)
        *         = pow(a^2 + b^2, (c + di) / 2) * exp(i(c + di)atan2(b, a))
        * =>...
        * Re = (pow(a^2 + b^2, c / 2) * exp(-d * atan2(b, a))) * cos(d * log(a^2 + b^2) / 2 + c * atan2(b, a))
        * Im = (pow(a^2 + b^2, c / 2) * exp(-d * atan2(b, a))) * sin(d * log(a^2 + b^2) / 2 + c * atan2(b, a))
-       * 
+       *
        * =>...
        * Re = exp(c * log(sqrt(a^2 + b^2)) - d * atan2(b, a)) * cos(d * log(sqrt(a^2 + b^2)) + c * atan2(b, a))
        * Im = exp(c * log(sqrt(a^2 + b^2)) - d * atan2(b, a)) * sin(d * log(sqrt(a^2 + b^2)) + c * atan2(b, a))
-       * 
+       *
        * =>
        * Re = exp(c * logsq2 - d * arg(z_1)) * cos(d * logsq2 + c * arg(z_1))
        * Im = exp(c * logsq2 - d * arg(z_1)) * sin(d * logsq2 + c * arg(z_1))
-       * 
+       *
        */
 
       a = Math.exp(P["re"] * loh - P["im"] * arg);
@@ -403,7 +402,7 @@
               a * Math.cos(b),
               a * Math.sin(b));
     },
-    
+
     /**
      * Calculate the complex square root
      *
@@ -431,7 +430,7 @@
 
       return new Complex(re, b >= 0 ? im : -im);
     },
-    
+
     /**
      * Calculate the complex exponent
      *
@@ -448,7 +447,7 @@
               tmp * Math.cos(this["im"]),
               tmp * Math.sin(this["im"]));
     },
-    
+
     /**
      * Calculate the natural log
      *
@@ -463,7 +462,7 @@
               logHypot(a, b),
               Math.atan2(b, a));
     },
-    
+
     /**
      * Calculate the magniture of the complex number
      *
@@ -474,7 +473,7 @@
       var a = Math.abs(this["re"]);
       var b = Math.abs(this["im"]);
 
-      if (a < 1000 && b < 1000) {
+      if (a < 3000 && b < 3000) {
         return Math.sqrt(a * a + b * b);
       }
 
@@ -486,7 +485,7 @@
       }
       return a * Math.sqrt(1 + b * b);
     },
-    
+
     /**
      * Calculate the angle of the complex number
      *
@@ -496,7 +495,7 @@
 
       return Math.atan2(this["im"], this["re"]);
     },
-    
+
     /**
      * Calculate the sine of the complex number
      *
@@ -511,7 +510,7 @@
               Math.sin(a) * Math.cosh(b),
               Math.cos(a) * Math.sinh(b));
     },
-    
+
     /**
      * Calculate the cosine
      *
@@ -524,9 +523,9 @@
 
       return new Complex(
               Math.cos(a) * Math.cosh(b),
-              -Math.sin(a) * Math.sinh(b));
+             -Math.sin(a) * Math.sinh(b));
     },
-    
+
     /**
      * Calculate the tangent
      *
@@ -540,9 +539,9 @@
 
       return new Complex(
               2 * Math.exp(-2 * b) * Math.sin(2 * a) / d,
-              (1 - Math.exp(-4 * b)) / d);
+             (1 - Math.exp(-4 * b)) / d);
     },
-    
+
     /**
      * Calculate the cotangent
      *
@@ -556,9 +555,9 @@
 
       return new Complex(
               2 * Math.exp(-2 * b) * Math.sin(2 * a) / d,
-              (Math.exp(-4 * b) - 1) / d);
+                 (Math.exp(-4 * b) - 1) / d);
     },
-    
+
     /**
      * Calculate the secant
      *
@@ -568,13 +567,13 @@
 
       var a = this["re"];
       var b = this["im"];
-      var d = 0.25 * (Math.exp(-2 * b) + Math.exp(2 * b)) + 0.5 * Math.cos(2 * a);
+      var d = 0.5 * (0.5 * (Math.exp(-2 * b) + Math.exp(2 * b)) + Math.cos(2 * a));
 
       return new Complex(
               Math.cos(a) * Math.cosh(b) / d,
               Math.sin(a) * Math.sinh(b) / d);
     },
-    
+
     /**
      * Calculate the cosecans
      *
@@ -588,9 +587,9 @@
 
       return new Complex(
               Math.sin(a) * Math.cosh(b) / d,
-              -Math.cos(a) * Math.sinh(b) / d);
+             -Math.cos(a) * Math.sinh(b) / d);
     },
-    
+
     /**
      * Calculate the complex arcus sinus
      *
@@ -602,7 +601,7 @@
       var b = this["im"];
 
       var t1 = new Complex(
-              b * b - a * a + 1,
+               b * b - a * a + 1,
               -2 * a * b)['sqrt']();
 
       var t2 = new Complex(
@@ -611,7 +610,7 @@
 
       return new Complex(t2['im'], -t2['re']);
     },
-    
+
     /**
      * Calculate the complex arcus cosinus
      *
@@ -623,7 +622,7 @@
       var b = this["im"];
 
       var t1 = new Complex(
-              b * b - a * a + 1,
+               b * b - a * a + 1,
               -2 * a * b)['sqrt']();
 
       var t2 = new Complex(
@@ -662,7 +661,7 @@
 
       return new Complex(-0.5 * t1["im"], 0.5 * t1["re"]);
     },
-    
+
     /**
      * Calculate the complex arcus tangent
      *
@@ -674,7 +673,7 @@
 
       return new Complex(this["re"] / P["re"], this["im"] / P["im"]).atan();
     },
-    
+
     /**
      * Calculate the complex arcus cotangent
      *
@@ -693,12 +692,12 @@
       return (d !== 0)
               ? new Complex(
                       a / d,
-                      -b / d).atan()
+                     -b / d).atan()
               : new Complex(
-                      (a !== 0) ? (a / 0) : 0,
-                      (b !== 0) ? -(b / 0) : 0).atan();
+                      (a !== 0) ? a / 0 : 0,
+                      (b !== 0) ?-b / 0 : 0).atan();
     },
-    
+
     /**
      * Calculate the complex arcus secant
      *
@@ -719,10 +718,10 @@
                       a / d,
                       -b / d).acos()
               : new Complex(
-                      (a !== 0) ? (a / 0) : 0,
-                      (b !== 0) ? -(b / 0) : 0).acos();
+                      (a !== 0) ? a / 0 : 0,
+                      (b !== 0) ?-b / 0 : 0).acos();
     },
-    
+
     /**
      * Calculate the complex arcus cosecans
      *
@@ -741,12 +740,12 @@
       return (d !== 0)
               ? new Complex(
                       a / d,
-                      -b / d).asin()
+                     -b / d).asin()
               : new Complex(
-                      (a !== 0) ? (a / 0) : 0,
-                      (b !== 0) ? -(b / 0) : 0).asin();
+                      (a !== 0) ? a / 0 : 0,
+                      (b !== 0) ?-b / 0 : 0).asin();
     },
-    
+
     /**
      * Calculate the complex sinh
      *
@@ -761,7 +760,7 @@
               Math.sinh(a) * Math.cos(b),
               Math.cosh(a) * Math.sin(b));
     },
-    
+
     /**
      * Calculate the complex cosh
      *
@@ -776,7 +775,7 @@
               Math.cosh(a) * Math.cos(b),
               Math.sinh(a) * Math.sin(b));
     },
-    
+
     /**
      * Calculate the complex tanh
      *
@@ -796,14 +795,14 @@
               ((re - 1) * (re + 1) + im * im) / d,
               2 * im / d);
     },
-    
+
     /**
      * Calculate the complex coth
      *
      * @returns {Complex}
      */
     "coth": function() {
-      
+
       var a = this["re"];
       var b = this["im"];
 
@@ -816,7 +815,7 @@
               ((re + 1) * (re - 1) + im * im) / d,
               -2 * im / d);
     },
-    
+
     /**
      * Calculate the complex coth
      *
@@ -834,7 +833,7 @@
       var d = re * re + im * im;
       return new Complex(2 * re / d, -2 * im / d);
     },
-    
+
     /**
      * Calculate the complex sech
      *
@@ -852,7 +851,7 @@
       var d = re * re + im * im;
       return new Complex(2 * re / d, -2 * im / d);
     },
-    
+
     /**
      * Calculate the complex asinh
      *
@@ -860,22 +859,20 @@
      */
     "asinh": function() {
 
-      var x = this;
-      var temp = x["im"];
-      x["im"] = -x["re"];
-      x["re"] = temp;
-      var res = x["asin"]();
+      var tmp = this["im"];
+      this["im"] = -this["re"];
+      this["re"] = tmp;
+      var res = this["asin"]();
 
-      // restore original values
-      x["re"] = -x["im"];
-      x["im"] = temp;
-      temp = res["re"];
+      this["re"] = -this["im"];
+      this["im"] = tmp;
+      tmp = res["re"];
 
       res["re"] = -res["im"];
-      res["im"] = temp;
+      res["im"] = tmp;
       return res;
     },
-    
+
     /**
      * Calculate the complex asinh
      *
@@ -896,7 +893,7 @@
       }
       return res;
     },
-    
+
     /**
      * Calculate the complex atanh
      *
@@ -928,7 +925,7 @@
       }
       return x;
     },
-    
+
     /**
      * Calculate the complex acoth
      *
@@ -948,12 +945,12 @@
       return (d !== 0)
               ? new Complex(
                       a / d,
-                      -b / d).atanh()
+                     -b / d).atanh()
               : new Complex(
-                      (a !== 0) ? (a / 0) : 0,
-                      (b !== 0) ? -(b / 0) : 0).atanh();
+                      (a !== 0) ? a / 0 : 0,
+                      (b !== 0) ?-b / 0 : 0).atanh();
     },
-    
+
     /**
      * Calculate the complex acsch
      *
@@ -978,10 +975,10 @@
                       a / d,
                       -b / d).asinh()
               : new Complex(
-                      (a !== 0) ? (a / 0) : 0,
-                      (b !== 0) ? -(b / 0) : 0).asinh();
+                      (a !== 0) ? a / 0 : 0,
+                      (b !== 0) ?-b / 0 : 0).asinh();
     },
-    
+
     /**
      * Calculate the complex asech
      *
@@ -1000,12 +997,12 @@
       return (d !== 0)
               ? new Complex(
                       a / d,
-                      -b / d).acosh()
+                     -b / d).acosh()
               : new Complex(
-                      (a !== 0) ? (a / 0) : 0,
-                      (b !== 0) ? -(b / 0) : 0).acosh();
+                      (a !== 0) ? a / 0 : 0,
+                      (b !== 0) ?-b / 0 : 0).acosh();
     },
-    
+
     /**
      * Calculate the complex inverse 1/z
      *
@@ -1020,9 +1017,9 @@
 
       return new Complex(
               a !== 0 ? a / d : 0,
-              b !== 0 ? -b / d : 0);
+              b !== 0 ?-b / d : 0);
     },
-    
+
     /**
      * Returns the complex conjugate
      *
@@ -1032,7 +1029,7 @@
 
       return new Complex(this["re"], -this["im"]);
     },
-    
+
     /**
      * Gets the negated complex number
      *
@@ -1042,10 +1039,10 @@
 
       return new Complex(-this["re"], -this["im"]);
     },
-    
+
     /**
      * Ceils the actual complex number
-     * 
+     *
      * @returns {Complex}
      */
     "ceil": function(places) {
@@ -1056,10 +1053,10 @@
               Math.ceil(this["re"] * places) / places,
               Math.ceil(this["im"] * places) / places);
     },
-    
+
     /**
      * Floors the actual complex number
-     * 
+     *
      * @returns {Complex}
      */
     "floor": function(places) {
@@ -1070,10 +1067,10 @@
               Math.floor(this["re"] * places) / places,
               Math.floor(this["im"] * places) / places);
     },
-    
+
     /**
      * Ceils the actual complex number
-     * 
+     *
      * @returns {Complex}
      */
     "round": function(places) {
@@ -1084,7 +1081,7 @@
               Math.round(this["re"] * places) / places,
               Math.round(this["im"] * places) / places);
     },
-    
+
     /**
      * Compares two complex numbers
      *
@@ -1095,9 +1092,9 @@
       parse(a, b); // mutates P
 
       return Math.abs(P["re"] - this["re"]) <= Complex["EPSILON"] &&
-              Math.abs(P["im"] - this["im"]) <= Complex["EPSILON"];
+             Math.abs(P["im"] - this["im"]) <= Complex["EPSILON"];
     },
-    
+
     /**
      * Clones the actual object
      *
@@ -1107,7 +1104,7 @@
 
       return new Complex(this["re"], this["im"]);
     },
-    
+
     /**
      * Gets a string of the actual complex number
      *
@@ -1148,7 +1145,7 @@
 
       return ret;
     },
-    
+
     /**
      * Returns the actual number as a vector
      *
@@ -1158,7 +1155,7 @@
 
       return [this["re"], this["im"]];
     },
-    
+
     /**
      * Returns the actual real value of the current object
      *
@@ -1171,10 +1168,10 @@
       }
       return null;
     },
-    
+
     /**
      * Checks if the given complex number is not a number
-     * 
+     *
      * @returns {boolean}
      */
     isNaN: function() {
@@ -1199,4 +1196,6 @@
     root["Complex"] = Complex;
   }
   
+  console.log(Complex().acot())
+
 })(this);
