@@ -663,18 +663,6 @@
     },
 
     /**
-     * Calculate the complex arcus tangent
-     *
-     * @returns {Complex}
-     */
-    "atan2": function(u, v) {
-
-      parse(u, v); // mutates P
-
-      return new Complex(this["re"] / P["re"], this["im"] / P["im"]).atan();
-    },
-
-    /**
      * Calculate the complex arcus cotangent
      *
      * @returns {Complex}
