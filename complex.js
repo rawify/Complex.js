@@ -1,7 +1,7 @@
 /**
- * @license Complex.js v1.9.2 13/07/2015
+ * @license Complex.js v2.0.0 11/02/2016
  *
- * Copyright (c) 2015, Robert Eisele (robert@xarg.org)
+ * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  **/
 
@@ -457,6 +457,10 @@
 
       var a = this["re"];
       var b = this["im"];
+      
+      if (b === 0 && a > 0) {
+        //return new Complex(Math.log(a), 0);
+      }
 
       return new Complex(
               logHypot(a, b),
@@ -1183,7 +1187,5 @@
   } else {
     root["Complex"] = Complex;
   }
-  
-  console.log(Complex().acot())
 
 })(this);
