@@ -55,6 +55,10 @@ new Complex(3, 2); // 3+2i
 Functions
 ===
 
+Complex sign()
+---
+Returns the complex sign, defined as the complex number normalized by it's absolute value
+
 Complex add(n)
 ---
 Adds another complex number
@@ -95,42 +99,6 @@ double arg()
 ---
 Calculates the angle of the complex number
 
-Complex sin()
----
-Calculates the sine of the complex number
-
-Complex cos()
----
-Calculates the cosine of the complex number
-
-Complex tan()
----
-Calculates the tangent of the complex number
-
-Complex sinh()
----
-Calculates the hyperbolic sine of the complex number
-
-Complex cosh()
----
-Calculates the hyperbolic cosine of the complex number
-
-Complex tanh()
----
-Calculates the hyperbolic tangent of the complex number
-
-Complex asin()
----
-Calculates the arcus sine of the complex number
-
-Complex acos()
----
-Calculates the arcus cosine of the complex number
-
-Complex atan()
----
-Calculates the arcus tangent of the complex number
-
 Complex inverse()
 ---
 Calculates the multiplicative inverse of the complex number (1 / z)
@@ -138,10 +106,6 @@ Calculates the multiplicative inverse of the complex number (1 / z)
 Complex conjugate()
 ---
 Calculates the conjugate of the complex number (multiplies the imaginary part with -1)
-
-Complex sign()
----
-Calculates the sign of the complex number
 
 Complex neg()
 ---
@@ -162,6 +126,10 @@ Rounds the complex number parts
 boolean equals(n)
 ---
 Checks if both numbers are exactly the same
+
+boolean isNaN(n)
+---
+Checks if the given number is not a number
 
 Complex clone()
 ---
@@ -185,6 +153,21 @@ new Complex(1, 1).toString(); // 1 + i
 double valueOf()
 ---
 Returns the real part of the number if imaginary part is zero. Otherwise `null`
+
+
+Trigonometric functions
+===
+The following trigonometric functions are defined on Complex.js:
+
+| Trig | Arcus | Hyperbolic | Arcus-Hyperbolic |
+|------|-------|------------|------------------|
+| sin  | asin  | sinh       | asinh            |
+| cos  | acos  | cosh       | acosh            |
+| tan  | atan  | tanh       | atanh            |
+| cot  | acot  | coth       | acoth            |
+| sec  | asec  | sech       | asech            |
+| csc  | acsc  | csch       | acsch            |
+
 
 
 Constants
