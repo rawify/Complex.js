@@ -161,12 +161,12 @@ The following trigonometric functions are defined on Complex.js:
 
 | Trig | Arcus | Hyperbolic | Arcus-Hyperbolic |
 |------|-------|------------|------------------|
-| sin  | asin  | sinh       | asinh            |
-| cos  | acos  | cosh       | acosh            |
-| tan  | atan  | tanh       | atanh            |
-| cot  | acot  | coth       | acoth            |
-| sec  | asec  | sech       | asech            |
-| csc  | acsc  | csch       | acsch            |
+| sin()  | asin()  | sinh()       | asinh()            |
+| cos()  | acos()  | cosh()       | acosh()            |
+| tan()  | atan()  | tanh()       | atanh()            |
+| cot()  | acot()  | coth()       | acoth()            |
+| sec()  | asec()  | sech()       | asech()            |
+| csc()  | acsc()  | csch()       | acsch()            |
 
 
 
