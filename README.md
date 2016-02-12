@@ -85,7 +85,7 @@ Returns the complex square root of the number
 
 Complex exp(n)
 ---
-Returns `e^n` with complex exponential.
+Returns `e^n` with complex exponent `n`.
 
 Complex log()
 ---
