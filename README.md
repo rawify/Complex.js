@@ -193,6 +193,10 @@ Complex.E
 ---
 A complex euler number instance
 
+Complex.EPSILON
+---
+A small epsilon value used for `equal()` comparison in order to circumvent double inprecision.
+
 
 Installation
 ===
