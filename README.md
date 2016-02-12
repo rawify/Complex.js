@@ -127,7 +127,7 @@ boolean equals(n)
 ---
 Checks if both numbers are exactly the same
 
-boolean isNaN(n)
+boolean isNaN()
 ---
 Checks if the given number is not a number
 
