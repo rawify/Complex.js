@@ -65,7 +65,7 @@ var tests = [{
     set: "36i",
     fn: "sqrt",
     expect: "4.242640687119285 + 4.242640687119285i"
-  },{
+  }, {
     set: Infinity,
     fn: "mul",
     param: "i",
@@ -364,7 +364,7 @@ var tests = [{
     set: "4 + 3i",
     fn: "exp",
     expect: "-54.05175886107815 + 7.7048913727311525i"
-  },{
+  }, {
     set: "1-2i",
     fn: "sqrt",
     expect: "1.272019649514069 - 0.7861513777574233i"
@@ -387,7 +387,7 @@ var tests = [{
   }, {
     set: {re: 1, im: 2},
     fn: "tan",
-    expect: "0.03381282607989669 + 1.0147936161466335i"
+    expect: "0.0338128260798967 + 1.0147936161466335i"
   }, {
     set: {re: 1, im: 3},
     fn: "sinh",
@@ -399,7 +399,7 @@ var tests = [{
   }, {
     set: {re: 1, im: 3},
     fn: "tanh",
-    expect: "0.7680176472869114 - 0.05916853956605075i"
+    expect: "0.7680176472869114 - 0.05916853956605073i"
   }, {
     set: {re: 1, im: 3},
     fn: "inverse",
@@ -476,6 +476,14 @@ var tests = [{
     fn: "add",
     param: "3e-3 + 1e2i",
     expect: "0.003 + 1100i"
+  }, {
+    set: "3.14-4i",
+    fn: "coth",
+    expect: "0.9994481238383571 + 0.0037048958915019844i"
+  }, {
+    set: "8i-31",
+    fn: "cot",
+    expect: "1.663676829121394e-7 - 1.0000001515864905i"
   }, {
     set: " + 7  - i  +  3i   -  +  +  +  + 43  +  2i  -  i4  +  -  33  +  65 - 1	",
     expect: "-5"
@@ -580,7 +588,7 @@ describe("Complex Details", function() {
     assert.equal(one.sqrt().toString(), "1.09868411346781 + 0.45508986056222733i");
     assert.equal(one.sin().toString(), "1.2984575814159773 + 0.6349639147847361i");
     assert.equal(one.cos().toString(), "0.8337300251311491 - 0.9888977057628651i");
-    assert.equal(one.tan().toString(), "0.27175258531951174 + 1.0839233273386946i");
+    assert.equal(one.tan().toString(), "0.2717525853195118 + 1.0839233273386948i");
     assert.equal(one.asin().toString(), "0.6662394324925153 + 1.0612750619050355i");
     assert.equal(one.acos().toString(), "0.9045568943023813 - 1.0612750619050355i");
     assert.equal(one.atan().toString(), "1.0172219678978514 + 0.40235947810852507i");

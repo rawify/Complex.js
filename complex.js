@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.0 11/02/2016
+ * @license Complex.js v2.0.1 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -416,6 +416,10 @@
 
       var re, im;
 
+      if (a >= 0 && b === 0) {
+        return new Complex(Math.sqrt(a), 0);
+      }
+
       if (a >= 0) {
         re = 0.5 * Math.sqrt(2.0 * (r + a));
       } else {
@@ -537,13 +541,13 @@
      */
     "tan": function() {
 
-      var a = this["re"];
-      var b = this["im"];
-      var d = Math.exp(-4 * b) + 2 * Math.exp(-2 * b) * Math.cos(2 * a) + 1;
+      var a = 2 * this["re"];
+      var b = 2 * this["im"];
+      var d = Math.cos(a) + Math.cosh(b);
 
       return new Complex(
-              2 * Math.exp(-2 * b) * Math.sin(2 * a) / d,
-             (1 - Math.exp(-4 * b)) / d);
+              Math.sin(a) / d,
+              Math.sinh(b) / d);
     },
 
     /**
@@ -553,13 +557,13 @@
      */
     "cot": function() {
 
-      var a = this["re"];
-      var b = this["im"];
-      var d = Math.exp(-4 * b) - 2 * Math.exp(-2 * b) * Math.cos(2 * a) + 1;
+      var a = 2 * this["re"];
+      var b = 2 * this["im"];
+      var d = Math.cos(a) - Math.cosh(b);
 
       return new Complex(
-              2 * Math.exp(-2 * b) * Math.sin(2 * a) / d,
-                 (Math.exp(-4 * b) - 1) / d);
+             -Math.sin(a) / d,
+              Math.sinh(b) / d);
     },
 
     /**
@@ -571,7 +575,7 @@
 
       var a = this["re"];
       var b = this["im"];
-      var d = 0.5 * (0.5 * (Math.exp(-2 * b) + Math.exp(2 * b)) + Math.cos(2 * a));
+      var d = 0.5 * Math.cosh(2 * b) + 0.5 * Math.cos(2 * a);
 
       return new Complex(
               Math.cos(a) * Math.cosh(b) / d,
@@ -587,7 +591,7 @@
 
       var a = this["re"];
       var b = this["im"];
-      var d = 0.25 * (Math.exp(-2 * b) + Math.exp(2 * b)) - 0.5 * Math.cos(2 * a);
+      var d = 0.5 * Math.cosh(2 * b) - 0.5 * Math.cos(2 * a);
 
       return new Complex(
               Math.sin(a) * Math.cosh(b) / d,
@@ -775,17 +779,13 @@
      */
     "tanh": function() {
 
-      var a = this["re"];
-      var b = this["im"];
-
-      var t = Math.exp(2 * a);
-      var re = t * Math.cos(2 * b);
-      var im = t * Math.sin(2 * b);
-      var d = (re + 1) * (re + 1) + im * im;
+      var a = 2 * this["re"];
+      var b = 2 * this["im"];
+      var d = Math.cosh(a) + Math.cos(b);
 
       return new Complex(
-              ((re - 1) * (re + 1) + im * im) / d,
-              2 * im / d);
+              Math.sinh(a) / d,
+              Math.sin(b) / d);
     },
 
     /**
@@ -795,17 +795,13 @@
      */
     "coth": function() {
 
-      var a = this["re"];
-      var b = this["im"];
-
-      var t = Math.exp(2 * a);
-      var re = t * Math.cos(2 * b);
-      var im = t * Math.sin(2 * b);
-      var d = (re - 1) * (re - 1) + im * im;
+      var a = 2 * this["re"];
+      var b = 2 * this["im"];
+      var d = Math.cosh(a) - Math.cos(b);
 
       return new Complex(
-              ((re + 1) * (re - 1) + im * im) / d,
-              -2 * im / d);
+              Math.sinh(a) / d,
+             -Math.sin(b) / d);
     },
 
     /**
@@ -817,13 +813,11 @@
 
       var a = this["re"];
       var b = this["im"];
+      var d = Math.cos(2 * b) - Math.cosh(2 * a);
 
-      var ep = Math.exp(a);
-      var en = Math.exp(-a);
-      var re = Math.cos(b) * (ep - en);
-      var im = Math.sin(b) * (ep + en);
-      var d = re * re + im * im;
-      return new Complex(2 * re / d, -2 * im / d);
+      return new Complex(
+           -2 * Math.sinh(a) * Math.cos(b) / d, 
+            2 * Math.cosh(a) * Math.sin(b) / d);
     },
 
     /**
@@ -835,13 +829,11 @@
 
       var a = this["re"];
       var b = this["im"];
+      var d = Math.cos(2 * b) + Math.cosh(2 * a);
 
-      var ep = Math.exp(a);
-      var en = Math.exp(-a);
-      var re = Math.cos(b) * (ep + en);
-      var im = Math.sin(b) * (ep - en);
-      var d = re * re + im * im;
-      return new Complex(2 * re / d, -2 * im / d);
+      return new Complex(
+              2 * Math.cosh(a) * Math.cos(b) / d, 
+             -2 * Math.sinh(a) * Math.sin(b) / d);
     },
 
     /**
@@ -1187,5 +1179,5 @@
   } else {
     root["Complex"] = Complex;
   }
-
+  
 })(this);
