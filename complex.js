@@ -432,7 +432,7 @@
         im = Math.abs(b) / Math.sqrt(2 * (r + a));
       }
 
-      return new Complex(re, b >= 0 ? im : -im);
+      return new Complex(re, b < 0 ? -im : im);
     },
 
     /**
