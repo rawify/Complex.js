@@ -169,6 +169,41 @@ The following trigonometric functions are defined on Complex.js:
 | csc()  | acsc()  | csch()       | acsch()            |
 
 
+Geometric Equivalence
+===
+
+Complex numbers can also be seen as a vector in the 2D space. Here is a simple overview of basic operations and how to implement them with complex.js:
+
+New vector
+---
+```
+var v1 = Complex(1, 0);
+var v2 = Complex(1, 1);
+```
+
+Scale vector
+---
+```
+scale(v1, factor):= v1.mul(factor)
+```
+
+Translate vector
+---
+```
+translate(v1, v2):= v1.add(v2)
+```
+
+Rotate vector
+---
+```
+rotate(v1, angle):= v1.mul({r: 1, arg: angle})
+```
+
+Distance vector
+---
+```
+distance(v1, v2):= v1.sub(v2).abs()
+```
 
 Constants
 ===

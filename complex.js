@@ -229,7 +229,7 @@
     "im": 0,
 
     /**
-     * Calculates the sign of a complex number
+     * Calculates the sign of a complex number, which is a normalized complex
      *
      * @returns {Complex}
      */
@@ -510,6 +510,8 @@
      * @returns {Complex}
      */
     "sin": function() {
+      
+      // sin(c) = (e^b - e^(-b)) / (2i)
 
       var a = this["re"];
       var b = this["im"];
@@ -525,6 +527,8 @@
      * @returns {Complex}
      */
     "cos": function() {
+      
+      // cos(z) = (e^b + e^(-b)) / 2
 
       var a = this["re"];
       var b = this["im"];
@@ -540,6 +544,8 @@
      * @returns {Complex}
      */
     "tan": function() {
+      
+      // tan(c) = (e^(ci) - e^(-ci)) / (i(e^(ci) + e^(-ci)))
 
       var a = 2 * this["re"];
       var b = 2 * this["im"];
@@ -556,6 +562,8 @@
      * @returns {Complex}
      */
     "cot": function() {
+      
+      // cot(c) = i(e^(ci) + e^(-ci)) / (e^(ci) - e^(-ci))
 
       var a = 2 * this["re"];
       var b = 2 * this["im"];
@@ -572,6 +580,8 @@
      * @returns {Complex}
      */
     "sec": function() {
+      
+      // sec(c) = 2 / (e^(ci) + e^(-ci))
 
       var a = this["re"];
       var b = this["im"];
@@ -588,6 +598,8 @@
      * @returns {Complex}
      */
     "csc": function() {
+      
+      // csc(c) = 2i / (e^(ci) - e^(-ci))
 
       var a = this["re"];
       var b = this["im"];
@@ -604,6 +616,8 @@
      * @returns {Complex}
      */
     "asin": function() {
+      
+      // asin(c) = -i * log(ci + sqrt(1 - c^2))
 
       var a = this["re"];
       var b = this["im"];
@@ -625,6 +639,8 @@
      * @returns {Complex}
      */
     "acos": function() {
+      
+      // acos(c) = i * log(c - i * sqrt(1 - c^2))
 
       var a = this["re"];
       var b = this["im"];
@@ -646,6 +662,8 @@
      * @returns {Complex}
      */
     "atan": function() {
+      
+      // atan(c) = i / 2 log((i + x) / (i - x))
 
       var a = this["re"];
       var b = this["im"];
@@ -676,6 +694,8 @@
      * @returns {Complex}
      */
     "acot": function() {
+      
+      // acot(c) = i / 2 log((c - i) / (c + i))
 
       var a = this["re"];
       var b = this["im"];
@@ -700,6 +720,8 @@
      * @returns {Complex}
      */
     "asec": function() {
+      
+      // asec(c) = -i * log(1 / c + sqrt(1 - i / c^2))
 
       var a = this["re"];
       var b = this["im"];
@@ -724,6 +746,8 @@
      * @returns {Complex}
      */
     "acsc": function() {
+      
+      // acsc(c) = -i * log(i / c + sqrt(1 - 1 / c^2))
 
       var a = this["re"];
       var b = this["im"];
@@ -748,6 +772,8 @@
      * @returns {Complex}
      */
     "sinh": function() {
+      
+      // sinh(c) = (e^c - e^-c) / 2
 
       var a = this["re"];
       var b = this["im"];
@@ -763,6 +789,8 @@
      * @returns {Complex}
      */
     "cosh": function() {
+      
+      // cosh(c) = (e^c + e^-c) / 2
 
       var a = this["re"];
       var b = this["im"];
@@ -778,6 +806,8 @@
      * @returns {Complex}
      */
     "tanh": function() {
+      
+      // tanh(c) = (e^c - e^-c) / (e^c + e^-c)
 
       var a = 2 * this["re"];
       var b = 2 * this["im"];
@@ -794,6 +824,8 @@
      * @returns {Complex}
      */
     "coth": function() {
+      
+      // coth(c) = (e^c + e^-c) / (e^c - e^-c)
 
       var a = 2 * this["re"];
       var b = 2 * this["im"];
@@ -810,6 +842,8 @@
      * @returns {Complex}
      */
     "csch": function() {
+      
+      // csch(c) = 2 / (e^c - e^-c)
 
       var a = this["re"];
       var b = this["im"];
@@ -826,6 +860,8 @@
      * @returns {Complex}
      */
     "sech": function() {
+      
+      // sech(c) = 2 / (e^c + e^-c)
 
       var a = this["re"];
       var b = this["im"];
@@ -842,6 +878,8 @@
      * @returns {Complex}
      */
     "asinh": function() {
+      
+      // asinh(c) = log(c + sqrt(c^2 + 1))
 
       var tmp = this["im"];
       this["im"] = -this["re"];
@@ -863,6 +901,8 @@
      * @returns {Complex}
      */
     "acosh": function() {
+      
+      // acosh(c) = log(c + sqrt(c^2 - 1))
 
       var tmp;
       var res = this["acos"]();
@@ -884,6 +924,8 @@
      * @returns {Complex}
      */
     "atanh": function() {
+      
+      // atanh(c) = log((1+c) / (1-c)) / 2
 
       var a = this["re"];
       var b = this["im"];
@@ -916,6 +958,8 @@
      * @returns {Complex}
      */
     "acoth": function() {
+      
+      // acoth(c) = log((c+1) / (c-1)) / 2
 
       var a = this["re"];
       var b = this["im"];
@@ -941,6 +985,8 @@
      * @returns {Complex}
      */
     "acsch": function() {
+      
+      // acsch(c) = log((1+sqrt(1+c^2))/c)
 
       var a = this["re"];
       var b = this["im"];
@@ -969,6 +1015,8 @@
      * @returns {Complex}
      */
     "asech": function() {
+      
+      // asech(c) = log((1+sqrt(1-c^2))/c)
 
       var a = this["re"];
       var b = this["im"];
