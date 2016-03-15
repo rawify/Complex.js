@@ -8,6 +8,9 @@
     "keywords": ["complex numbers", "math", "complex", "number", "calculus", "parser", "arithmetic"],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "complex",
+    "directories": {
+        "example": "examples"
+    },
     "readmeFilename": "README.md",
     "license": "MIT OR GPL-2.0",
     "repository": {
