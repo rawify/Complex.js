@@ -31,6 +31,7 @@ new Complex({re: real, im: imaginary});
 new Complex({arg: angle, abs: radius});
 new Complex({phi: angle, r: radius});
 ```
+If there are other attributes on the passed object, they're not getting preserved and have to be merged manually.
 
 Doubles
 ---
@@ -90,6 +91,8 @@ Returns `e^n` with complex exponent `n`.
 Complex log()
 ---
 Returns the natural logarithm (base `E`) of the actual complex number
+
+_Note:_ The logarithm to a different base can be calculated with `z.log().div(Math.log(base))`.
 
 double abs()
 ---
@@ -193,13 +196,19 @@ Translate vector
 translate(v1, v2):= v1.add(v2)
 ```
 
-Rotate vector
+Rotate vector around center
 ---
 ```
-rotate(v1, angle):= v1.mul({r: 1, arg: angle})
+rotate(v, angle):= v.mul({abs: 1, arg: angle})
 ```
 
-Distance vector
+Rotate vector around another vector
+---
+```
+rotate(v, p, angle):= v.sub(p).mul({abs: 1, arg: angle}).add(p)
+```
+
+Distance to another vector
 ---
 ```
 distance(v1, v2):= v1.sub(v2).abs()

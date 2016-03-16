@@ -18,6 +18,12 @@ var tests = [{
     set: " + i",
     expect: "i"
   }, {
+    set: "3+4i",
+    expect: "3 + 4i"
+  }, {
+    set: "i",
+    expect: "i"
+  }, {
     set: "3",
     expect: "3"
   }, {
@@ -31,6 +37,11 @@ var tests = [{
     fn: "mul",
     param: Complex(Math.PI).exp(),
     expect: "23.140692632779274i"
+  }, {
+    set: new Complex(1, 4),
+    fn: "mul",
+    param: 3,
+    expect: "3 + 12i"
   }, {
     set: 0,
     expect: "0"
@@ -172,6 +183,11 @@ var tests = [{
     fn: "exp",
     expect: Math.cos(1) + " + " + Math.sin(1) + "i"
   }, {
+    set: "i",
+    fn: "mul",
+    param: "i",
+    expect: "-1"
+  }, {
     set: "3 + 2i",
     fn: "exp",
     expect: "-8.358532650935372 + 18.263727040666765i"
@@ -243,7 +259,7 @@ var tests = [{
     fn: "abs",
     expect: "26"
   }, {
-    set: "1 + 4i",
+    set: "+++++--+1 + 4i",
     fn: "mul",
     param: "3 + 2i",
     expect: "-5 + 14i"
@@ -254,6 +270,15 @@ var tests = [{
     expect: "1 + 4i"
   }, {
     set: {re: -7.1, im: 2.5},
+    fn: "neg",
+    expect: "7.1 - 2.5i"
+  }, {
+    set: {re: 1, im: 1},
+    fn: "div",
+    param: {re: 3, im: 4},
+    expect: 7 / 25 + " - " + 1 / 25 + "i"
+  }, {
+    set: new Complex(-7.1, 2.5),
     fn: "neg",
     expect: "7.1 - 2.5i"
   }, {
@@ -276,6 +301,14 @@ var tests = [{
     set: {re: 99, im: 50},
     fn: "conjugate",
     expect: "99 - 50i"
+  }, {
+    set: {re: 0, im: 0},
+    fn: "conjugate",
+    expect: "0"
+  }, {
+    set: {re: 1, im: 23},
+    fn: "conjugate",
+    expect: "1 - 23i"
   }, {
     set: "2 + 8i",
     fn: "div",
@@ -312,10 +345,24 @@ var tests = [{
     param: new Complex(3, 4),
     expect: "0.12900959407446697 + 0.033924092905170025i"
   }, {
+    fn: "abs",
+    set: new Complex(3, 4),
+    expect: "5"
+  }, {
+    param: 2,
+    fn: "pow",
+    set: new Complex(1, 2),
+    expect: "-2.999999999999999 + 4.000000000000001i"
+  }, {
     set: "i",
     fn: "pow",
     param: 7,
     expect: "-i"
+  }, {
+    set: "2+3i",
+    fn: "mul",
+    param: "4+5i",
+    expect: "-7 + 22i"
   }, {
     set: "i",
     fn: "pow",
@@ -352,6 +399,11 @@ var tests = [{
     set: {re: -3, im: -4},
     fn: "sqrt",
     expect: "1 - 2i"
+  }, {
+    set: {abs: 1, arg: 0},
+    fn: "equals",
+    param: {re: 1, im: 0},
+    expect: "true"
   }, {
     set: -Complex.E.pow(2),
     fn: "log",
@@ -494,6 +546,20 @@ var tests = [{
     set: "-3x + 4",
     expect: "SyntaxError: Invalid Param"
   }, {
+    set: Complex(1, 1).sub(0, 1), // Distance
+    fn: "abs",
+    expect: "1"
+  }, {
+    set: Complex(1, 1), // Rotate around center
+    fn: "mul",
+    param: {abs: 1, arg: Math.PI / 2},
+    expect: "-0.9999999999999999 + i"
+  }, {
+    set: Complex(1, 1).sub(0, 1).mul({abs: 1, arg: Math.PI / 2}), // Rotate around another point
+    fn: "add",
+    param: "i",
+    expect: "6.123233995736766e-17 + 2i"
+  }, {
     set: "- + 7",
     expect: "-7"
   }, {
@@ -554,12 +620,7 @@ describe("Complex Details", function() {
     assert.equal(Complex(1, -1).toString(), "1 - i");
     assert.equal(Complex(0, 0).toString(), "0");
     assert.equal(Complex(0, 2).toString(), "2i");
-    assert.equal(Complex("3 + 4i").toString(), "3 + 4i");
-    assert.equal(Complex("1 + i").toString(), "1 + i");
-    assert.equal(Complex("i").toString(), "i");
     assert.equal(Complex.I.toString(), "i");
-    assert.equal(Complex("3 - 4i").toString(), "3 - 4i");
-    assert.equal(Complex("5").toString(), "5");
     assert.equal(Complex(0, -2).toString(), "-2i");
     assert.equal(Complex({re: 0, im: -2}).toString(), "-2i");
   });
@@ -593,8 +654,29 @@ describe("Complex Details", function() {
     assert.equal(one.acos().toString(), "0.9045568943023813 - 1.0612750619050355i");
     assert.equal(one.atan().toString(), "1.0172219678978514 + 0.40235947810852507i");
 
+    assert.equal(Complex(3, 4).abs(), "5");
+
     assert.equal(Complex("5i + 3").log().exp().toString(), "3 + 5i")
     assert.equal(Complex("-2i - 1").log().exp().toString(), "-1 - 2i")
+  });
+
+  it("should calculate distributed conjugate", function() {
+
+    var c1 = Complex(7, 3);
+    var c2 = Complex(1, 2);
+
+    var r1 = c1.add(c2).conjugate();
+    var r2 = c1.conjugate().add(c2.conjugate());
+
+    assert.equal(r1.toString(), r2.toString());
+  });
+
+  it("should be raised to power of 6", function() {
+    var c1 = Complex(2, 2);
+
+    var t = c1.pow(6);
+
+    assert.equal(t.toString(), "-9.405287417451663e-14 - 511.99999999999955i");
   });
 
   it("should handle inverse trig fns", function() {
@@ -620,6 +702,60 @@ describe("Complex Details", function() {
     }
   });
 
+  it('should handle get real part', function() {
+    assert.equal(Complex({abs: 1, arg: Math.PI / 4}).re, Math.SQRT2 / 2);
+  });
+
+  it('should handle get complex part', function() {
+    assert.equal(Complex({abs: 1, arg: Math.PI / 4}).im, "0.7071067811865475");
+  });
+
+  it('should handle sum', function() {
+    assert.equal(Complex({abs: 1, arg: 0}).add({abs: 1, arg: Math.PI / 2}).abs(), Math.SQRT2);
+    assert.equal(Complex({abs: 1, arg: 0}).add({abs: 1, arg: Math.PI / 2}).arg(), Math.PI / 4);
+  });
+
+  it('should handle conjugate', function() {
+    assert.equal(Complex({abs: 1, arg: Math.PI / 4}).conjugate().toString(), Complex({abs: 1, arg: -Math.PI / 4}).toString());
+  });
+
+  it('should handle substract', function() {
+    assert.equal(Complex({abs: 1, arg: 0}).sub({abs: 1, arg: Math.PI / 2}).abs().toString(), "1.414213562373095");
+    assert.equal(Complex({abs: 1, arg: 0}).sub({abs: 1, arg: Math.PI / 2}).arg().toString(), "-0.7853981633974484");
+  });
+
+  it('should handle arg for the first quadrant', function() {
+    assert.equal(Complex({re: 1, im: 1}).arg(), Math.PI / 4);
+  });
+
+  it('should handle arg for the second quadrant', function() {
+    assert.equal(Complex({re: -1, im: 1}).arg(), 3 * Math.PI / 4);
+  });
+
+  it('should handle arg for the third quadrant', function() {
+    assert.equal(Complex({re: -1, im: -1}).arg(), -3 * Math.PI / 4);
+  });
+
+  it('should handle arg for the fourth quadrant', function() {
+    assert.equal(Complex({re: 1, im: -1}).arg(), -Math.PI / 4);
+  });
+
+  it('should handle arg for the forth and first quadrant', function() {
+    assert.equal(Complex({re: 1, im: 0}).arg(), 0);
+  });
+
+  it('should handle arg for first and second quadrant', function() {
+    assert.equal(Complex({re: 0, im: 1}).arg(), Math.PI / 2);
+  });
+
+  it('should handle arg for the second and third quadrant', function() {
+    assert.equal(Complex({re: -1, im: 0}).arg(), Math.PI);
+  });
+
+  it('should handle arg for the third and forth quadrant', function() {
+    assert.equal(Complex({re: 0, im: -1}).arg(), -Math.PI / 2);
+  });
+
   it("should eat it's own dog food", function() {
 
     var a = Complex(1, -5).toString();
@@ -628,4 +764,18 @@ describe("Complex Details", function() {
 
     assert.equal(c.toString(), '-24 - 10i');
   });
+
+  it("should calculate the absolute value of i", function() {
+
+    var a = Complex("i").sign().inverse().mul("i");
+
+    assert.equal(a.toString(), '1');
+  });
+
+  it('should take the natural logartithm', function() {
+    var n = Complex(Math.E * Math.E).log().div("i").mul(-Math.PI * 2, 1);
+
+    assert.equal(n.toString(), '2 + ' + 4 * Math.PI + "i");
+  });
+
 });
