@@ -8,6 +8,7 @@
     "keywords": ["complex numbers", "math", "complex", "number", "calculus", "parser", "arithmetic"],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "complex",
+    "private": false,
     "directories": {
         "example": "examples"
     },
