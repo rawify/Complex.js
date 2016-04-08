@@ -43,6 +43,24 @@
   Math.sinh = Math.sinh || function(x) {
     return (Math.exp(x) - Math.exp(-x)) * 0.5;
   };
+  
+  Math.hypot = Math.hypot || function(x, y) {
+
+      var a = Math.abs(x);
+      var b = Math.abs(y);
+
+      if (a < 3000 && b < 3000) {
+        return Math.sqrt(a * a + b * b);
+      }
+
+      if (a < b) {
+        a = b;
+        b = x / y;
+      } else {
+        b = y / x;
+      }
+      return a * Math.sqrt(1 + b * b);
+  };
 
   var parser_exit = function() {
     throw SyntaxError('Invalid Param');
@@ -477,21 +495,8 @@
      * @returns {number}
      */
     'abs': function() {
-
-      var a = Math.abs(this['re']);
-      var b = Math.abs(this['im']);
-
-      if (a < 3000 && b < 3000) {
-        return Math.sqrt(a * a + b * b);
-      }
-
-      if (a < b) {
-        a = b;
-        b = this['re'] / this['im'];
-      } else {
-        b = this['im'] / this['re'];
-      }
-      return a * Math.sqrt(1 + b * b);
+      
+      return Math.hypot(this['re'], this['im']);
     },
 
     /**
