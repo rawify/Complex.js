@@ -434,11 +434,12 @@
 
       var re, im;
 
-      if (a >= 0 && b === 0) {
-        return new Complex(Math.sqrt(a), 0);
-      }
-
       if (a >= 0) {
+        
+        if (b === 0) {
+          return new Complex(Math.sqrt(a), 0);
+        }
+        
         re = 0.5 * Math.sqrt(2.0 * (r + a));
       } else {
         re = Math.abs(b) / Math.sqrt(2 * (r - a));
