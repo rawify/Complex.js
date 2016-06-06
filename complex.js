@@ -323,16 +323,16 @@
       var d = P['im'];
       var t, x;
 
-      // Divisor is zero
-      if (0 === c && 0 === d) {
-        return new Complex(
+      if (0 === d) {
+        if (0 === c) {
+          // Divisor is zero
+          return new Complex(
                 (a !== 0) ? (a / 0) : 0,
                 (b !== 0) ? (b / 0) : 0);
-      }
-
-      // Divisor is rational
-      if (0 === d) {
-        return new Complex(a / c, b / c);
+        } else {
+          // Divisor is rational
+          return new Complex(a / c, b / c);
+        }
       }
 
       if (Math.abs(c) < Math.abs(d)) {
