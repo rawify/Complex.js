@@ -179,38 +179,38 @@ Complex numbers can also be seen as a vector in the 2D space. Here is a simple o
 
 New vector
 ---
-```
+```js
 var v1 = Complex(1, 0);
 var v2 = Complex(1, 1);
 ```
 
 Scale vector
 ---
-```
+```js
 scale(v1, factor):= v1.mul(factor)
 ```
 
 Translate vector
 ---
-```
+```js
 translate(v1, v2):= v1.add(v2)
 ```
 
 Rotate vector around center
 ---
-```
+```js
 rotate(v, angle):= v.mul({abs: 1, arg: angle})
 ```
 
 Rotate vector around another vector
 ---
-```
+```js
 rotate(v, p, angle):= v.sub(p).mul({abs: 1, arg: angle}).add(p)
 ```
 
 Distance to another vector
 ---
-```
+```js
 distance(v1, v2):= v1.sub(v2).abs()
 ```
 
@@ -246,33 +246,35 @@ Installation
 ===
 Installing complex.js is as easy as cloning this repo or use one of the following commands:
 
-```
+```bash
 bower install complex.js
 ```
 or
 
-```
+```bash
 npm install --save complex.js
 ```
 
 Using Complex.js with the browser
 ===
-    <script src="complex.js"></script>
-    <script>
-        console.log(Complex("4+3i"));
-    </script>
-
+```html
+<script src="complex.js"></script>
+<script>
+    console.log(Complex("4+3i"));
+</script>
+```
 
 Using Complex.js with require.js
 ===
-    <script src="require.js"></script>
-    <script>
-    requirejs(['complex.js'],
-    function(Complex) {
-        console.log(Complex("4+3i"));
-    });
-    </script>
-
+```html
+<script src="require.js"></script>
+<script>
+requirejs(['complex.js'],
+function(Complex) {
+    console.log(Complex("4+3i"));
+});
+</script>
+```
 
 Coding Style
 ===
@@ -283,7 +285,7 @@ Testing
 ===
 If you plan to enhance the library, make sure you add test cases and all the previous tests are passing. You can test the library with
 
-```
+```bash
 npm test
 ```
 
