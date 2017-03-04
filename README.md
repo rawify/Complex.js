@@ -202,7 +202,7 @@ Rotate vector around center
 rotate(v, angle):= v.mul({abs: 1, arg: angle})
 ```
 
-Rotate vector around another vector
+Rotate vector around a point
 ---
 ```js
 rotate(v, p, angle):= v.sub(p).mul({abs: 1, arg: angle}).add(p)
