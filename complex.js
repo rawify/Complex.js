@@ -368,7 +368,7 @@
       b = this['im'];
 
       if (a === 0 && b === 0) {
-        return new Complex(0, 0);
+        return Complex['ZERO'];
       }
 
       var arg = Math.atan2(b, a);
