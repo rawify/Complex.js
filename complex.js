@@ -181,10 +181,10 @@
             }
 
             if (tokens[i + 1] !== ' ' && !isNaN(tokens[i + 1])) {
-              P['im'] += parseFloat((minus % 2 ? '-' : '') + tokens[i + 1]);
+              P['im']+= parseFloat((minus % 2 ? '-' : '') + tokens[i + 1]);
               i++;
             } else {
-              P['im'] += parseFloat((minus % 2 ? '-' : '') + '1');
+              P['im']+= parseFloat((minus % 2 ? '-' : '') + '1');
             }
             plus = minus = 0;
 
@@ -195,10 +195,10 @@
             }
 
             if (tokens[i + 1] === 'i' || tokens[i + 1] === 'I') {
-              P['im'] += parseFloat((minus % 2 ? '-' : '') + c);
+              P['im']+= parseFloat((minus % 2 ? '-' : '') + c);
               i++;
             } else {
-              P['re'] += parseFloat((minus % 2 ? '-' : '') + c);
+              P['re']+= parseFloat((minus % 2 ? '-' : '') + c);
             }
             plus = minus = 0;
           }
@@ -330,7 +330,7 @@
             (a !== 0) ? (a / 0) : 0,
             (b !== 0) ? (b / 0) : 0);
         } else {
-          // Divisor is rational
+          // Divisor is real
           return new Complex(a / c, b / c);
         }
       }
@@ -376,7 +376,7 @@
 
       if (P['im'] === 0) {
 
-        if (b === 0 && a >= 0) {
+        if (b === 0 && !(0 > a && isFinite(P['re']))) {
 
           return new Complex(Math.pow(a, P['re']), 0);
 
@@ -416,6 +416,12 @@
 
       a = Math.exp(P['re'] * loh - P['im'] * arg);
       b = P['im'] * loh + P['re'] * arg;
+
+      if (!isFinite(b)) {
+        // Return complex infinity
+        return Complex['Infinity'];
+      }
+
       return new Complex(
         a * Math.cos(b),
         a * Math.sin(b));
@@ -1053,9 +1059,13 @@
 
       var d = a * a + b * b;
 
+      if (d === 0) {
+        return Complex['Infinity'];
+      }
+
       return new Complex(
-        a !== 0 ? a / d : 0,
-        b !== 0 ? -b / d : 0);
+        a / d,
+        -b / d);
     },
 
     /**
@@ -1152,30 +1162,37 @@
 
       var a = this['re'];
       var b = this['im'];
+      var e = Complex['EPSILON'];
       var ret = '';
 
       if (isNaN(a) || isNaN(b)) {
         return 'NaN';
       }
 
-      if (a !== 0) {
-        ret += a;
+      if (Math.abs(a) < e) {
+        /* void */
+      } else if (isFinite(a)) {
+        ret+= a;
+      } else if (a < 0) {
+        ret+= '-∞';
+      } else {
+        ret += '∞';
       }
 
-      if (b !== 0) {
+      if (-e > b || b > e) { // means b !== 0
 
-        if (a !== 0) {
-          ret += b < 0 ? ' - ' : ' + ';
+        if (-e > a || a > e) {// means a !== 0
+          ret+= b < 0 ? ' - ' : ' + ';
         } else if (b < 0) {
-          ret += '-';
+          ret+= '-';
         }
 
         b = Math.abs(b);
 
         if (1 !== b) {
-          ret += b;
+          ret+= isFinite(b) ? b : '∞';
         }
-        ret += 'i';
+        ret+= 'i';
       }
 
       if (!ret)
@@ -1222,6 +1239,7 @@
   Complex['I'] = new Complex(0, 1);
   Complex['PI'] = new Complex(Math.PI, 0);
   Complex['E'] = new Complex(Math.E, 0);
+  Complex['Infinity'] = new Complex(Infinity, Infinity);
   Complex['EPSILON'] = 1e-16;
 
   if (typeof define === 'function' && define['amd']) {
