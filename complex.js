@@ -297,7 +297,7 @@
 
       parse(a, b); // mutates P
 
-      // Besides the addition/subtraction, this helps having a solution for rational Infinity
+      // Besides the addition/subtraction, this helps having a solution for real Infinity
       if (P['im'] === 0 && this['im'] === 0) {
         return new Complex(this['re'] * P['re'], 0);
       }
@@ -367,20 +367,25 @@
       a = this['re'];
       b = this['im'];
 
-      if (a === 0 && b === 0) {
-        return Complex['ZERO'];
-      }
-
       var arg = Math.atan2(b, a);
       var loh = logHypot(a, b);
 
+      // If the exponent is real
       if (P['im'] === 0) {
 
-        if (b === 0 && !(0 > a && isFinite(P['re']))) {
+        if (b === 0) { // If base is real
 
-          return new Complex(Math.pow(a, P['re']), 0);
+          // a >= 0, no matter if exp gets inf
+          // -1 < a < 1 & exp=Inf
+          // !(-1 < a < 1) & exp=-Inf
+          if (a >= 0 ||
+            P['re'] == Infinity && a * a < 1 ||
+            P['re'] == -Infinity && a * a > 1) {
+            return new Complex(Math.pow(a, P['re']), 0);
+          }
+        }
 
-        } else if (a === 0) {
+        if (a === 0) { // If base is fully imaginary
 
           switch (P['re'] % 4) {
             case 0:
@@ -1172,9 +1177,9 @@
       if (Math.abs(a) < e) {
         /* void */
       } else if (isFinite(a)) {
-        ret+= a;
+        ret += a;
       } else if (a < 0) {
-        ret+= '-∞';
+        ret += '-∞';
       } else {
         ret += '∞';
       }
@@ -1182,17 +1187,17 @@
       if (-e > b || b > e) { // means b !== 0
 
         if (-e > a || a > e) {// means a !== 0
-          ret+= b < 0 ? ' - ' : ' + ';
+          ret += b < 0 ? ' - ' : ' + ';
         } else if (b < 0) {
-          ret+= '-';
+          ret += '-';
         }
 
         b = Math.abs(b);
 
         if (1 !== b) {
-          ret+= isFinite(b) ? b : '∞';
+          ret += isFinite(b) ? b : '∞';
         }
-        ret+= 'i';
+        ret += 'i';
       }
 
       if (!ret)

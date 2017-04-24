@@ -436,7 +436,7 @@ var tests = [{
   set: "0-0i",
   fn: "pow",
   param: 0,
-  expect: "0"
+  expect: "1"
 }, {
   set: "1 + 4i",
   fn: "sqrt",
@@ -634,6 +634,66 @@ var tests = [{
 }, {
   set: {r: 1, phi: 1},
   expect: "0.5403023058681398 + 0.8414709848078965i"
+}, {
+  set: 3,
+  param: Infinity,
+  fn: 'pow',
+  expect: "∞"
+}, {
+  set: 3,
+  param: -Infinity,
+  fn: 'pow',
+  expect: "0"
+}, {
+  set: -3,
+  param: Infinity,
+  fn: 'pow',
+  expect: "∞ + ∞i"
+}, {
+  set: -3,
+  param: -Infinity,
+  fn: 'pow',
+  expect: "0"
+}, {
+  set: 0.3,
+  param: Infinity,
+  fn: 'pow',
+  expect: "0"
+}, {
+  set: 0.3,
+  param: -Infinity,
+  fn: 'pow',
+  expect: "∞"
+}, {
+  set: -0.3,
+  param: Infinity,
+  fn: 'pow',
+  expect: "0"
+}, {
+  set: -0.3,
+  param: -Infinity,
+  fn: 'pow',
+  expect: "∞ + ∞i"
+}, {
+  set: Infinity,
+  param: Infinity,
+  fn: 'pow',
+  expect: "∞"
+}, {
+  set: Infinity,
+  param: -Infinity,
+  fn: 'pow',
+  expect: "0"
+}, {
+  set: -Infinity,
+  param: Infinity,
+  fn: 'pow',
+  expect: "∞ + ∞i"
+}, {
+  set: -Infinity,
+  param: -Infinity,
+  fn: 'pow',
+  expect: "0"
 }
 ];
 
@@ -647,7 +707,7 @@ describe("Complex", function() {
 
         it((tests[i].fn || "") + " " + tests[i].set + ", " + (tests[i].param || ""), function() {
           try {
-            assert.equal(tests[i].expect, new Complex(tests[i].set)[tests[i].fn](tests[i].param).toString());
+            assert.equal(new Complex(tests[i].set)[tests[i].fn](tests[i].param).toString(), tests[i].expect);
           } catch (e) {
             assert.equal(e.toString(), tests[i].expect.toString());
           }
@@ -657,7 +717,7 @@ describe("Complex", function() {
 
         it((tests[i].fn || "") + "" + tests[i].set, function() {
           try {
-            assert.equal(tests[i].expect, new Complex(tests[i].set).toString());
+            assert.equal(new Complex(tests[i].set).toString(), tests[i].expect);
           } catch (e) {
             assert.equal(e.toString(), tests[i].expect.toString());
           }
