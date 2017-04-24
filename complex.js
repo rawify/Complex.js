@@ -141,11 +141,16 @@
           P['re'] = a['re'];
           P['im'] = a['im'];
         } else if ('abs' in a && 'arg' in a) {
+
           P['re'] = a['abs'] * Math.cos(a['arg']);
-          P['im'] = a['abs'] * Math.sin(a['arg']);
+          P['im'] = a['arg'] === 0
+            ? 0
+            : a['abs'] * Math.sin(a['arg']);
         } else if ('r' in a && 'phi' in a) {
           P['re'] = a['r'] * Math.cos(a['phi']);
-          P['im'] = a['r'] * Math.sin(a['phi']);
+          P['im'] = a['phi'] === 0
+            ? 0
+            : a['r'] * Math.sin(a['phi']);
         } else {
           parser_exit();
         }
@@ -154,7 +159,7 @@
       case 'string':
 
         P['im'] = /* void */
-          P['re'] = 0;
+        P['re'] = 0;
 
         var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
         var plus = 1;
@@ -219,9 +224,14 @@
         parser_exit();
     }
 
+
     if (isNaN(P['re']) || isNaN(P['im'])) {
-      // If a calculation is NaN, we treat it as NaN and don't throw
-      //parser_exit();
+      P['re'] = P['im'] = NaN;
+    }
+
+    if (((P['re'] === Infinity || P['re'] === -Infinity) && P['im'] !== 0)
+     || ((P['im'] === Infinity || P['im'] === -Infinity) && P['re'] !== 0)) {
+      P['re'] = P['im'] = Infinity;
     }
   };
 
