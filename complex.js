@@ -1234,9 +1234,18 @@
      *
      * @returns {boolean}
      */
-    isNaN: function() {
+    'isNaN': function() {
       return isNaN(this['re']) || isNaN(this['im']);
-    }
+    },
+
+    /**
+     * Checks if the given complex number is finite
+     *
+     * @returns {boolean}
+     */
+    'isFinite': function() {
+      return isFinite(this['re']) && isFinite(this['im']);
+    },
   };
 
   Complex['ZERO'] = new Complex(0, 0);

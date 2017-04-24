@@ -134,6 +134,10 @@ boolean isNaN()
 ---
 Checks if the given number is not a number
 
+boolean isFinite()
+---
+Checks if the given number is finite
+
 Complex clone()
 ---
 Returns a new Complex instance with the same real and imaginary properties
