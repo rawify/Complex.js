@@ -94,7 +94,17 @@ var tests = [{
   set: "4",
   fn: "div",
   param: "0",
-  expect: "∞"
+  expect: "∞ + ∞i"
+}, {
+  set: "1",
+  fn: "div",
+  param: "0",
+  expect: "∞ + ∞i"
+}, {
+  set: "0",
+  fn: "div",
+  param: "0",
+  expect: "∞ + ∞i"
 }, {
   set: "4 + 2i",
   fn: "div",
