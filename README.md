@@ -180,14 +180,20 @@ Complex numbers can also be seen as a vector in the 2D space. Here is a simple o
 New vector
 ---
 ```js
-var v1 = Complex(1, 0);
-var v2 = Complex(1, 1);
+var v1 = new Complex(1, 0);
+var v2 = new Complex(1, 1);
 ```
 
 Scale vector
 ---
 ```js
 scale(v1, factor):= v1.mul(factor)
+```
+
+Vector norm
+---
+```js
+norm(v):= v.abs()
 ```
 
 Translate vector
