@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.1 11/02/2016
+ * @license Complex.js v2.0.2 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -36,15 +36,15 @@
 
   var P = {'re': 0, 'im': 0};
 
-  Math.cosh = Math.cosh || function(x) {
+  var cosh = function(x) {
     return (Math.exp(x) + Math.exp(-x)) * 0.5;
   };
 
-  Math.sinh = Math.sinh || function(x) {
+  var sinh = function(x) {
     return (Math.exp(x) - Math.exp(-x)) * 0.5;
   };
-  
-  Math.hypot = Math.hypot || function(x, y) {
+
+  var hypot = function(x, y) {
 
       var a = Math.abs(x);
       var b = Math.abs(y);
@@ -435,11 +435,11 @@
       var re, im;
 
       if (a >= 0) {
-        
+
         if (b === 0) {
           return new Complex(Math.sqrt(a), 0);
         }
-        
+
         re = 0.5 * Math.sqrt(2.0 * (r + a));
       } else {
         re = Math.abs(b) / Math.sqrt(2 * (r - a));
@@ -480,7 +480,7 @@
 
       var a = this['re'];
       var b = this['im'];
-      
+
       if (b === 0 && a > 0) {
         //return new Complex(Math.log(a), 0);
       }
@@ -496,8 +496,8 @@
      * @returns {number}
      */
     'abs': function() {
-      
-      return Math.hypot(this['re'], this['im']);
+
+      return hypot(this['re'], this['im']);
     },
 
     /**
@@ -516,15 +516,15 @@
      * @returns {Complex}
      */
     'sin': function() {
-      
+
       // sin(c) = (e^b - e^(-b)) / (2i)
 
       var a = this['re'];
       var b = this['im'];
 
       return new Complex(
-              Math.sin(a) * Math.cosh(b),
-              Math.cos(a) * Math.sinh(b));
+              Math.sin(a) * cosh(b),
+              Math.cos(a) * sinh(b));
     },
 
     /**
@@ -533,15 +533,15 @@
      * @returns {Complex}
      */
     'cos': function() {
-      
+
       // cos(z) = (e^b + e^(-b)) / 2
 
       var a = this['re'];
       var b = this['im'];
 
       return new Complex(
-              Math.cos(a) * Math.cosh(b),
-             -Math.sin(a) * Math.sinh(b));
+              Math.cos(a) * cosh(b),
+             -Math.sin(a) * sinh(b));
     },
 
     /**
@@ -550,16 +550,16 @@
      * @returns {Complex}
      */
     'tan': function() {
-      
+
       // tan(c) = (e^(ci) - e^(-ci)) / (i(e^(ci) + e^(-ci)))
 
       var a = 2 * this['re'];
       var b = 2 * this['im'];
-      var d = Math.cos(a) + Math.cosh(b);
+      var d = Math.cos(a) + cosh(b);
 
       return new Complex(
               Math.sin(a) / d,
-              Math.sinh(b) / d);
+              sinh(b) / d);
     },
 
     /**
@@ -568,16 +568,16 @@
      * @returns {Complex}
      */
     'cot': function() {
-      
+
       // cot(c) = i(e^(ci) + e^(-ci)) / (e^(ci) - e^(-ci))
 
       var a = 2 * this['re'];
       var b = 2 * this['im'];
-      var d = Math.cos(a) - Math.cosh(b);
+      var d = Math.cos(a) - cosh(b);
 
       return new Complex(
              -Math.sin(a) / d,
-              Math.sinh(b) / d);
+              sinh(b) / d);
     },
 
     /**
@@ -586,16 +586,16 @@
      * @returns {Complex}
      */
     'sec': function() {
-      
+
       // sec(c) = 2 / (e^(ci) + e^(-ci))
 
       var a = this['re'];
       var b = this['im'];
-      var d = 0.5 * Math.cosh(2 * b) + 0.5 * Math.cos(2 * a);
+      var d = 0.5 * cosh(2 * b) + 0.5 * Math.cos(2 * a);
 
       return new Complex(
-              Math.cos(a) * Math.cosh(b) / d,
-              Math.sin(a) * Math.sinh(b) / d);
+              Math.cos(a) * cosh(b) / d,
+              Math.sin(a) * sinh(b) / d);
     },
 
     /**
@@ -604,16 +604,16 @@
      * @returns {Complex}
      */
     'csc': function() {
-      
+
       // csc(c) = 2i / (e^(ci) - e^(-ci))
 
       var a = this['re'];
       var b = this['im'];
-      var d = 0.5 * Math.cosh(2 * b) - 0.5 * Math.cos(2 * a);
+      var d = 0.5 * cosh(2 * b) - 0.5 * Math.cos(2 * a);
 
       return new Complex(
-              Math.sin(a) * Math.cosh(b) / d,
-             -Math.cos(a) * Math.sinh(b) / d);
+              Math.sin(a) * cosh(b) / d,
+             -Math.cos(a) * sinh(b) / d);
     },
 
     /**
@@ -622,7 +622,7 @@
      * @returns {Complex}
      */
     'asin': function() {
-      
+
       // asin(c) = -i * log(ci + sqrt(1 - c^2))
 
       var a = this['re'];
@@ -645,7 +645,7 @@
      * @returns {Complex}
      */
     'acos': function() {
-      
+
       // acos(c) = i * log(c - i * sqrt(1 - c^2))
 
       var a = this['re'];
@@ -668,7 +668,7 @@
      * @returns {Complex}
      */
     'atan': function() {
-      
+
       // atan(c) = i / 2 log((i + x) / (i - x))
 
       var a = this['re'];
@@ -700,7 +700,7 @@
      * @returns {Complex}
      */
     'acot': function() {
-      
+
       // acot(c) = i / 2 log((c - i) / (c + i))
 
       var a = this['re'];
@@ -726,7 +726,7 @@
      * @returns {Complex}
      */
     'asec': function() {
-      
+
       // asec(c) = -i * log(1 / c + sqrt(1 - i / c^2))
 
       var a = this['re'];
@@ -752,7 +752,7 @@
      * @returns {Complex}
      */
     'acsc': function() {
-      
+
       // acsc(c) = -i * log(i / c + sqrt(1 - 1 / c^2))
 
       var a = this['re'];
@@ -778,15 +778,15 @@
      * @returns {Complex}
      */
     'sinh': function() {
-      
+
       // sinh(c) = (e^c - e^-c) / 2
 
       var a = this['re'];
       var b = this['im'];
 
       return new Complex(
-              Math.sinh(a) * Math.cos(b),
-              Math.cosh(a) * Math.sin(b));
+              sinh(a) * Math.cos(b),
+              cosh(a) * Math.sin(b));
     },
 
     /**
@@ -795,15 +795,15 @@
      * @returns {Complex}
      */
     'cosh': function() {
-      
+
       // cosh(c) = (e^c + e^-c) / 2
 
       var a = this['re'];
       var b = this['im'];
 
       return new Complex(
-              Math.cosh(a) * Math.cos(b),
-              Math.sinh(a) * Math.sin(b));
+              cosh(a) * Math.cos(b),
+              sinh(a) * Math.sin(b));
     },
 
     /**
@@ -812,15 +812,15 @@
      * @returns {Complex}
      */
     'tanh': function() {
-      
+
       // tanh(c) = (e^c - e^-c) / (e^c + e^-c)
 
       var a = 2 * this['re'];
       var b = 2 * this['im'];
-      var d = Math.cosh(a) + Math.cos(b);
+      var d = cosh(a) + Math.cos(b);
 
       return new Complex(
-              Math.sinh(a) / d,
+              sinh(a) / d,
               Math.sin(b) / d);
     },
 
@@ -830,15 +830,15 @@
      * @returns {Complex}
      */
     'coth': function() {
-      
+
       // coth(c) = (e^c + e^-c) / (e^c - e^-c)
 
       var a = 2 * this['re'];
       var b = 2 * this['im'];
-      var d = Math.cosh(a) - Math.cos(b);
+      var d = cosh(a) - Math.cos(b);
 
       return new Complex(
-              Math.sinh(a) / d,
+              sinh(a) / d,
              -Math.sin(b) / d);
     },
 
@@ -848,16 +848,16 @@
      * @returns {Complex}
      */
     'csch': function() {
-      
+
       // csch(c) = 2 / (e^c - e^-c)
 
       var a = this['re'];
       var b = this['im'];
-      var d = Math.cos(2 * b) - Math.cosh(2 * a);
+      var d = Math.cos(2 * b) - cosh(2 * a);
 
       return new Complex(
-           -2 * Math.sinh(a) * Math.cos(b) / d, 
-            2 * Math.cosh(a) * Math.sin(b) / d);
+           -2 * sinh(a) * Math.cos(b) / d,
+            2 * cosh(a) * Math.sin(b) / d);
     },
 
     /**
@@ -866,16 +866,16 @@
      * @returns {Complex}
      */
     'sech': function() {
-      
+
       // sech(c) = 2 / (e^c + e^-c)
 
       var a = this['re'];
       var b = this['im'];
-      var d = Math.cos(2 * b) + Math.cosh(2 * a);
+      var d = Math.cos(2 * b) + cosh(2 * a);
 
       return new Complex(
-              2 * Math.cosh(a) * Math.cos(b) / d, 
-             -2 * Math.sinh(a) * Math.sin(b) / d);
+              2 * cosh(a) * Math.cos(b) / d,
+             -2 * sinh(a) * Math.sin(b) / d);
     },
 
     /**
@@ -884,7 +884,7 @@
      * @returns {Complex}
      */
     'asinh': function() {
-      
+
       // asinh(c) = log(c + sqrt(c^2 + 1))
 
       var tmp = this['im'];
@@ -907,7 +907,7 @@
      * @returns {Complex}
      */
     'acosh': function() {
-      
+
       // acosh(c) = log(c + sqrt(c^2 - 1))
 
       var tmp;
@@ -930,7 +930,7 @@
      * @returns {Complex}
      */
     'atanh': function() {
-      
+
       // atanh(c) = log((1+c) / (1-c)) / 2
 
       var a = this['re'];
@@ -964,7 +964,7 @@
      * @returns {Complex}
      */
     'acoth': function() {
-      
+
       // acoth(c) = log((c+1) / (c-1)) / 2
 
       var a = this['re'];
@@ -991,7 +991,7 @@
      * @returns {Complex}
      */
     'acsch': function() {
-      
+
       // acsch(c) = log((1+sqrt(1+c^2))/c)
 
       var a = this['re'];
@@ -1021,7 +1021,7 @@
      * @returns {Complex}
      */
     'asech': function() {
-      
+
       // asech(c) = log((1+sqrt(1-c^2))/c)
 
       var a = this['re'];
@@ -1233,5 +1233,5 @@
   } else {
     root['Complex'] = Complex;
   }
-  
+
 })(this);

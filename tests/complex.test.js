@@ -1,6 +1,6 @@
 var assert = require("assert");
 
-var Complex = require("../complex");
+var Complex = require("../complex.min");
 
 var tests = [{
     set: null,
@@ -128,19 +128,19 @@ var tests = [{
   }, {
     set: "36 + 36i",
     fn: "sqrt",
-    expect: "6.592104680806861 + 2.7305391633733636i"
+    expect: "6.59210468080686 + 2.730539163373364i"
   }, {
     set: "36 - 36i",
     fn: "sqrt",
-    expect: "6.592104680806861 - 2.7305391633733636i"
+    expect: "6.59210468080686 - 2.730539163373364i"
   }, {
     set: "-36 + 36i",
     fn: "sqrt",
-    expect: "2.7305391633733636 + 6.592104680806861i"
+    expect: "2.730539163373364 + 6.59210468080686i"
   }, {
     set: "-36 - 36i",
     fn: "sqrt",
-    expect: "2.7305391633733636 - 6.592104680806861i"
+    expect: "2.730539163373364 - 6.59210468080686i"
   }, {
     set: "0",
     fn: "sqrt",
