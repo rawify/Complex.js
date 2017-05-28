@@ -9,7 +9,7 @@ Complex.js is a well tested JavaScript library to work with complex number arith
 
 Example
 ===
-  
+
 ```js
 var Complex = require('complex.js');
 
@@ -133,6 +133,10 @@ Checks if both numbers are exactly the same
 boolean isNaN()
 ---
 Checks if the given number is not a number
+
+boolean isFinite()
+---
+Checks if the given number is finite
 
 Complex clone()
 ---

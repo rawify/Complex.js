@@ -297,7 +297,7 @@
 
       parse(a, b); // mutates P
 
-      // Besides the addition/subtraction, this helps having a solution for rational Infinity
+      // Besides the addition/subtraction, this helps having a solution for real Infinity
       if (P['im'] === 0 && this['im'] === 0) {
         return new Complex(this['re'] * P['re'], 0);
       }
@@ -330,7 +330,7 @@
                 (a !== 0) ? (a / 0) : 0,
                 (b !== 0) ? (b / 0) : 0);
         } else {
-          // Divisor is rational
+          // Divisor is real
           return new Complex(a / c, b / c);
         }
       }
@@ -380,7 +380,7 @@
 
           return new Complex(Math.pow(a, P['re']), 0);
 
-        } else if (a === 0) {
+        } else if (a === 0) { // If base is fully imaginary
 
           switch (P['re'] % 4) {
             case 0:
@@ -1212,8 +1212,17 @@
      *
      * @returns {boolean}
      */
-    isNaN: function() {
+    'isNaN': function() {
       return isNaN(this['re']) || isNaN(this['im']);
+    },
+
+    /**
+     * Checks if the given complex number is finite
+     *
+     * @returns {boolean}
+     */
+    'isFinite': function() {
+      return isFinite(this['re']) && isFinite(this['im']);
     }
   };
 
