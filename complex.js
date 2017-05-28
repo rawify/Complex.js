@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.2 11/02/2016
+ * @license Complex.js v2.0.3 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -374,6 +374,7 @@
       var arg = Math.atan2(b, a);
       var loh = logHypot(a, b);
 
+      // If the exponent is real
       if (P['im'] === 0) {
 
         if (b === 0 && a >= 0) {
