@@ -262,7 +262,7 @@ bower install complex.js
 or
 
 ```bash
-npm install --save complex.js
+npm install complex.js
 ```
 
 Using Complex.js with the browser
