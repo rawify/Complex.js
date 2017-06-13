@@ -1,6 +1,7 @@
 # Complex.js - ℂ in JavaSript
 
-[![NPM Package](https://img.shields.io/npm/v/complex.js.svg?style=flat)](https://npmjs.org/package/complex.js "View this project on npm")
+[![NPM Package](https://nodei.co/npm-dl/fraction.js.png?months=6&height=1)](https://npmjs.org/package/fraction.js)
+
 [![Build Status](https://travis-ci.org/infusion/Complex.js.svg?branch=master)](https://travis-ci.org/infusion/Complex.js)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
