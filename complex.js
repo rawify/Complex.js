@@ -308,7 +308,7 @@
       parse(a, b); // mutates P
       
       
-      if (this.isNaN() || isNaN(a) || isNaN(b)) {
+      if (this.isNaN() || isNaN(P['re']) || isNaN(P['im'])) {
         return Complex.COMPLEX_NAN;
       }
 
