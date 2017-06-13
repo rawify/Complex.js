@@ -380,7 +380,7 @@
 
         } else if (a === 0) { // If base is fully imaginary
 
-          switch (P['re'] % 4) {
+          switch ((P['re'] % 4 + 4) % 4) {
             case 0:
               return new Complex(Math.pow(b, P['re']), 0);
             case 1:
