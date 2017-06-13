@@ -7,7 +7,7 @@
 
 /**
  *
- * This class allows the manipilation of complex numbers.
+ * This class allows the manipulation of complex numbers.
  * You can pass a complex number in different formats. Either as object, double, string or two integer parameters.
  *
  * Object form
@@ -492,7 +492,7 @@
     },
 
     /**
-     * Calculate the magniture of the complex number
+     * Calculate the magnitude of the complex number
      *
      * @returns {number}
      */
