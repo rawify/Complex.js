@@ -371,9 +371,6 @@
         return Complex['ZERO'];
       }
 
-      var arg = Math.atan2(b, a);
-      var loh = logHypot(a, b);
-
       // If the exponent is real
       if (P['im'] === 0) {
 
@@ -414,6 +411,9 @@
        * Im = exp(c * logsq2 - d * arg(z_1)) * sin(d * logsq2 + c * arg(z_1))
        *
        */
+
+      var arg = Math.atan2(b, a);
+      var loh = logHypot(a, b);
 
       a = Math.exp(P['re'] * loh - P['im'] * arg);
       b = P['im'] * loh + P['re'] * arg;
