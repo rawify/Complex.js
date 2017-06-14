@@ -1,4 +1,4 @@
-# Complex.js - ℂ in JavaSript
+# Complex.js - ℂ in JavaScript
 
 [![NPM Package](https://nodei.co/npm-dl/complex.js.png?months=6&height=1)](https://npmjs.org/package/complex.js)
 
