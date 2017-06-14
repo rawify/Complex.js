@@ -740,7 +740,7 @@ describe("Complex Details", function() {
     assert.equal(Complex({re: 1, im: -1}).arg(), -Math.PI / 4);
   });
 
-  it('should handle arg for the forth and first quadrant', function() {
+  it('should handle arg for the fourth and first quadrant', function() {
     assert.equal(Complex({re: 1, im: 0}).arg(), 0);
   });
 
@@ -752,11 +752,11 @@ describe("Complex Details", function() {
     assert.equal(Complex({re: -1, im: 0}).arg(), Math.PI);
   });
 
-  it('should handle arg for the third and forth quadrant', function() {
+  it('should handle arg for the third and fourth quadrant', function() {
     assert.equal(Complex({re: 0, im: -1}).arg(), -Math.PI / 2);
   });
 
-  it("should eat it's own dog food", function() {
+  it("should eat its own dog food", function() {
 
     var a = Complex(1, -5).toString();
     var b = Complex(a).toString();
@@ -772,7 +772,7 @@ describe("Complex Details", function() {
     assert.equal(a.toString(), '1');
   });
 
-  it('should take the natural logartithm', function() {
+  it('should take the natural logarithm', function() {
     var n = Complex(Math.E * Math.E).log().div("i").mul(-Math.PI * 2, 1);
 
     assert.equal(n.toString(), '2 + ' + 4 * Math.PI + "i");
