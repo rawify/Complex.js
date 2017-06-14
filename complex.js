@@ -15,6 +15,9 @@
  * { arg: <angle>, abs: <radius> }
  * { phi: <angle>, r: <radius> }
  *
+ * Array / Vector form
+ * [ real, imaginary ]
+ *
  * Double form
  * 99.3 - Single double value
  *
