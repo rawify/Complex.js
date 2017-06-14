@@ -5,7 +5,15 @@
     "title": "complex.js",
     "version": "2.0.3",
     "description": "A complex number library",
-    "keywords": ["complex numbers", "math", "complex", "number", "calculus", "parser", "arithmetic"],
+    "keywords": [
+        "complex numbers",
+        "math",
+        "complex",
+        "number",
+        "calculus",
+        "parser",
+        "arithmetic"
+    ],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "complex",
     "private": false,

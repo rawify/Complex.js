@@ -27,6 +27,9 @@ var tests = [{
     set: "3",
     expect: "3"
   }, {
+    set: [9, 8],
+    expect: "9 + 8i"
+  }, {
     set: "2.3",
     expect: "2.3"
   }, {
@@ -583,15 +586,15 @@ var tests = [{
   }
 ];
 
-describe("Complex", function() {
+describe("Complex", function () {
 
   for (var i = 0; i < tests.length; i++) {
 
-    (function(i) {
+    (function (i) {
 
       if (tests[i].fn) {
 
-        it((tests[i].fn || "") + " " + tests[i].set + ", " + (tests[i].param || ""), function() {
+        it((tests[i].fn || "") + " " + tests[i].set + ", " + (tests[i].param || ""), function () {
           try {
             assert.equal(tests[i].expect, new Complex(tests[i].set)[tests[i].fn](tests[i].param).toString());
           } catch (e) {
@@ -601,7 +604,7 @@ describe("Complex", function() {
 
       } else {
 
-        it((tests[i].fn || "") + "" + tests[i].set, function() {
+        it((tests[i].fn || "") + "" + tests[i].set, function () {
           try {
             assert.equal(tests[i].expect, new Complex(tests[i].set).toString());
           } catch (e) {
@@ -614,9 +617,9 @@ describe("Complex", function() {
   }
 });
 
-describe("Complex Details", function() {
+describe("Complex Details", function () {
 
-  it("should work with different params", function() {
+  it("should work with different params", function () {
     assert.equal(Complex(1, -1).toString(), "1 - i");
     assert.equal(Complex(0, 0).toString(), "0");
     assert.equal(Complex(0, 2).toString(), "2i");
@@ -625,7 +628,7 @@ describe("Complex Details", function() {
     assert.equal(Complex({re: 0, im: -2}).toString(), "-2i");
   });
 
-  it("Complex Combinations", function() {
+  it("Complex Combinations", function () {
 
     var zero = Complex(0, 0), one = Complex(1, 1), two = Complex(2, 2);
 
@@ -660,7 +663,7 @@ describe("Complex Details", function() {
     assert.equal(Complex("-2i - 1").log().exp().toString(), "-1 - 2i")
   });
 
-  it("should calculate distributed conjugate", function() {
+  it("should calculate distributed conjugate", function () {
 
     var c1 = Complex(7, 3);
     var c2 = Complex(1, 2);
@@ -671,7 +674,7 @@ describe("Complex Details", function() {
     assert.equal(r1.toString(), r2.toString());
   });
 
-  it("should be raised to power of 6", function() {
+  it("should be raised to power of 6", function () {
     var c1 = Complex(2, 2);
 
     var t = c1.pow(6);
@@ -679,7 +682,7 @@ describe("Complex Details", function() {
     assert.equal(t.toString(), "-9.405287417451663e-14 - 511.9999999999995i");
   });
 
-  it("should handle inverse trig fns", function() {
+  it("should handle inverse trig fns", function () {
 
     var values = [
       new Complex(2.3, 1.4),
@@ -702,61 +705,61 @@ describe("Complex Details", function() {
     }
   });
 
-  it('should handle get real part', function() {
+  it('should handle get real part', function () {
     assert.equal(Complex({abs: 1, arg: Math.PI / 4}).re, Math.SQRT2 / 2);
   });
 
-  it('should handle get complex part', function() {
+  it('should handle get complex part', function () {
     assert.equal(Complex({abs: 1, arg: Math.PI / 4}).im, "0.7071067811865475");
   });
 
-  it('should handle sum', function() {
+  it('should handle sum', function () {
     assert.equal(Complex({abs: 1, arg: 0}).add({abs: 1, arg: Math.PI / 2}).abs(), Math.SQRT2);
     assert.equal(Complex({abs: 1, arg: 0}).add({abs: 1, arg: Math.PI / 2}).arg(), Math.PI / 4);
   });
 
-  it('should handle conjugate', function() {
+  it('should handle conjugate', function () {
     assert.equal(Complex({abs: 1, arg: Math.PI / 4}).conjugate().toString(), Complex({abs: 1, arg: -Math.PI / 4}).toString());
   });
 
-  it('should handle substract', function() {
+  it('should handle substract', function () {
     assert.equal(Complex({abs: 1, arg: 0}).sub({abs: 1, arg: Math.PI / 2}).abs().toString(), "1.414213562373095");
     assert.equal(Complex({abs: 1, arg: 0}).sub({abs: 1, arg: Math.PI / 2}).arg().toString(), "-0.7853981633974484");
   });
 
-  it('should handle arg for the first quadrant', function() {
+  it('should handle arg for the first quadrant', function () {
     assert.equal(Complex({re: 1, im: 1}).arg(), Math.PI / 4);
   });
 
-  it('should handle arg for the second quadrant', function() {
+  it('should handle arg for the second quadrant', function () {
     assert.equal(Complex({re: -1, im: 1}).arg(), 3 * Math.PI / 4);
   });
 
-  it('should handle arg for the third quadrant', function() {
+  it('should handle arg for the third quadrant', function () {
     assert.equal(Complex({re: -1, im: -1}).arg(), -3 * Math.PI / 4);
   });
 
-  it('should handle arg for the fourth quadrant', function() {
+  it('should handle arg for the fourth quadrant', function () {
     assert.equal(Complex({re: 1, im: -1}).arg(), -Math.PI / 4);
   });
 
-  it('should handle arg for the fourth and first quadrant', function() {
+  it('should handle arg for the fourth and first quadrant', function () {
     assert.equal(Complex({re: 1, im: 0}).arg(), 0);
   });
 
-  it('should handle arg for first and second quadrant', function() {
+  it('should handle arg for first and second quadrant', function () {
     assert.equal(Complex({re: 0, im: 1}).arg(), Math.PI / 2);
   });
 
-  it('should handle arg for the second and third quadrant', function() {
+  it('should handle arg for the second and third quadrant', function () {
     assert.equal(Complex({re: -1, im: 0}).arg(), Math.PI);
   });
 
-  it('should handle arg for the third and fourth quadrant', function() {
+  it('should handle arg for the third and fourth quadrant', function () {
     assert.equal(Complex({re: 0, im: -1}).arg(), -Math.PI / 2);
   });
 
-  it("should eat its own dog food", function() {
+  it("should eat its own dog food", function () {
 
     var a = Complex(1, -5).toString();
     var b = Complex(a).toString();
@@ -765,14 +768,14 @@ describe("Complex Details", function() {
     assert.equal(c.toString(), '-24 - 10i');
   });
 
-  it("should calculate the absolute value of i", function() {
+  it("should calculate the absolute value of i", function () {
 
     var a = Complex("i").sign().inverse().mul("i");
 
     assert.equal(a.toString(), '1');
   });
 
-  it('should take the natural logarithm', function() {
+  it('should take the natural logarithm', function () {
     var n = Complex(Math.E * Math.E).log().div("i").mul(-Math.PI * 2, 1);
 
     assert.equal(n.toString(), '2 + ' + 4 * Math.PI + "i");

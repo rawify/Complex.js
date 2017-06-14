@@ -31,6 +31,7 @@ Objects
 new Complex({re: real, im: imaginary});
 new Complex({arg: angle, abs: radius});
 new Complex({phi: angle, r: radius});
+new Complex([real, imaginary]); // Vector/Array syntax
 ```
 If there are other attributes on the passed object, they're not getting preserved and have to be merged manually.
 

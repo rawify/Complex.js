@@ -146,6 +146,9 @@
         } else if ('r' in a && 'phi' in a) {
           P['re'] = a['r'] * Math.cos(a['phi']);
           P['im'] = a['r'] * Math.sin(a['phi']);
+        } else if (a.length === 2) { // Quick array check
+          P['re'] = a[0];
+          P['im'] = a[1];
         } else {
           parser_exit();
         }
