@@ -80,7 +80,7 @@ var tests = [{
   set: Infinity,
   fn: "mul",
   param: "i",
-  expect: "NaN"
+  expect: "∞i"
 }, {
   set: "-36i",
   fn: "sqrt",
