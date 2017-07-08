@@ -1337,6 +1337,7 @@
   Complex['PI'] = new Complex(Math.PI, 0);
   Complex['E'] = new Complex(Math.E, 0);
   Complex['Infinity'] = new Complex(Infinity, Infinity);
+  Complex['NaN'] = new Complex(NaN, NaN);
   Complex['EPSILON'] = 1e-16;
 
   if (typeof define === 'function' && define['amd']) {
