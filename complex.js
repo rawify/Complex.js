@@ -236,6 +236,40 @@
   };
 
   /**
+   * Convert NaN to zero.
+   */
+  function NaNtoZero(x) {
+    if (Number.isNaN(x)) {
+      return 0;
+    } else {
+      return x;
+    }
+  }
+
+  /**
+   * Test if a complex object `{re, im}` is NaN
+   */
+  function complexIsNaN(z) {
+    // Todo: is having two checks redundant or sensible?
+    return isNaN(z['re']) || isNaN(z['im']);
+  }
+
+  /**
+   * Test if a complex object `{re, im}` is Finite
+   */
+  function complexIsFinte(z) {
+  return isFinite(z['re']) && isFinite(z['im']);
+  }
+
+  /**
+   * Test if a complex object `{re, im}` is zero
+   */
+  function complexIsZero(z) {
+    return z['re'] === 0 && z['im'] === 0;
+  }
+
+
+  /**
    * @constructor
    * @returns {Complex}
    */
@@ -1318,7 +1352,7 @@
      * @returns {boolean}
      */
     'isNaN': function() {
-      return isNaN(this['re']) || isNaN(this['im']);
+      return complexIsNaN(this);
     },
 
     /**
@@ -1327,7 +1361,7 @@
      * @returns {boolean}
      */
     'isFinite': function() {
-      return isFinite(this['re']) && isFinite(this['im']);
+      return complexIsNaN(this);
     },
   };
 
