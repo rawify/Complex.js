@@ -340,88 +340,28 @@
     'mul': function(a, b) {
 
       parse(a, b); // mutates P
-      
-      
-      if (this.isNaN() || isNaN(P['re']) || isNaN(P['im'])) {
+
+      /*
+       * A NaN value is returned if either operand
+       * is NaN or if one operand is an infinity and
+       * the other is zero.
+       */
+
+      if (complexIsNaN(this)
+       || complexIsNaN(P)
+       || (!complexIsFinte(this) && complexIsZero(P))
+       || (!complexIsFinte(P)    && complexIsZero(this))
+      ){
         return Complex.COMPLEX_NAN;
       }
 
-      
-      var infinityFlags =
-        ((this['re'] === Infinity || this['re'] === -Infinity) << 0) |
-        ((this['im'] === Infinity || this['im'] === -Infinity) << 1) |
-        ((   P['re'] === Infinity ||    P['re'] === -Infinity) << 2) |
-        ((   P['im'] === Infinity ||    P['im'] === -Infinity) << 3);
+      // Some values will be coersed to ComplexNaN by constructor
+      // make sure not to short cut this parsing.
 
-      switch(infinityFlags) {
-        // 0 Infinities
-        case 0b0000:
-          return new Complex(
-            this['re'] * P['re'] - this['im'] * P['im'],
-            this['re'] * P['im'] + this['im'] * P['re']);
-
-        // 1 Infinity
-        case 0b0001: // this['re'] infinite
-          return P['im'] === 0
-            ? new Complex(this['re'] * P['re'], 0)
-            : P['re'] === 0
-              ? new Complex(0, this['re'] * P['im'])
-              : Complex.COMPLEX_INFINITY;
-        case 0b0010: // this['im'] infinite
-          return P['im'] === 0
-           ? new Complex(0, this['im'] * P['re'])
-            : P['re'] === 0
-              ? new Complex(-this['im'] * P['im'], 0)
-              : Complex.COMPLEX_INFINITY;
-        case 0b0100: // P['re'] infinite
-          return this['im'] === 0
-           ? new Complex(this['re'] * P['re'], 0)
-            : this['re'] === 0
-              ? new Complex(0, this['im'] * P['re'])
-              : Complex.COMPLEX_INFINITY;
-        case 0b1000: // P['im'] infinite
-          return this['im'] === 0
-           ? new Complex(0, this['re'] * P['im'])
-            : this['re'] === 0
-              ? new Complex(-this['im'] * P['im'], 0)
-              : Complex.COMPLEX_INFINITY;
-
-        // 2 Infinities
-        case 0b0101: // this['re'] and P['re'] infinite
-          return this['im'] === 0 && P['im'] === 0
-            ? new Complex(this['re'] * P['re'], 0)
-            : Complex.COMPLEX_INFINITY;
-        case 0b1001: // this['re'] and P['im'] infinite
-          return this['im'] === 0 && P['re'] === 0
-            ? new Complex(0, this['re'] * P['im'])
-            : Complex.COMPLEX_INFINITY;
-        case 0b0110: // this['im'] and P['re'] infinite
-          return this['re'] === 0 && P['im'] === 0
-            ? new Complex(0, this['im'] * P['re'])
-            : Complex.COMPLEX_INFINITY;
-        case 0b1010: // this['im'] and P['im'] infinite
-          return this['re'] === 0 && P['re'] === 0
-            ? new Complex(-this['im'] * P['im'], 0)
-            : Complex.COMPLEX_INFINITY;
-        case 0b0011:
-          return P['re'] === 0 && P['im'] === 0
-            ? Complex.COMPLEX_NAN
-            : Complex.COMPLEX_INFINITY;
-        case 0b1100:
-          return this['re'] === 0 && this['im'] === 0
-            ? Complex.COMPLEX_NAN
-            : Complex.COMPLEX_INFINITY;
-
-        // 3 or 4 Infinities
-        case 0b0111:
-        case 0b1011:
-        case 0b1101:
-        case 0b1110:
-        case 0b1111:
-          return Complex.COMPLEX_INFINITY;
-        default:
-          throw new Error("I have missed a case in the mul function"); // TODO
-      };
+      return new Complex(
+        NaNtoZero(this['re'] * P['re']) - NaNtoZero(this['im'] * P['im']),
+        NaNtoZero(this['re'] * P['im']) + NaNtoZero(this['im'] * P['re'])
+      );
     },
 
     /**
