@@ -141,11 +141,16 @@
           P['re'] = a['re'];
           P['im'] = a['im'];
         } else if ('abs' in a && 'arg' in a) {
+
           P['re'] = a['abs'] * Math.cos(a['arg']);
-          P['im'] = a['abs'] * Math.sin(a['arg']);
+          P['im'] = a['arg'] === 0
+            ? 0
+            : a['abs'] * Math.sin(a['arg']);
         } else if ('r' in a && 'phi' in a) {
           P['re'] = a['r'] * Math.cos(a['phi']);
-          P['im'] = a['r'] * Math.sin(a['phi']);
+          P['im'] = a['phi'] === 0
+            ? 0
+            : a['r'] * Math.sin(a['phi']);
         } else {
           parser_exit();
         }
@@ -154,7 +159,7 @@
       case 'string':
 
         P['im'] = /* void */
-          P['re'] = 0;
+        P['re'] = 0;
 
         var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
         var plus = 1;
@@ -219,11 +224,50 @@
         parser_exit();
     }
 
+
     if (isNaN(P['re']) || isNaN(P['im'])) {
-      // If a calculation is NaN, we treat it as NaN and don't throw
-      //parser_exit();
+      P['re'] = P['im'] = NaN;
+    }
+
+    if (((P['re'] === Infinity || P['re'] === -Infinity) && P['im'] !== 0)
+     || ((P['im'] === Infinity || P['im'] === -Infinity) && P['re'] !== 0)) {
+      P['re'] = P['im'] = Infinity;
     }
   };
+
+  /**
+   * Convert NaN to zero.
+   */
+  function NaNtoZero(x) {
+    if (Number.isNaN(x)) {
+      return 0;
+    } else {
+      return x;
+    }
+  }
+
+  /**
+   * Test if a complex object `{re, im}` is NaN
+   */
+  function complexIsNaN(z) {
+    // Todo: is having two checks redundant or sensible?
+    return isNaN(z['re']) || isNaN(z['im']);
+  }
+
+  /**
+   * Test if a complex object `{re, im}` is Finite
+   */
+  function complexIsFinte(z) {
+  return isFinite(z['re']) && isFinite(z['im']);
+  }
+
+  /**
+   * Test if a complex object `{re, im}` is zero
+   */
+  function complexIsZero(z) {
+    return z['re'] === 0 && z['im'] === 0;
+  }
+
 
   /**
    * @constructor
@@ -297,14 +341,27 @@
 
       parse(a, b); // mutates P
 
-      // Besides the addition/subtraction, this helps having a solution for real Infinity
-      if (P['im'] === 0 && this['im'] === 0) {
-        return new Complex(this['re'] * P['re'], 0);
+      /*
+       * A NaN value is returned if either operand
+       * is NaN or if one operand is an infinity and
+       * the other is zero.
+       */
+
+      if (complexIsNaN(this)
+       || complexIsNaN(P)
+       || (!complexIsFinte(this) && complexIsZero(P))
+       || (!complexIsFinte(P)    && complexIsZero(this))
+      ){
+        return Complex.COMPLEX_NAN;
       }
 
+      // Some values will be coersed to ComplexNaN by constructor
+      // make sure not to short cut this parsing.
+
       return new Complex(
-        this['re'] * P['re'] - this['im'] * P['im'],
-        this['re'] * P['im'] + this['im'] * P['re']);
+        NaNtoZero(this['re'] * P['re']) - NaNtoZero(this['im'] * P['im']),
+        NaNtoZero(this['re'] * P['im']) + NaNtoZero(this['im'] * P['re'])
+      );
     },
 
     /**
@@ -1235,7 +1292,7 @@
      * @returns {boolean}
      */
     'isNaN': function() {
-      return isNaN(this['re']) || isNaN(this['im']);
+      return complexIsNaN(this);
     },
 
     /**
@@ -1244,7 +1301,7 @@
      * @returns {boolean}
      */
     'isFinite': function() {
-      return isFinite(this['re']) && isFinite(this['im']);
+      return complexIsNaN(this);
     },
   };
 
@@ -1254,6 +1311,7 @@
   Complex['PI'] = new Complex(Math.PI, 0);
   Complex['E'] = new Complex(Math.E, 0);
   Complex['Infinity'] = new Complex(Infinity, Infinity);
+  Complex['NaN'] = new Complex(NaN, NaN);
   Complex['EPSILON'] = 1e-16;
 
   if (typeof define === 'function' && define['amd']) {
