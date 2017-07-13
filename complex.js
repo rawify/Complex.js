@@ -143,14 +143,10 @@
         } else if ('abs' in a && 'arg' in a) {
 
           P['re'] = a['abs'] * Math.cos(a['arg']);
-          P['im'] = a['arg'] === 0
-            ? 0
-            : a['abs'] * Math.sin(a['arg']);
+          P['im'] = NaNtoZero(a['abs'] * Math.sin(a['arg']));
         } else if ('r' in a && 'phi' in a) {
           P['re'] = a['r'] * Math.cos(a['phi']);
-          P['im'] = a['phi'] === 0
-            ? 0
-            : a['r'] * Math.sin(a['phi']);
+          P['im'] = NaNtoZero(a['r'] * Math.sin(a['phi']));
         } else {
           parser_exit();
         }
@@ -237,6 +233,14 @@
 
   /**
    * Convert NaN to zero.
+   *
+   * **Note:** wherever this is used there is a risk of losing an actual NaN.
+   * Usually `NaNtoZero()` is used for one of the two arguments to `new Complex()`
+   * and therefore if the complex number should be NaN the other argument to `new
+   * Complex()` will be NaN and so it is ok. Care does need to be taken though.
+   *
+   * @private
+   *
    */
   function NaNtoZero(x) {
     if (Number.isNaN(x)) {
@@ -356,8 +360,7 @@
       }
 
       // Some values will be coersed to ComplexNaN by constructor
-      // make sure not to short cut this parsing.
-
+      // make sure not to shortcut this parsing.
       return new Complex(
         NaNtoZero(this['re'] * P['re']) - NaNtoZero(this['im'] * P['im']),
         NaNtoZero(this['re'] * P['im']) + NaNtoZero(this['im'] * P['re'])
@@ -531,12 +534,9 @@
 
       var tmp = Math.exp(this['re']);
 
-      if (this['im'] === 0) {
-        //return new Complex(tmp, 0);
-      }
       return new Complex(
         tmp * Math.cos(this['im']),
-        tmp * Math.sin(this['im']));
+        NaNtoZero(tmp * Math.sin(this['im'])));
     },
 
     /**
@@ -591,7 +591,7 @@
       var b = this['im'];
 
       return new Complex(
-        Math.sin(a) * Math.cosh(b),
+        NaNtoZero(Math.sin(a) * Math.cosh(b)),
         Math.cos(a) * Math.sinh(b));
     },
 
@@ -609,7 +609,7 @@
 
       return new Complex(
         Math.cos(a) * Math.cosh(b),
-        -Math.sin(a) * Math.sinh(b));
+        NaNtoZero(-Math.sin(a) * Math.sinh(b)));
     },
 
     /**
@@ -854,7 +854,7 @@
 
       return new Complex(
         Math.sinh(a) * Math.cos(b),
-        Math.cosh(a) * Math.sin(b));
+        NaNtoZero(Math.cosh(a) * Math.sin(b)));
     },
 
     /**
@@ -871,7 +871,7 @@
 
       return new Complex(
         Math.cosh(a) * Math.cos(b),
-        Math.sinh(a) * Math.sin(b));
+        NaNtoZero(Math.sinh(a) * Math.sin(b)));
     },
 
     /**
