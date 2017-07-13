@@ -486,7 +486,7 @@
 
       if (!isFinite(b)) {
         // Return complex infinity
-        return Complex['Infinity'];
+        return Complex['ComplexInfinity'];
       }
 
       return new Complex(
@@ -1124,7 +1124,11 @@
       var d = a * a + b * b;
 
       if (d === 0) {
-        return Complex['Infinity'];
+        return Complex['ComplexInfinity'];
+      }
+
+      if (!complexIsFinite(this)) {
+        return Complex['ZERO'];
       }
 
       return new Complex(
@@ -1314,7 +1318,7 @@
   Complex['I'] = new Complex(0, 1);
   Complex['PI'] = new Complex(Math.PI, 0);
   Complex['E'] = new Complex(Math.E, 0);
-  Complex['Infinity'] = new Complex(Infinity, Infinity);
+  Complex['ComplexInfinity'] = new Complex(Infinity, Infinity);
   Complex['NaN'] = new Complex(NaN, NaN);
   Complex['EPSILON'] = 1e-16;
 
