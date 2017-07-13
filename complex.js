@@ -257,7 +257,7 @@
   /**
    * Test if a complex object `{re, im}` is Finite
    */
-  function complexIsFinte(z) {
+  function complexIsFinite(z) {
   return isFinite(z['re']) && isFinite(z['im']);
   }
 
@@ -349,8 +349,8 @@
 
       if (complexIsNaN(this)
        || complexIsNaN(P)
-       || (!complexIsFinte(this) && complexIsZero(P))
-       || (!complexIsFinte(P)    && complexIsZero(this))
+       || (!complexIsFinite(this) && complexIsZero(P))
+       || (!complexIsFinite(P)    && complexIsZero(this))
       ){
         return Complex.COMPLEX_NAN;
       }
@@ -1303,7 +1303,7 @@
      * @returns {boolean}
      */
     'isFinite': function() {
-      return complexIsNaN(this);
+      return complexIsFinite(this);
     },
   };
 
