@@ -128,7 +128,8 @@ Rounds the complex number parts
 
 boolean equals(n)
 ---
-Checks if both numbers are exactly the same
+Checks if both numbers are exactly the same, if both numbers are infinite they
+are considered **not** equal.
 
 boolean isNaN()
 ---

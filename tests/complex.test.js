@@ -104,7 +104,7 @@ var tests = [{
   set: "0",
   fn: "div",
   param: "0",
-  expect: "∞ + ∞i"
+  expect: "NaN"
 }, {
   set: "4 + 2i",
   fn: "div",
