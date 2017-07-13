@@ -1195,6 +1195,8 @@
     /**
      * Compares two complex numbers
      *
+     * **Note:** new Complex(Infinity).equals(Infinity) === false
+     *
      * @returns {boolean}
      */
     'equals': function(a, b) {
