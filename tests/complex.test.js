@@ -679,7 +679,7 @@ function describeTest(test) {
   return ctor + fnCall + expectedResult + error;
 }
 
-describe("Complex", function () {
+describe("Complex functions", function () {
 
   for (var i = 0; i < functionTests.length; i++) {
 
@@ -698,6 +698,9 @@ describe("Complex", function () {
       });
     })(functionTests[i]);
   }
+});
+
+describe("Complex constructor", function() {
 
   for (var i = 0; i < constructorTests.length; i++) {
 
