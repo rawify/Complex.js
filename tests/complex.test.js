@@ -3,66 +3,6 @@ var assert = require("assert");
 var Complex = require("../complex.js");
 
 var tests = [{
-    set: null,
-    expect: "0"
-  }, {
-    set: undefined,
-    expect: "0"
-  }, {
-    set: "foo",
-    error: "SyntaxError: Invalid Param"
-  }, {
-    set: {},
-    error: "SyntaxError: Invalid Param"
-  }, {
-    set: " + i",
-    expect: "i"
-  }, {
-    set: "3+4i",
-    expect: "3 + 4i"
-  }, {
-    set: "i",
-    expect: "i"
-  }, {
-    set: "3",
-    expect: "3"
-  }, {
-    set: [9, 8],
-    expect: "9 + 8i"
-  }, {
-    set: "2.3",
-    expect: "2.3"
-  }, {
-    set: "0",
-    expect: "0"
-  }, {
-    set: "-0",
-    expect: "0"
-  }, {
-    set: {re: -0, im: 0},
-    expect: "0"
-  }, {
-    set: {re: 0, im: -0},
-    expect: "0"
-  }, {
-    set: Infinity,
-    expect: "Infinity"
-  }, {
-    set: -Infinity,
-    expect: "Infinity"
-  }, {
-    set: {re: Infinity, im: 0},
-    expect: "Infinity"
-  }, {
-    set: {re: -Infinity, im: 0},
-    expect: "Infinity"
-  }, {
-    set: {re: 0, im: Infinity},
-    expect: "Infinity"
-  }, {
-    set: {re: 0, im: -Infinity},
-    expect: "Infinity"
-  }, {
     set: Complex.I,
     fn: "mul",
     param: Complex(Math.PI).exp(),
@@ -72,9 +12,6 @@ var tests = [{
     fn: "mul",
     param: 3,
     expect: "3 + 12i"
-  }, {
-    set: 0,
-    expect: "0"
   }, {
     set: "4 + 3i",
     fn: "add",
@@ -606,15 +543,6 @@ var tests = [{
     fn: "cot",
     expect: "1.6636768291213935e-7 - 1.0000001515864902i"
   }, {
-    set: " + 7  - i  +  3i   -  +  +  +  + 43  +  2i  -  i4  +  -  33  +  65 - 1	",
-    expect: "-5"
-  }, {
-    set: " + 7  - i  +  3i   -  +  +  +  + 43  +  2i  -  i4  +  -  33  +  65 - 1	 + ",
-    error: "SyntaxError: Invalid Param"
-  }, {
-    set: "-3x + 4",
-    error: "SyntaxError: Invalid Param"
-  }, {
     set: Complex(1, 1).sub(0, 1), // Distance
     fn: "abs",
     expect: "1"
@@ -628,6 +556,78 @@ var tests = [{
     fn: "add",
     param: "i",
     expect: "6.123233995736766e-17 + 2i"
+  }, {
+    set: null,
+    expect: "0"
+  }, {
+    set: undefined,
+    expect: "0"
+  }, {
+    set: "foo",
+    error: "SyntaxError: Invalid Param"
+  }, {
+    set: {},
+    error: "SyntaxError: Invalid Param"
+  }, {
+    set: " + i",
+    expect: "i"
+  }, {
+    set: "3+4i",
+    expect: "3 + 4i"
+  }, {
+    set: "i",
+    expect: "i"
+  }, {
+    set: "3",
+    expect: "3"
+  }, {
+    set: [9, 8],
+    expect: "9 + 8i"
+  }, {
+    set: "2.3",
+    expect: "2.3"
+  }, {
+    set: "2.3",
+    expect: "2.3"
+  }, {
+    set: "0",
+    expect: "0"
+  }, {
+    set: "-0",
+    expect: "0"
+  }, {
+    set: {re: -0, im: 0},
+    expect: "0"
+  }, {
+    set: {re: 0, im: -0},
+    expect: "0"
+  }, {
+    set: Infinity,
+    expect: "Infinity"
+  }, {
+    set: -Infinity,
+    expect: "Infinity"
+  }, {
+    set: {re: Infinity, im: 0},
+    expect: "Infinity"
+  }, {
+    set: {re: -Infinity, im: 0},
+    expect: "Infinity"
+  }, {
+    set: {re: 0, im: Infinity},
+    expect: "Infinity"
+  }, {
+    set: {re: 0, im: -Infinity},
+    expect: "Infinity"
+  }, {
+    set: " + 7  - i  +  3i   -  +  +  +  + 43  +  2i  -  i4  +  -  33  +  65 - 1	",
+    expect: "-5"
+  }, {
+    set: " + 7  - i  +  3i   -  +  +  +  + 43  +  2i  -  i4  +  -  33  +  65 - 1	 + ",
+    error: "SyntaxError: Invalid Param"
+  }, {
+    set: "-3x + 4",
+    error: "SyntaxError: Invalid Param"
   }, {
     set: "- + 7",
     expect: "-7"
