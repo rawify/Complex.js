@@ -37,8 +37,6 @@
 
   'use strict';
 
-  var P = {'re': 0, 'im': 0};
-
   var cosh = function(x) {
     return (Math.exp(x) + Math.exp(-x)) * 0.5;
   };
@@ -129,6 +127,8 @@
   }
 
   var parse = function(a, b) {
+
+    var P = {'re': 0, 'im': 0};
 
     if (a === undefined || a === null) {
       P['re'] =
@@ -229,6 +229,8 @@
       // If a calculation is NaN, we treat it as NaN and don't throw
       //parser_exit();
     }
+
+    return P;
   };
 
   /**
@@ -241,10 +243,10 @@
       return new Complex(a, b);
     }
 
-    parse(a, b); // mutates P
+    var z = parse(a, b); // mutates P
 
-    this['re'] = P['re'];
-    this['im'] = P['im'];
+    this['re'] = z['re'];
+    this['im'] = z['im'];
   }
 
   Complex.prototype = {
@@ -273,11 +275,11 @@
      */
     'add': function(a, b) {
 
-      parse(a, b); // mutates P
+      var z = new Complex(a, b);
 
       return new Complex(
-              this['re'] + P['re'],
-              this['im'] + P['im']);
+              this['re'] + z['re'],
+              this['im'] + z['im']);
     },
 
     /**
@@ -287,11 +289,11 @@
      */
     'sub': function(a, b) {
 
-      parse(a, b); // mutates P
+      var z = new Complex(a, b);
 
       return new Complex(
-              this['re'] - P['re'],
-              this['im'] - P['im']);
+              this['re'] - z['re'],
+              this['im'] - z['im']);
     },
 
     /**
@@ -301,16 +303,16 @@
      */
     'mul': function(a, b) {
 
-      parse(a, b); // mutates P
+      var z = new Complex(a, b);
 
       // Besides the addition/subtraction, this helps having a solution for real Infinity
-      if (P['im'] === 0 && this['im'] === 0) {
-        return new Complex(this['re'] * P['re'], 0);
+      if (z['im'] === 0 && this['im'] === 0) {
+        return new Complex(this['re'] * z['re'], 0);
       }
 
       return new Complex(
-              this['re'] * P['re'] - this['im'] * P['im'],
-              this['re'] * P['im'] + this['im'] * P['re']);
+              this['re'] * z['re'] - this['im'] * z['im'],
+              this['re'] * z['im'] + this['im'] * z['re']);
     },
 
     /**
@@ -320,13 +322,13 @@
      */
     'div': function(a, b) {
 
-      parse(a, b); // mutates P
+      var z = new Complex(a, b);
 
       a = this['re'];
       b = this['im'];
 
-      var c = P['re'];
-      var d = P['im'];
+      var c = z['re'];
+      var d = z['im'];
       var t, x;
 
       if (0 === d) {
@@ -368,7 +370,7 @@
      */
     'pow': function(a, b) {
 
-      parse(a, b); // mutates P
+      var z = new Complex(a, b);
 
       a = this['re'];
       b = this['im'];
@@ -378,23 +380,23 @@
       }
 
       // If the exponent is real
-      if (P['im'] === 0) {
+      if (z['im'] === 0) {
 
         if (b === 0 && a >= 0) {
 
-          return new Complex(Math.pow(a, P['re']), 0);
+          return new Complex(Math.pow(a, z['re']), 0);
 
         } else if (a === 0) { // If base is fully imaginary
 
-          switch ((P['re'] % 4 + 4) % 4) {
+          switch ((z['re'] % 4 + 4) % 4) {
             case 0:
-              return new Complex(Math.pow(b, P['re']), 0);
+              return new Complex(Math.pow(b, z['re']), 0);
             case 1:
-              return new Complex(0, Math.pow(b, P['re']));
+              return new Complex(0, Math.pow(b, z['re']));
             case 2:
-              return new Complex(-Math.pow(b, P['re']), 0);
+              return new Complex(-Math.pow(b, z['re']), 0);
             case 3:
-              return new Complex(0, -Math.pow(b, P['re']));
+              return new Complex(0, -Math.pow(b, z['re']));
           }
         }
       }
@@ -421,8 +423,8 @@
       var arg = Math.atan2(b, a);
       var loh = logHypot(a, b);
 
-      a = Math.exp(P['re'] * loh - P['im'] * arg);
-      b = P['im'] * loh + P['re'] * arg;
+      a = Math.exp(z['re'] * loh - z['im'] * arg);
+      b = z['im'] * loh + z['re'] * arg;
       return new Complex(
               a * Math.cos(b),
               a * Math.sin(b));
@@ -1134,10 +1136,10 @@
      */
     'equals': function(a, b) {
 
-      parse(a, b); // mutates P
+      var z = new Complex(a, b);
 
-      return Math.abs(P['re'] - this['re']) <= Complex['EPSILON'] &&
-             Math.abs(P['im'] - this['im']) <= Complex['EPSILON'];
+      return Math.abs(z['re'] - this['re']) <= Complex['EPSILON'] &&
+             Math.abs(z['im'] - this['im']) <= Complex['EPSILON'];
     },
 
     /**

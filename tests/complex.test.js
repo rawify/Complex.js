@@ -1,6 +1,6 @@
 var assert = require("assert");
 
-var Complex = require("../complex.min");
+var Complex = require("../complex.js");
 
 var tests = [{
     set: null,
