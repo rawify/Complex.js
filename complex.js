@@ -277,6 +277,16 @@
 
       var z = new Complex(a, b);
 
+      // Infinity + Infinity = NaN
+      if (this.isInfinite() && z.isInfinite()) {
+        return Complex.NAN;
+      }
+
+      // Infinity + z = Infinity { where z != Infinity }
+      if (this.isInfinite() || z.isInfinite()) {
+        return Complex.INFINITY;
+      }
+
       return new Complex(
               this['re'] + z['re'],
               this['im'] + z['im']);
@@ -290,6 +300,16 @@
     'sub': function(a, b) {
 
       var z = new Complex(a, b);
+
+      // Infinity - Infinity = NaN
+      if (this.isInfinite() && z.isInfinite()) {
+        return Complex.NAN;
+      }
+
+      // Infinity - z = Infinity { where z != Infinity }
+      if (this.isInfinite() || z.isInfinite()) {
+        return Complex.INFINITY;
+      }
 
       return new Complex(
               this['re'] - z['re'],
@@ -305,7 +325,17 @@
 
       var z = new Complex(a, b);
 
-      // Besides the addition/subtraction, this helps having a solution for real Infinity
+      // Infinity * 0 = NaN
+      if ((this.isInfinite() && z.isZero()) || (this.isZero() && z.isInfinite())) {
+        return Complex.NAN;
+      }
+
+      // Infinity * z = Infinity { where z != 0 }
+      if (this.isInfinite() || z.isInfinite()) {
+        return Complex.INFINITY;
+      }
+
+      // Short circuit for real values
       if (z['im'] === 0 && this['im'] === 0) {
         return new Complex(this['re'] * z['re'], 0);
       }
@@ -324,6 +354,21 @@
 
       var z = new Complex(a, b);
 
+      // 0 / 0 = NaN and Infinity / Infinity = NaN
+      if ((this.isZero() && z.isZero()) || (this.isInfinite() && z.isInfinite())) {
+        return Complex.NAN;
+      }
+
+      // Infinity / 0 = Infinity
+      if (this.isInfinite() || z.isZero()) {
+        return Complex.INFINITY;
+      }
+
+      // 0 / Infinity = 0
+      if (this.isZero() || z.isInfinite()) {
+        return Complex.ZERO;
+      }
+
       a = this['re'];
       b = this['im'];
 
@@ -332,15 +377,8 @@
       var t, x;
 
       if (0 === d) {
-        if (0 === c) {
-          // Divisor is zero
-          return new Complex(
-                (a !== 0) ? (a / 0) : 0,
-                (b !== 0) ? (b / 0) : 0);
-        } else {
-          // Divisor is real
-          return new Complex(a / c, b / c);
-        }
+        // Divisor is real
+        return new Complex(a / c, b / c);
       }
 
       if (Math.abs(c) < Math.abs(d)) {
@@ -375,8 +413,8 @@
       a = this['re'];
       b = this['im'];
 
-      if (a === 0 && b === 0) {
-        return Complex['ZERO'];
+      if (z.isZero()) {
+        return Complex['ONE'];
       }
 
       // If the exponent is real
@@ -1036,8 +1074,8 @@
       var a = this['re'];
       var b = this['im'];
 
-      if (a === 0 && b === 0) {
-        return new Complex(Infinity, 0);
+      if (this.isZero()) {
+        return Complex.INFINITY;
       }
 
       var d = a * a + b * b;
@@ -1057,14 +1095,21 @@
      */
     'inverse': function() {
 
+      // 1 / 0 = Infinity and 1 / Infinity = 0
+      if (this.isZero()) {
+        return Complex.INFINITY;
+      }
+
+      if (this.isInfinite()) {
+        return Complex.ZERO;
+      }
+
       var a = this['re'];
       var b = this['im'];
 
       var d = a * a + b * b;
 
-      return new Complex(
-              a !== 0 ? a / d : 0,
-              b !== 0 ?-b / d : 0);
+      return new Complex(a / d, -b / d);
     },
 
     /**
@@ -1163,8 +1208,16 @@
       var b = this['im'];
       var ret = '';
 
-      if (isNaN(a) || isNaN(b)) {
+      if (this.isNaN()) {
         return 'NaN';
+      }
+
+      if (this.isZero()) {
+        return '0';
+      }
+
+      if (this.isInfinite()) {
+        return 'Infinity';
       }
 
       if (a !== 0) {
@@ -1217,7 +1270,7 @@
     },
 
     /**
-     * Checks if the given complex number is not a number
+     * Determines whether a complex number is not on the Riemann sphere.
      *
      * @returns {boolean}
      */
@@ -1226,12 +1279,36 @@
     },
 
     /**
-     * Checks if the given complex number is finite
+     * Determines whether or not a complex number is at the zero pole of the
+     * Riemann sphere.
+     *
+     * @returns {boolean}
+     */
+    'isZero': function() {
+      return (
+              (this['re'] === 0 || this['re'] === -0) &&
+              (this['im'] === 0 || this['im'] === -0)
+      );
+    },
+
+    /**
+     * Determines whether a complex number is not at the infinity pole of the
+     * Riemann sphere.
      *
      * @returns {boolean}
      */
     'isFinite': function() {
       return isFinite(this['re']) && isFinite(this['im']);
+    },
+
+    /**
+     * Determines whether or not a complex number is at the infinity pole of the
+     * Riemann sphere.
+     *
+     * @returns {boolean}
+     */
+    'isInfinite': function() {
+      return !(this.isNaN() || this.isFinite());
     }
   };
 
@@ -1240,6 +1317,8 @@
   Complex['I'] = new Complex(0, 1);
   Complex['PI'] = new Complex(Math.PI, 0);
   Complex['E'] = new Complex(Math.E, 0);
+  Complex['INFINITY'] = new Complex(Infinity, Infinity);
+  Complex['NAN'] = new Complex(NaN, NaN);
   Complex['EPSILON'] = 1e-16;
 
   if (typeof define === 'function' && define['amd']) {
