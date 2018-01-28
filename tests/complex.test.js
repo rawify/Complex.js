@@ -1,6 +1,6 @@
 var assert = require("assert");
 
-var Complex = require("../complex.min");
+var Complex = require("../complex.js");
 
 var tests = [{
     set: null,
@@ -33,8 +33,35 @@ var tests = [{
     set: "2.3",
     expect: "2.3"
   }, {
+    set: "0",
+    expect: "0"
+  }, {
+    set: "-0",
+    expect: "0"
+  }, {
+    set: {re: -0, im: 0},
+    expect: "0"
+  }, {
+    set: {re: 0, im: -0},
+    expect: "0"
+  }, {
+    set: Infinity,
+    expect: "Infinity"
+  }, {
+    set: -Infinity,
+    expect: "Infinity"
+  }, {
+    set: {re: Infinity, im: 0},
+    expect: "Infinity"
+  }, {
     set: {re: -Infinity, im: 0},
-    expect: "-Infinity"
+    expect: "Infinity"
+  }, {
+    set: {re: 0, im: Infinity},
+    expect: "Infinity"
+  }, {
+    set: {re: 0, im: -Infinity},
+    expect: "Infinity"
   }, {
     set: Complex.I,
     fn: "mul",
@@ -83,7 +110,7 @@ var tests = [{
     set: Infinity,
     fn: "mul",
     param: "i",
-    expect: "NaN"
+    expect: "Infinity"
   }, {
     set: "-36i",
     fn: "sqrt",
@@ -92,7 +119,27 @@ var tests = [{
     set: "4 + 2i",
     fn: "div",
     param: "0",
-    expect: "Infinity + Infinityi"
+    expect: "Infinity"
+  }, {
+    set: "0",
+    fn: "div",
+    param: Infinity,
+    expect: "0"
+  }, {
+    set: -Infinity,
+    fn: "div",
+    param: 0,
+    expect: "Infinity"
+  }, {
+    set: Infinity,
+    fn: "div",
+    param: Infinity,
+    expect: "NaN"
+  }, {
+    set: 0,
+    fn: "div",
+    param: 0,
+    expect: "NaN"
   }, {
     set: "4 + 2i",
     fn: "div",
@@ -119,10 +166,25 @@ var tests = [{
     param: "i",
     expect: "6 + 3i"
   }, {
+    set: Infinity,
+    fn: "mul",
+    param: 0,
+    expect: "NaN"
+  }, {
     set: "3 + 4i",
     fn: "add",
     param: "5 - 7i",
     expect: "8 - 3i"
+  }, {
+    set: Infinity,
+    fn: "add",
+    param: Infinity,
+    expect: "NaN"
+  }, {
+    set: -Infinity,
+    fn: "sub",
+    param: -Infinity,
+    expect: "NaN"
   }, {
     set: "6i",
     fn: "div",
@@ -155,7 +217,7 @@ var tests = [{
   }, {
     set: 0,
     fn: "log",
-    expect: "-Infinity"
+    expect: "Infinity"
   }, {
     set: Infinity,
     fn: "mul",
@@ -321,7 +383,7 @@ var tests = [{
     set: -Infinity,
     fn: "div",
     param: 3,
-    expect: "-Infinity"
+    expect: "Infinity"
   }, {
     set: {re: 1, im: 2},
     fn: "add",
@@ -385,7 +447,7 @@ var tests = [{
     set: "0-0i",
     fn: "pow",
     param: 0,
-    expect: "0"
+    expect: "1"
   }, {
     set: "1 + 4i",
     fn: "sqrt",
@@ -469,6 +531,10 @@ var tests = [{
     expect: "0.5 - 0.5i"
   }, {
     set: "0",
+    fn: "inverse",
+    expect: "Infinity"
+  }, {
+    set: Infinity,
     fn: "inverse",
     expect: "0"
   }, {
@@ -644,7 +710,7 @@ describe("Complex Details", function () {
     assert.equal(one.mul(one).toString(), Complex(0, 2).toString());
     assert.equal(one.div(2).toString(), "0.5 + 0.5i");
     assert.equal(one.div(one).toString(), "1");
-    assert.equal(one.div(0).toString(), "Infinity + Infinityi");
+    assert.equal(one.div(0).toString(), "Infinity");
     assert.equal(one.exp().toString(), "1.4686939399158851 + 2.2873552871788423i");
     assert.equal(one.log().toString(), "0.34657359027997264 + 0.7853981633974483i");
     assert.equal(one.pow(one).toString(), "0.2739572538301211 + 0.5837007587586147i");

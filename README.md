@@ -80,7 +80,7 @@ Divides the number by another complex number
 
 Complex pow(exp)
 ---
-Returns the number raised to the complex exponent
+Returns the number raised to the complex exponent (Note: Complex.ZERO.pow(0) => Complex.ONE by convention)
 
 Complex sqrt()
 ---
@@ -231,11 +231,19 @@ Constants
 
 Complex.ZERO
 ---
-A complex zero instance
+A complex zero value (south pole on the Riemann Sphere)
 
 Complex.ONE
 ---
 A complex one instance
+
+Complex.INFINITY
+---
+A complex infinity value (north pole on the Riemann Sphere)
+
+Complex.NAN
+---
+A complex NaN value (not on the Riemann Sphere)
 
 Complex.I
 ---
