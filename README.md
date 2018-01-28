@@ -231,11 +231,19 @@ Constants
 
 Complex.ZERO
 ---
-A complex zero instance
+A complex zero value (south pole on the Riemann Sphere)
 
 Complex.ONE
 ---
 A complex one instance
+
+Complex.INFINITY
+---
+A complex infinity value (north pole on the Riemann Sphere)
+
+Complex.NAN
+---
+A complex NaN value (not on the Riemann Sphere)
 
 Complex.I
 ---

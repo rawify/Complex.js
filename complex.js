@@ -128,30 +128,30 @@
 
   var parse = function(a, b) {
 
-    var P = {'re': 0, 'im': 0};
+    var z = {'re': 0, 'im': 0};
 
     if (a === undefined || a === null) {
-      P['re'] =
-      P['im'] = 0;
+      z['re'] =
+      z['im'] = 0;
     } else if (b !== undefined) {
-      P['re'] = a;
-      P['im'] = b;
+      z['re'] = a;
+      z['im'] = b;
     } else switch (typeof a) {
 
       case 'object':
 
         if ('im' in a && 're' in a) {
-          P['re'] = a['re'];
-          P['im'] = a['im'];
+          z['re'] = a['re'];
+          z['im'] = a['im'];
         } else if ('abs' in a && 'arg' in a) {
-          P['re'] = a['abs'] * Math.cos(a['arg']);
-          P['im'] = a['abs'] * Math.sin(a['arg']);
+          z['re'] = a['abs'] * Math.cos(a['arg']);
+          z['im'] = a['abs'] * Math.sin(a['arg']);
         } else if ('r' in a && 'phi' in a) {
-          P['re'] = a['r'] * Math.cos(a['phi']);
-          P['im'] = a['r'] * Math.sin(a['phi']);
+          z['re'] = a['r'] * Math.cos(a['phi']);
+          z['im'] = a['r'] * Math.sin(a['phi']);
         } else if (a.length === 2) { // Quick array check
-          P['re'] = a[0];
-          P['im'] = a[1];
+          z['re'] = a[0];
+          z['im'] = a[1];
         } else {
           parser_exit();
         }
@@ -159,8 +159,8 @@
 
       case 'string':
 
-        P['im'] = /* void */
-        P['re'] = 0;
+        z['im'] = /* void */
+        z['re'] = 0;
 
         var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
         var plus = 1;
@@ -187,10 +187,10 @@
             }
 
             if (tokens[i + 1] !== ' ' && !isNaN(tokens[i + 1])) {
-              P['im']+= parseFloat((minus % 2 ? '-' : '') + tokens[i + 1]);
+              z['im']+= parseFloat((minus % 2 ? '-' : '') + tokens[i + 1]);
               i++;
             } else {
-              P['im']+= parseFloat((minus % 2 ? '-' : '') + '1');
+              z['im']+= parseFloat((minus % 2 ? '-' : '') + '1');
             }
             plus = minus = 0;
 
@@ -201,10 +201,10 @@
             }
 
             if (tokens[i + 1] === 'i' || tokens[i + 1] === 'I') {
-              P['im']+= parseFloat((minus % 2 ? '-' : '') + c);
+              z['im']+= parseFloat((minus % 2 ? '-' : '') + c);
               i++;
             } else {
-              P['re']+= parseFloat((minus % 2 ? '-' : '') + c);
+              z['re']+= parseFloat((minus % 2 ? '-' : '') + c);
             }
             plus = minus = 0;
           }
@@ -217,20 +217,20 @@
         break;
 
       case 'number':
-        P['im'] = 0;
-        P['re'] = a;
+        z['im'] = 0;
+        z['re'] = a;
         break;
 
       default:
         parser_exit();
     }
 
-    if (isNaN(P['re']) || isNaN(P['im'])) {
+    if (isNaN(z['re']) || isNaN(z['im'])) {
       // If a calculation is NaN, we treat it as NaN and don't throw
       //parser_exit();
     }
 
-    return P;
+    return z;
   };
 
   /**
@@ -243,7 +243,7 @@
       return new Complex(a, b);
     }
 
-    var z = parse(a, b); // mutates P
+    var z = parse(a, b);
 
     this['re'] = z['re'];
     this['im'] = z['im'];
