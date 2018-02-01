@@ -652,6 +652,30 @@ var tests = [{
   }
 ];
 
+function stringify(value) {
+  return typeof value === "number"
+    ? value.toString()
+    : JSON.stringify(value);
+}
+
+function describeTest(test) {
+  var ctor = "new Complex(" + (test.set !== undefined ? stringify(test.set) : "") + ")";
+
+  var fnCall = test.fn == null
+    ? ""
+    : "." + test.fn + "(" + (test.param !== undefined ? stringify(test.param) : "") + ")";
+
+  var expectedResult = test.expect == null
+    ? ""
+    : " === " + stringify(test.expect);
+
+  var error = test.error == null
+    ? ""
+    : " should throw " + test.error;
+
+  return ctor + fnCall + expectedResult + error;
+}
+
 describe("Complex", function () {
 
   for (var i = 0; i < tests.length; i++) {
@@ -660,7 +684,7 @@ describe("Complex", function () {
 
       if (tests[i].fn) {
 
-        it((tests[i].fn || "") + " " + tests[i].set + ", " + (tests[i].param || ""), function () {
+        it(describeTest(tests[i]), function () {
           try {
             assert.equal(tests[i].expect, new Complex(tests[i].set)[tests[i].fn](tests[i].param).toString());
           } catch (e) {
@@ -669,8 +693,7 @@ describe("Complex", function () {
         });
 
       } else {
-
-        it((tests[i].fn || "") + "" + tests[i].set, function () {
+        it(describeTest(tests[i]), function () {
           try {
             assert.equal(tests[i].expect, new Complex(tests[i].set).toString());
           } catch (e) {
