@@ -2,7 +2,7 @@ var assert = require("assert");
 
 var Complex = require("../complex.js");
 
-var tests = [{
+var functionTests = [{
     set: Complex.I,
     fn: "mul",
     param: Complex(Math.PI).exp(),
@@ -556,7 +556,10 @@ var tests = [{
     fn: "add",
     param: "i",
     expect: "6.123233995736766e-17 + 2i"
-  }, {
+  }
+];
+
+var constructorTests = [{
     set: null,
     expect: "0"
   }, {
@@ -678,39 +681,39 @@ function describeTest(test) {
 
 describe("Complex", function () {
 
-  for (var i = 0; i < tests.length; i++) {
+  for (var i = 0; i < functionTests.length; i++) {
 
-    (function (i) {
+    (function (test) {
 
-      if (tests[i].fn) {
-
-        it(describeTest(tests[i]), function () {
-          try {
-            assert.equal(tests[i].expect, new Complex(tests[i].set)[tests[i].fn](tests[i].param).toString());
-          } catch (e) {
-            if (tests[i].error) {
-              assert.equal(e.toString(), tests[i].error.toString());
-            } else {
-              throw e;
-            }
+      it(describeTest(test), function () {
+        try {
+          assert.equal(test.expect, new Complex(test.set)[test.fn](test.param).toString());
+        } catch (e) {
+          if (test.error) {
+            assert.equal(e.toString(), test.error.toString());
+          } else {
+            throw e;
           }
-        });
+        }
+      });
+    })(functionTests[i]);
+  }
 
-      } else {
-        it(describeTest(tests[i]), function () {
-          try {
-            assert.equal(tests[i].expect, new Complex(tests[i].set).toString());
-          } catch (e) {
-            if (tests[i].error) {
-              assert.equal(e.toString(), tests[i].error.toString());
-            } else {
-              throw e;
-            }
+  for (var i = 0; i < constructorTests.length; i++) {
+
+    (function (test) {
+      it(describeTest(test), function () {
+        try {
+          assert.equal(test.expect, new Complex(test.set).toString());
+        } catch (e) {
+          if (test.error) {
+            assert.equal(e.toString(), test.error.toString());
+          } else {
+            throw e;
           }
-        });
-      }
-
-    })(i);
+        }
+      });
+    })(constructorTests[i]);
   }
 });
 
