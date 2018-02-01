@@ -687,7 +687,7 @@ describe("Complex functions", function () {
 
       it(describeTest(test), function () {
         try {
-          assert.equal(test.expect, new Complex(test.set)[test.fn](test.param).toString());
+          assert.equal(new Complex(test.set)[test.fn](test.param).toString(), test.expect);
         } catch (e) {
           if (test.error) {
             assert.equal(e.toString(), test.error.toString());
@@ -707,7 +707,7 @@ describe("Complex constructor", function() {
     (function (test) {
       it(describeTest(test), function () {
         try {
-          assert.equal(test.expect, new Complex(test.set).toString());
+          assert.equal(new Complex(test.set).toString(), test.expect);
         } catch (e) {
           if (test.error) {
             assert.equal(e.toString(), test.error.toString());
