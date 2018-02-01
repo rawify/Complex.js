@@ -686,14 +686,14 @@ describe("Complex functions", function () {
     (function (test) {
 
       it(describeTest(test), function () {
-        try {
-          assert.equal(new Complex(test.set)[test.fn](test.param).toString(), test.expect);
-        } catch (e) {
-          if (test.error) {
+        if (test.error) {
+          try {
+            new Complex(test.set)[test.fn](test.param);
+          } catch (e) {
             assert.equal(e.toString(), test.error.toString());
-          } else {
-            throw e;
           }
+        } else {
+          assert.equal(new Complex(test.set)[test.fn](test.param).toString(), test.expect);
         }
       });
     })(functionTests[i]);
@@ -706,14 +706,14 @@ describe("Complex constructor", function() {
 
     (function (test) {
       it(describeTest(test), function () {
-        try {
-          assert.equal(new Complex(test.set).toString(), test.expect);
-        } catch (e) {
-          if (test.error) {
+        if (test.error) {
+          try {
+            new Complex(test.set);
+          } catch (e) {
             assert.equal(e.toString(), test.error.toString());
-          } else {
-            throw e;
           }
+        } else {
+          assert.equal(new Complex(test.set).toString(), test.expect);
         }
       });
     })(constructorTests[i]);
