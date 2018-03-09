@@ -652,13 +652,41 @@ var constructorTests = [{
   }, {
     set: {r: 1, phi: 1},
     expect: "0.5403023058681398 + 0.8414709848078965i"
+  }, {
+    set: {r: Infinity, phi: 0},
+    expect: "Infinity"
+  }, {
+    set: {r: Infinity, phi: 2},
+    expect: "Infinity"
+  }, {
+    set: {r: Infinity, phi: Infinity},
+    expect: "NaN"
+  }, {
+    set: {r: Infinity, phi: NaN},
+    expect: "NaN"
   }
 ];
 
+for (let i = 0, len = constructorTests.length; i < len; ++i) {
+  if (constructorTests[i].set != null && constructorTests[i].set.hasOwnProperty('r')) {
+    constructorTests.push({
+      set: {
+        abs: constructorTests[i].set.r,
+        arg: constructorTests[i].set.phi,
+      },
+      expect: constructorTests[i].expect
+    })
+  }
+}
+
+
 function stringify(value) {
-  return typeof value === "number"
-    ? value.toString()
-    : JSON.stringify(value);
+  return JSON.stringify(value, function replacer(key, val) {
+    if (typeof val === "number") {
+      return val.toString();
+    }
+    return val;
+  })
 }
 
 function describeTest(test) {
