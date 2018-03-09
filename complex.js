@@ -145,9 +145,15 @@
             z['re'] = a['re'];
             z['im'] = a['im'];
           } else if ('abs' in a && 'arg' in a) {
+            if (!Number.isFinite(a['abs']) && Number.isFinite(a['arg'])) {
+              return Complex.INFINITY;
+            }
             z['re'] = a['abs'] * Math.cos(a['arg']);
             z['im'] = a['abs'] * Math.sin(a['arg']);
           } else if ('r' in a && 'phi' in a) {
+            if (!Number.isFinite(a['r']) && Number.isFinite(a['phi'])) {
+              return Complex.INFINITY;
+            }
             z['re'] = a['r'] * Math.cos(a['phi']);
             z['im'] = a['r'] * Math.sin(a['phi']);
           } else if (a.length === 2) { // Quick array check
