@@ -45,6 +45,38 @@
     return (Math.exp(x) - Math.exp(-x)) * 0.5;
   };
 
+  /**
+   * Calculates cos(x) - 1 using Taylor series if x is small.
+   *
+   * @param {number} x
+   * @returns {number} cos(x) - 1
+   */
+
+  const cosm1 = function(x) {
+    const limit = Math.PI/4;
+    if (x < -limit || x > limit) {
+      return (Math.cos(x) - 1.0);
+    }
+
+    let xx = x * x;
+    return xx *
+      (-0.5 + xx *
+        (1/24 + xx *
+          (-1/720 + xx *
+            (1/40320 + xx *
+              (-1/3628800 + xx *
+                (1/4790014600 + xx *
+                  (-1/87178291200 + xx *
+                    (1/20922789888000)
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+  };
+
   const hypot = function(x, y) {
 
     let a = Math.abs(x);
@@ -523,6 +555,30 @@
       return new Complex(
               tmp * Math.cos(this['im']),
               tmp * Math.sin(this['im']));
+    },
+
+    /**
+     * Calculate the complex exponent and subtracts one.
+     *
+     * This may be more accurate than `Complex(x).exp().sub(1)` if
+     * `x` is small.
+     *
+     * @returns {Complex}
+     */
+    'expm1': function() {
+
+      /**
+       * exp(a + i*b) - 1
+       = exp(a) * (cos(b) + j*sin(b)) - 1
+       = expm1(a)*cos(b) + cosm1(b) + j*exp(a)*sin(b)
+       */
+
+      const a = this['re'];
+      const b = this['im'];
+
+      return new Complex(
+              Math.expm1(a) * Math.cos(b) + cosm1(b),
+              Math.exp(a) * Math.sin(b));
     },
 
     /**
