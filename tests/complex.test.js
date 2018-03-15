@@ -194,6 +194,14 @@ var functionTests = [{
     fn: "exp",
     expect: "-8.358532650935372 + 18.263727040666765i"
   }, {
+    set: Infinity,
+    fn: "exp",
+    expect: "NaN"
+  }, {
+    set: Infinity,
+    fn: "expm1",
+    expect: "NaN"
+  }, {
     set: "3 - 2i",
     fn: "exp",
     expect: "-8.358532650935372 - 18.263727040666765i"
@@ -403,8 +411,58 @@ var functionTests = [{
   }, {
     set: "0-0i",
     fn: "pow",
+    param: Infinity,
+    expect: "NaN"
+  }, {
+    set: "-1",
+    fn: "pow",
+    param: Infinity,
+    expect: "NaN"
+  }, {
+    set: "1",
+    fn: "pow",
+    param: Infinity,
+    expect: "NaN"
+  }, {
+    set: "4 - 7i",
+    fn: "pow",
+    param: Infinity,
+    expect: "NaN"
+  }, {
+    set: "-5.9 + 8i",
+    fn: "pow",
+    param: Infinity,
+    expect: "NaN"
+  }, {
+    set: Infinity,
+    fn: "pow",
     param: 0,
     expect: "1"
+  }, {
+    set: Infinity,
+    fn: "pow",
+    param: -1,
+    expect: "0"
+  }, {
+    set: Infinity,
+    fn: "pow",
+    param: 1,
+    expect: "Infinity"
+  }, {
+    set: Infinity,
+    fn: "pow",
+    param: "-1.9 + 7i",
+    expect: "0"
+  }, {
+    set: Infinity,
+    fn: "pow",
+    param: "0.3",
+    expect: "Infinity"
+  }, {
+    set: Infinity,
+    fn: "pow",
+    param: "88",
+    expect: "Infinity"
   }, {
     set: "1 + 4i",
     fn: "sqrt",
