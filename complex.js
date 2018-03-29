@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.3 11/02/2016
+ * @license Complex.js v2.0.5 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -178,13 +178,13 @@
             z['im'] = a['im'];
           } else if ('abs' in a && 'arg' in a) {
             if (!Number.isFinite(a['abs']) && Number.isFinite(a['arg'])) {
-              return Complex.INFINITY;
+              return Complex['INFINITY'];
             }
             z['re'] = a['abs'] * Math.cos(a['arg']);
             z['im'] = a['abs'] * Math.sin(a['arg']);
           } else if ('r' in a && 'phi' in a) {
             if (!Number.isFinite(a['r']) && Number.isFinite(a['phi'])) {
-              return Complex.INFINITY;
+              return Complex['INFINITY'];
             }
             z['re'] = a['r'] * Math.cos(a['phi']);
             z['im'] = a['r'] * Math.sin(a['phi']);
@@ -1389,7 +1389,10 @@
       return Complex;
     });
   } else if (typeof exports === 'object') {
+    Object.defineProperty(exports, "__esModule", {'value': true});
     module['exports'] = Complex;
+    exports['Angles'] = Complex;
+    exports['default'] = Complex;
   } else {
     root['Complex'] = Complex;
   }
