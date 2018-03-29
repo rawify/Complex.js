@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.5 11/02/2016
+ * @license Complex.js v2.0.6 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -1390,9 +1390,9 @@
     });
   } else if (typeof exports === 'object') {
     Object.defineProperty(exports, "__esModule", {'value': true});
+    Complex['default'] = Complex;
+    Complex['Complex'] = Complex;
     module['exports'] = Complex;
-    exports['Angles'] = Complex;
-    exports['default'] = Complex;
   } else {
     root['Complex'] = Complex;
   }
