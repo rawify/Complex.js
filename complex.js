@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.3 11/02/2016
+ * @license Complex.js v2.0.10 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -28,7 +28,7 @@
  *
  * Example:
  *
- * const c = new Complex('99.3+8i');
+ * var c = new Complex('99.3+8i');
  * c.mul({r: 3, i: 9}).div(4.9).sub(3, 2);
  *
  */
@@ -37,11 +37,11 @@
 
   'use strict';
 
-  const cosh = function(x) {
+  var cosh = function(x) {
     return (Math.exp(x) + Math.exp(-x)) * 0.5;
   };
 
-  const sinh = function(x) {
+  var sinh = function(x) {
     return (Math.exp(x) - Math.exp(-x)) * 0.5;
   };
 
@@ -52,13 +52,13 @@
    * @returns {number} cos(x) - 1
    */
 
-  const cosm1 = function(x) {
-    const limit = Math.PI/4;
+  var cosm1 = function(x) {
+    var limit = Math.PI/4;
     if (x < -limit || x > limit) {
       return (Math.cos(x) - 1.0);
     }
 
-    let xx = x * x;
+    var xx = x * x;
     return xx *
       (-0.5 + xx *
         (1/24 + xx *
@@ -77,10 +77,10 @@
       )
   };
 
-  const hypot = function(x, y) {
+  var hypot = function(x, y) {
 
-    let a = Math.abs(x);
-    let b = Math.abs(y);
+    var a = Math.abs(x);
+    var b = Math.abs(y);
 
     if (a < 3000 && b < 3000) {
       return Math.sqrt(a * a + b * b);
@@ -95,7 +95,7 @@
     return a * Math.sqrt(1 + b * b);
   };
 
-  const parser_exit = function() {
+  var parser_exit = function() {
     throw SyntaxError('Invalid Param');
   };
 
@@ -108,8 +108,8 @@
    */
   function logHypot(a, b) {
 
-    const _a = Math.abs(a);
-    const _b = Math.abs(b);
+    var _a = Math.abs(a);
+    var _b = Math.abs(b);
 
     if (a === 0) {
       return Math.log(_b);
@@ -128,39 +128,39 @@
      * Testing 1000000 times with random samples for a,b ∈ [1, 1000000000] against a big decimal library to get an error estimate
      *
      * 1. Only eliminate the square root: (OVERALL ERROR: 3.9122483030951116e-11)
-     
+
      Math.log(a * a + b * b) / 2
-     
+
      *
      *
      * 2. Try to use the non-overflowing pythagoras: (OVERALL ERROR: 8.889760039210159e-10)
-     
+
      var fn = function(a, b) {
      a = Math.abs(a);
      b = Math.abs(b);
      var t = Math.min(a, b);
      a = Math.max(a, b);
      t = t / a;
-     
+
      return Math.log(a) + Math.log(1 + t * t) / 2;
      };
-     
+
      * 3. Abuse the identity cos(atan(y/x) = x / sqrt(x^2+y^2): (OVERALL ERROR: 3.4780178737037204e-10)
-     
+
      Math.log(a / Math.cos(Math.atan2(b, a)))
-     
+
      * 4. Use 3. and apply log rules: (OVERALL ERROR: 1.2014087502620896e-9)
-     
+
      Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)))
-     
+
      */
 
     return Math.log(a / Math.cos(Math.atan2(b, a)));
   }
 
-  const parse = function(a, b) {
+  var parse = function(a, b) {
 
-    const z = {'re': 0, 'im': 0};
+    var z = {'re': 0, 'im': 0};
 
     if (a === undefined || a === null) {
       z['re'] =
@@ -178,13 +178,13 @@
             z['im'] = a['im'];
           } else if ('abs' in a && 'arg' in a) {
             if (!Number.isFinite(a['abs']) && Number.isFinite(a['arg'])) {
-              return Complex.INFINITY;
+              return Complex['INFINITY'];
             }
             z['re'] = a['abs'] * Math.cos(a['arg']);
             z['im'] = a['abs'] * Math.sin(a['arg']);
           } else if ('r' in a && 'phi' in a) {
             if (!Number.isFinite(a['r']) && Number.isFinite(a['phi'])) {
-              return Complex.INFINITY;
+              return Complex['INFINITY'];
             }
             z['re'] = a['r'] * Math.cos(a['phi']);
             z['im'] = a['r'] * Math.sin(a['phi']);
@@ -201,17 +201,17 @@
           z['im'] = /* void */
                   z['re'] = 0;
 
-          const tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
-          let plus = 1;
-          let minus = 0;
+          var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
+          var plus = 1;
+          var minus = 0;
 
           if (tokens === null) {
             parser_exit();
           }
 
-          for (let i = 0; i < tokens.length; i++) {
+          for (var i = 0; i < tokens.length; i++) {
 
-            const c = tokens[i];
+            var c = tokens[i];
 
             if (c === ' ' || c === '\t' || c === '\n') {
               /* void */
@@ -282,7 +282,7 @@
       return new Complex(a, b);
     }
 
-    const z = parse(a, b);
+    var z = parse(a, b);
 
     this['re'] = z['re'];
     this['im'] = z['im'];
@@ -300,7 +300,7 @@
      */
     'sign': function() {
 
-      const abs = this['abs']();
+      var abs = this['abs']();
 
       return new Complex(
               this['re'] / abs,
@@ -314,7 +314,7 @@
      */
     'add': function(a, b) {
 
-      const z = new Complex(a, b);
+      var z = new Complex(a, b);
 
       // Infinity + Infinity = NaN
       if (this.isInfinite() && z.isInfinite()) {
@@ -338,7 +338,7 @@
      */
     'sub': function(a, b) {
 
-      const z = new Complex(a, b);
+      var z = new Complex(a, b);
 
       // Infinity - Infinity = NaN
       if (this.isInfinite() && z.isInfinite()) {
@@ -362,7 +362,7 @@
      */
     'mul': function(a, b) {
 
-      const z = new Complex(a, b);
+      var z = new Complex(a, b);
 
       // Infinity * 0 = NaN
       if ((this.isInfinite() && z.isZero()) || (this.isZero() && z.isInfinite())) {
@@ -391,7 +391,7 @@
      */
     'div': function(a, b) {
 
-      const z = new Complex(a, b);
+      var z = new Complex(a, b);
 
       // 0 / 0 = NaN and Infinity / Infinity = NaN
       if ((this.isZero() && z.isZero()) || (this.isInfinite() && z.isInfinite())) {
@@ -411,9 +411,9 @@
       a = this['re'];
       b = this['im'];
 
-      const c = z['re'];
-      const d = z['im'];
-      let t, x;
+      var c = z['re'];
+      var d = z['im'];
+      var t, x;
 
       if (0 === d) {
         // Divisor is real
@@ -447,7 +447,7 @@
      */
     'pow': function(a, b) {
 
-      const z = new Complex(a, b);
+      var z = new Complex(a, b);
 
       a = this['re'];
       b = this['im'];
@@ -509,8 +509,12 @@
        *
        */
 
-      const arg = Math.atan2(b, a);
-      const loh = logHypot(a, b);
+      if (a === 0 && b === 0 && z['re'] > 0 && z['im'] >= 0) {
+        return Complex['ZERO'];
+      }
+
+      var arg = Math.atan2(b, a);
+      var loh = logHypot(a, b);
 
       a = Math.exp(z['re'] * loh - z['im'] * arg);
       b = z['im'] * loh + z['re'] * arg;
@@ -526,11 +530,11 @@
      */
     'sqrt': function() {
 
-      const a = this['re'];
-      const b = this['im'];
-      const r = this['abs']();
+      var a = this['re'];
+      var b = this['im'];
+      var r = this['abs']();
 
-      let re, im;
+      var re, im;
 
       if (a >= 0) {
 
@@ -559,7 +563,7 @@
      */
     'exp': function() {
 
-      const tmp = Math.exp(this['re']);
+      var tmp = Math.exp(this['re']);
 
       if (!this.isFinite()) {
         return Complex['NAN'];
@@ -586,12 +590,8 @@
        = expm1(a)*cos(b) + cosm1(b) + j*exp(a)*sin(b)
        */
 
-      if (!this.isFinite()) {
-        return Complex['NAN'];
-      }
-
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       return new Complex(
               Math.expm1(a) * Math.cos(b) + cosm1(b),
@@ -605,8 +605,8 @@
      */
     'log': function() {
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       if (b === 0 && a > 0) {
         //return new Complex(Math.log(a), 0);
@@ -646,8 +646,8 @@
 
       // sin(c) = (e^b - e^(-b)) / (2i)
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       return new Complex(
               Math.sin(a) * cosh(b),
@@ -663,8 +663,8 @@
 
       // cos(z) = (e^b + e^(-b)) / 2
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       return new Complex(
               Math.cos(a) * cosh(b),
@@ -680,9 +680,9 @@
 
       // tan(c) = (e^(ci) - e^(-ci)) / (i(e^(ci) + e^(-ci)))
 
-      const a = 2 * this['re'];
-      const b = 2 * this['im'];
-      const d = Math.cos(a) + cosh(b);
+      var a = 2 * this['re'];
+      var b = 2 * this['im'];
+      var d = Math.cos(a) + cosh(b);
 
       return new Complex(
               Math.sin(a) / d,
@@ -698,9 +698,9 @@
 
       // cot(c) = i(e^(ci) + e^(-ci)) / (e^(ci) - e^(-ci))
 
-      const a = 2 * this['re'];
-      const b = 2 * this['im'];
-      const d = Math.cos(a) - cosh(b);
+      var a = 2 * this['re'];
+      var b = 2 * this['im'];
+      var d = Math.cos(a) - cosh(b);
 
       return new Complex(
               -Math.sin(a) / d,
@@ -716,9 +716,9 @@
 
       // sec(c) = 2 / (e^(ci) + e^(-ci))
 
-      const a = this['re'];
-      const b = this['im'];
-      const d = 0.5 * cosh(2 * b) + 0.5 * Math.cos(2 * a);
+      var a = this['re'];
+      var b = this['im'];
+      var d = 0.5 * cosh(2 * b) + 0.5 * Math.cos(2 * a);
 
       return new Complex(
               Math.cos(a) * cosh(b) / d,
@@ -734,9 +734,9 @@
 
       // csc(c) = 2i / (e^(ci) - e^(-ci))
 
-      const a = this['re'];
-      const b = this['im'];
-      const d = 0.5 * cosh(2 * b) - 0.5 * Math.cos(2 * a);
+      var a = this['re'];
+      var b = this['im'];
+      var d = 0.5 * cosh(2 * b) - 0.5 * Math.cos(2 * a);
 
       return new Complex(
               Math.sin(a) * cosh(b) / d,
@@ -752,14 +752,14 @@
 
       // asin(c) = -i * log(ci + sqrt(1 - c^2))
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
-      const t1 = new Complex(
+      var t1 = new Complex(
               b * b - a * a + 1,
               -2 * a * b)['sqrt']();
 
-      const t2 = new Complex(
+      var t2 = new Complex(
               t1['re'] - b,
               t1['im'] + a)['log']();
 
@@ -775,14 +775,14 @@
 
       // acos(c) = i * log(c - i * sqrt(1 - c^2))
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
-      const t1 = new Complex(
+      var t1 = new Complex(
               b * b - a * a + 1,
               -2 * a * b)['sqrt']();
 
-      const t2 = new Complex(
+      var t2 = new Complex(
               t1['re'] - b,
               t1['im'] + a)['log']();
 
@@ -798,8 +798,8 @@
 
       // atan(c) = i / 2 log((i + x) / (i - x))
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       if (a === 0) {
 
@@ -812,9 +812,9 @@
         }
       }
 
-      const d = a * a + (1.0 - b) * (1.0 - b);
+      var d = a * a + (1.0 - b) * (1.0 - b);
 
-      const t1 = new Complex(
+      var t1 = new Complex(
               (1 - b * b - a * a) / d,
               -2 * a / d).log();
 
@@ -830,14 +830,14 @@
 
       // acot(c) = i / 2 log((c - i) / (c + i))
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       if (b === 0) {
         return new Complex(Math.atan2(1, a), 0);
       }
 
-      const d = a * a + b * b;
+      var d = a * a + b * b;
       return (d !== 0)
               ? new Complex(
                       a / d,
@@ -856,14 +856,14 @@
 
       // asec(c) = -i * log(1 / c + sqrt(1 - i / c^2))
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       if (a === 0 && b === 0) {
         return new Complex(0, Infinity);
       }
 
-      const d = a * a + b * b;
+      var d = a * a + b * b;
       return (d !== 0)
               ? new Complex(
                       a / d,
@@ -882,14 +882,14 @@
 
       // acsc(c) = -i * log(i / c + sqrt(1 - 1 / c^2))
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       if (a === 0 && b === 0) {
         return new Complex(Math.PI / 2, Infinity);
       }
 
-      const d = a * a + b * b;
+      var d = a * a + b * b;
       return (d !== 0)
               ? new Complex(
                       a / d,
@@ -908,8 +908,8 @@
 
       // sinh(c) = (e^c - e^-c) / 2
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       return new Complex(
               sinh(a) * Math.cos(b),
@@ -925,8 +925,8 @@
 
       // cosh(c) = (e^c + e^-c) / 2
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       return new Complex(
               cosh(a) * Math.cos(b),
@@ -942,9 +942,9 @@
 
       // tanh(c) = (e^c - e^-c) / (e^c + e^-c)
 
-      const a = 2 * this['re'];
-      const b = 2 * this['im'];
-      const d = cosh(a) + Math.cos(b);
+      var a = 2 * this['re'];
+      var b = 2 * this['im'];
+      var d = cosh(a) + Math.cos(b);
 
       return new Complex(
               sinh(a) / d,
@@ -960,9 +960,9 @@
 
       // coth(c) = (e^c + e^-c) / (e^c - e^-c)
 
-      const a = 2 * this['re'];
-      const b = 2 * this['im'];
-      const d = cosh(a) - Math.cos(b);
+      var a = 2 * this['re'];
+      var b = 2 * this['im'];
+      var d = cosh(a) - Math.cos(b);
 
       return new Complex(
               sinh(a) / d,
@@ -978,9 +978,9 @@
 
       // csch(c) = 2 / (e^c - e^-c)
 
-      const a = this['re'];
-      const b = this['im'];
-      const d = Math.cos(2 * b) - cosh(2 * a);
+      var a = this['re'];
+      var b = this['im'];
+      var d = Math.cos(2 * b) - cosh(2 * a);
 
       return new Complex(
               -2 * sinh(a) * Math.cos(b) / d,
@@ -996,9 +996,9 @@
 
       // sech(c) = 2 / (e^c + e^-c)
 
-      const a = this['re'];
-      const b = this['im'];
-      const d = Math.cos(2 * b) + cosh(2 * a);
+      var a = this['re'];
+      var b = this['im'];
+      var d = Math.cos(2 * b) + cosh(2 * a);
 
       return new Complex(
               2 * cosh(a) * Math.cos(b) / d,
@@ -1014,10 +1014,10 @@
 
       // asinh(c) = log(c + sqrt(c^2 + 1))
 
-      let tmp = this['im'];
+      var tmp = this['im'];
       this['im'] = -this['re'];
       this['re'] = tmp;
-      const res = this['asin']();
+      var res = this['asin']();
 
       this['re'] = -this['im'];
       this['im'] = tmp;
@@ -1037,13 +1037,13 @@
 
       // acosh(c) = log(c + sqrt(c^2 - 1))
 
-      const res = this['acos']();
+      var res = this['acos']();
       if (res['im'] <= 0) {
-        let tmp = res['re'];
+        var tmp = res['re'];
         res['re'] = -res['im'];
         res['im'] = tmp;
       } else {
-        let tmp = res['im'];
+        var tmp = res['im'];
         res['im'] = -res['re'];
         res['re'] = tmp;
       }
@@ -1059,15 +1059,15 @@
 
       // atanh(c) = log((1+c) / (1-c)) / 2
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
-      const noIM = a > 1 && b === 0;
-      const oneMinus = 1 - a;
-      const onePlus = 1 + a;
-      const d = oneMinus * oneMinus + b * b;
+      var noIM = a > 1 && b === 0;
+      var oneMinus = 1 - a;
+      var onePlus = 1 + a;
+      var d = oneMinus * oneMinus + b * b;
 
-      const x = (d !== 0)
+      var x = (d !== 0)
               ? new Complex(
                       (onePlus * oneMinus - b * b) / d,
                       (b * oneMinus + onePlus * b) / d)
@@ -1075,7 +1075,7 @@
                       (a !== -1) ? (a / 0) : 0,
                       (b !== 0) ? (b / 0) : 0);
 
-      const temp = x['re'];
+      var temp = x['re'];
       x['re'] = logHypot(x['re'], x['im']) / 2;
       x['im'] = Math.atan2(x['im'], temp) / 2;
       if (noIM) {
@@ -1093,14 +1093,14 @@
 
       // acoth(c) = log((c+1) / (c-1)) / 2
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       if (a === 0 && b === 0) {
         return new Complex(0, Math.PI / 2);
       }
 
-      const d = a * a + b * b;
+      var d = a * a + b * b;
       return (d !== 0)
               ? new Complex(
                       a / d,
@@ -1119,8 +1119,8 @@
 
       // acsch(c) = log((1+sqrt(1+c^2))/c)
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       if (b === 0) {
 
@@ -1130,7 +1130,7 @@
                 : Infinity, 0);
       }
 
-      const d = a * a + b * b;
+      var d = a * a + b * b;
       return (d !== 0)
               ? new Complex(
                       a / d,
@@ -1149,14 +1149,14 @@
 
       // asech(c) = log((1+sqrt(1-c^2))/c)
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
       if (this.isZero()) {
         return Complex['INFINITY'];
       }
 
-      const d = a * a + b * b;
+      var d = a * a + b * b;
       return (d !== 0)
               ? new Complex(
                       a / d,
@@ -1182,10 +1182,10 @@
         return Complex['ZERO'];
       }
 
-      const a = this['re'];
-      const b = this['im'];
+      var a = this['re'];
+      var b = this['im'];
 
-      const d = a * a + b * b;
+      var d = a * a + b * b;
 
       return new Complex(a / d, -b / d);
     },
@@ -1261,7 +1261,7 @@
      */
     'equals': function(a, b) {
 
-      const z = new Complex(a, b);
+      var z = new Complex(a, b);
 
       return Math.abs(z['re'] - this['re']) <= Complex['EPSILON'] &&
               Math.abs(z['im'] - this['im']) <= Complex['EPSILON'];
@@ -1284,9 +1284,9 @@
      */
     'toString': function() {
 
-      let a = this['re'];
-      let b = this['im'];
-      let ret = '';
+      var a = this['re'];
+      var b = this['im'];
+      var ret = '';
 
       if (this.isNaN()) {
         return 'NaN';
@@ -1406,6 +1406,9 @@
       return Complex;
     });
   } else if (typeof exports === 'object') {
+    Object.defineProperty(exports, "__esModule", {'value': true});
+    Complex['default'] = Complex;
+    Complex['Complex'] = Complex;
     module['exports'] = Complex;
   } else {
     root['Complex'] = Complex;
