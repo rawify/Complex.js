@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.7 11/02/2016
+ * @license Complex.js v2.0.8 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -128,31 +128,31 @@
      * Testing 1000000 times with random samples for a,b ∈ [1, 1000000000] against a big decimal library to get an error estimate
      *
      * 1. Only eliminate the square root: (OVERALL ERROR: 3.9122483030951116e-11)
-     
+
      Math.log(a * a + b * b) / 2
-     
+
      *
      *
      * 2. Try to use the non-overflowing pythagoras: (OVERALL ERROR: 8.889760039210159e-10)
-     
+
      var fn = function(a, b) {
      a = Math.abs(a);
      b = Math.abs(b);
      var t = Math.min(a, b);
      a = Math.max(a, b);
      t = t / a;
-     
+
      return Math.log(a) + Math.log(1 + t * t) / 2;
      };
-     
+
      * 3. Abuse the identity cos(atan(y/x) = x / sqrt(x^2+y^2): (OVERALL ERROR: 3.4780178737037204e-10)
-     
+
      Math.log(a / Math.cos(Math.atan2(b, a)))
-     
+
      * 4. Use 3. and apply log rules: (OVERALL ERROR: 1.2014087502620896e-9)
-     
+
      Math.log(a) - Math.log(Math.cos(Math.atan2(b, a)))
-     
+
      */
 
     return Math.log(a / Math.cos(Math.atan2(b, a)));
@@ -496,6 +496,10 @@
        * Im = exp(c * logsq2 - d * arg(z_1)) * sin(d * logsq2 + c * arg(z_1))
        *
        */
+
+      if (a === 0 && b === 0 && z['re'] > 0 && z['im'] >= 0) {
+        return Complex['ONE'];
+      }
 
       var arg = Math.atan2(b, a);
       var loh = logHypot(a, b);

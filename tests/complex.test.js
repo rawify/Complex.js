@@ -223,6 +223,11 @@ var functionTests = [{
     param: "3",
     expect: "27"
   }, {
+    set: "0",
+    fn: "pow",
+    param: "1+i",
+    expect: "0"
+  }, {
     set: "i",
     fn: "pow",
     param: "0",
