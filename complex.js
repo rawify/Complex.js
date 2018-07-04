@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.10 11/02/2016
+ * @license Complex.js v2.0.11 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -317,12 +317,12 @@
       var z = new Complex(a, b);
 
       // Infinity + Infinity = NaN
-      if (this.isInfinite() && z.isInfinite()) {
+      if (this['isInfinite']() && z['isInfinite']()) {
         return Complex['NAN'];
       }
 
       // Infinity + z = Infinity { where z != Infinity }
-      if (this.isInfinite() || z.isInfinite()) {
+      if (this['isInfinite']() || z['isInfinite']()) {
         return Complex['INFINITY'];
       }
 
@@ -341,12 +341,12 @@
       var z = new Complex(a, b);
 
       // Infinity - Infinity = NaN
-      if (this.isInfinite() && z.isInfinite()) {
+      if (this['isInfinite']() && z['isInfinite']()) {
         return Complex['NAN'];
       }
 
       // Infinity - z = Infinity { where z != Infinity }
-      if (this.isInfinite() || z.isInfinite()) {
+      if (this['isInfinite']() || z['isInfinite']()) {
         return Complex['INFINITY'];
       }
 
@@ -365,12 +365,12 @@
       var z = new Complex(a, b);
 
       // Infinity * 0 = NaN
-      if ((this.isInfinite() && z.isZero()) || (this.isZero() && z.isInfinite())) {
+      if ((this['isInfinite']() && z['isZero']()) || (this['isZero']() && z['isInfinite']())) {
         return Complex['NAN'];
       }
 
       // Infinity * z = Infinity { where z != 0 }
-      if (this.isInfinite() || z.isInfinite()) {
+      if (this['isInfinite']() || z['isInfinite']()) {
         return Complex['INFINITY'];
       }
 
@@ -394,17 +394,17 @@
       var z = new Complex(a, b);
 
       // 0 / 0 = NaN and Infinity / Infinity = NaN
-      if ((this.isZero() && z.isZero()) || (this.isInfinite() && z.isInfinite())) {
+      if ((this['isZero']() && z['isZero']()) || (this['isInfinite']() && z['isInfinite']())) {
         return Complex['NAN'];
       }
 
       // Infinity / 0 = Infinity
-      if (this.isInfinite() || z.isZero()) {
+      if (this['isInfinite']() || z['isZero']()) {
         return Complex['INFINITY'];
       }
 
       // 0 / Infinity = 0
-      if (this.isZero() || z.isInfinite()) {
+      if (this['isZero']() || z['isInfinite']()) {
         return Complex['ZERO'];
       }
 
@@ -452,7 +452,7 @@
       a = this['re'];
       b = this['im'];
 
-      if (z.isZero()) {
+      if (z['isZero']()) {
         return Complex['ONE'];
       }
 
@@ -1139,7 +1139,7 @@
       var a = this['re'];
       var b = this['im'];
 
-      if (this.isZero()) {
+      if (this['isZero']()) {
         return Complex['INFINITY'];
       }
 
@@ -1161,11 +1161,11 @@
     'inverse': function() {
 
       // 1 / 0 = Infinity and 1 / Infinity = 0
-      if (this.isZero()) {
+      if (this['isZero']()) {
         return Complex['INFINITY'];
       }
 
-      if (this.isInfinite()) {
+      if (this['isInfinite']()) {
         return Complex['ZERO'];
       }
 
@@ -1275,15 +1275,15 @@
       var b = this['im'];
       var ret = '';
 
-      if (this.isNaN()) {
+      if (this['isNaN']()) {
         return 'NaN';
       }
 
-      if (this.isZero()) {
+      if (this['isZero']()) {
         return '0';
       }
 
-      if (this.isInfinite()) {
+      if (this['isInfinite']()) {
         return 'Infinity';
       }
 
@@ -1375,7 +1375,7 @@
      * @returns {boolean}
      */
     'isInfinite': function() {
-      return !(this.isNaN() || this.isFinite());
+      return !(this['isNaN']() || this['isFinite']());
     }
   };
 
