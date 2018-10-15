@@ -12,9 +12,9 @@ Example
 ===
 
 ```js
-var Complex = require('complex.js');
+let Complex = require('complex.js');
 
-var c = new Complex("99.3+8i");
+let c = new Complex("99.3+8i");
 c.mul({re: 3, im: 9}).div(4.9).sub(3, 2);
 ```
 
@@ -53,6 +53,18 @@ Two arguments
 ---
 ```javascript
 new Complex(3, 2); // 3+2i
+```
+
+Attributes
+===
+
+Any complex number object exposes its real and imaginary part as follows:
+
+```javascript
+let c = new Complex(3, 2);
+
+console.log("Real part:", c.re); // 3
+console.log("Imaginary part:", c.im); // 2
 ```
 
 Functions
@@ -187,8 +199,8 @@ Complex numbers can also be seen as a vector in the 2D space. Here is a simple o
 New vector
 ---
 ```js
-var v1 = new Complex(1, 0);
-var v2 = new Complex(1, 1);
+let v1 = new Complex(1, 0);
+let v2 = new Complex(1, 1);
 ```
 
 Scale vector
