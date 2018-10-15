@@ -58,7 +58,7 @@ new Complex(3, 2); // 3+2i
 Attributes
 ===
 
-Any complex number object exposes its real and imaginary part as follows:
+Every complex number object exposes its real and imaginary part as attribute `re` and `im`:
 
 ```javascript
 let c = new Complex(3, 2);
