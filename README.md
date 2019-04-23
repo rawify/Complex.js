@@ -181,7 +181,7 @@ Trigonometric functions
 ===
 The following trigonometric functions are defined on Complex.js:
 
-| Trig | Arcus | Hyperbolic | Arcus-Hyperbolic |
+| Trig | Arcus | Hyperbolic | Area-Hyperbolic |
 |------|-------|------------|------------------|
 | sin()  | asin()  | sinh()       | asinh()            |
 | cos()  | acos()  | cosh()       | acosh()            |
