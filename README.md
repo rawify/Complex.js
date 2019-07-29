@@ -92,7 +92,7 @@ Divides the number by another complex number
 
 Complex pow(exp)
 ---
-Returns the number raised to the complex exponent (Note: Complex.ZERO.pow(0) => Complex.ONE by convention)
+Returns the number raised to the complex exponent (Note: `Complex.ZERO.pow(0) = Complex.ONE` by convention)
 
 Complex sqrt()
 ---
