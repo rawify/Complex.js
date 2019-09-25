@@ -325,6 +325,10 @@ var functionTests = [{
     fn: "arg",
     expect: "" + Math.PI / 6
   }, {
+    set: "3 + 4i",
+    fn: "conjugate",
+    expect: "3 - 4i"
+  }, {
     set: {re: 99, im: 50},
     fn: "conjugate",
     expect: "99 - 50i"
@@ -342,10 +346,20 @@ var functionTests = [{
     param: new Complex(1, 2),
     expect: "3.6 + 0.8i"
   }, {
+    set: "2 + 8i",
+    fn: "div",
+    param: "2 + 8i",
+    expect: "1"
+  }, {
     set: -Infinity,
     fn: "div",
     param: 3,
     expect: "Infinity"
+  }, {
+    set: "3+4i",
+    fn: "add",
+    param: "5 - i",
+    expect: "8 + 3i"
   }, {
     set: {re: 1, im: 2},
     fn: "add",
@@ -356,6 +370,11 @@ var functionTests = [{
     fn: "sub",
     param: "4 + 6i",
     expect: "1 + 2i"
+  },{
+    set: "3 + 4i",
+    fn: "sub",
+    param: "2 - 5i",
+    expect: "1 + 9i"
   }, {
     set: "1 + 2i",
     fn: "pow",
@@ -390,6 +409,11 @@ var functionTests = [{
     fn: "mul",
     param: "4+5i",
     expect: "-7 + 22i"
+  }, {
+    set: "3 + 4i",
+    fn: "mul",
+    param: "2 - 5i",
+    expect: "26 - 7i"
   }, {
     set: "i",
     fn: "pow",
@@ -483,6 +507,10 @@ var functionTests = [{
     set: {re: 1, im: 3},
     fn: "inverse",
     expect: "0.1 - 0.3i"
+  }, {
+    set: "3+4i",
+    fn: "inverse",
+    expect: "0.12 - 0.16i" // 3/25 - (4/25)i
   }, {
     set: {re: 0.5, im: -0.5},
     fn: "inverse",
