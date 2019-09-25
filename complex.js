@@ -1273,44 +1273,40 @@
 
       var a = this['re'];
       var b = this['im'];
-      var ret = '';
+      var ret = "";
 
       if (this['isNaN']()) {
         return 'NaN';
-      }
-
-      if (this['isZero']()) {
-        return '0';
       }
 
       if (this['isInfinite']()) {
         return 'Infinity';
       }
 
+      // If is real number
+      if (b === 0) {
+        return ret + a;
+      }
+
       if (a !== 0) {
-        ret += a;
+        ret+= a;
+        ret+= " ";
+        if (b < 0) {
+          b = -b;
+          ret+= "-";
+        } else {
+          ret+= "+";
+        }
+        ret+= " ";
+      } else if (b < 0) {
+        b = -b;
+        ret+= "-";
       }
 
-      if (b !== 0) {
-
-        if (a !== 0) {
-          ret += b < 0 ? ' - ' : ' + ';
-        } else if (b < 0) {
-          ret += '-';
-        }
-
-        b = Math.abs(b);
-
-        if (1 !== b) {
-          ret += b;
-        }
-        ret += 'i';
+      if (1 !== b) { // b is the absolute imaginary part
+        ret+= b;
       }
-
-      if (!ret)
-        return '0';
-
-      return ret;
+      return ret + "i";
     },
 
     /**
@@ -1352,10 +1348,7 @@
      * @returns {boolean}
      */
     'isZero': function() {
-      return (
-              (this['re'] === 0 || this['re'] === -0) &&
-              (this['im'] === 0 || this['im'] === -0)
-              );
+      return this['im'] === 0 && this['re'] === 0;
     },
 
     /**
