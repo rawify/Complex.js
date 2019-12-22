@@ -8,7 +8,7 @@
 Complex.js is a well tested JavaScript library to work with [complex number arithmetic](https://www.xarg.org/book/analysis/complex-numbers/) in JavaScript. It implements every elementary complex number manipulation function and the API is intentionally similar to [Fraction.js](https://github.com/infusion/Fraction.js). Furthermore, it's the basis of [Polynomial.js](https://github.com/infusion/Polynomial.js) and [Math.js](https://github.com/josdejong/mathjs).
 
 
-Example
+Examples
 ===
 
 ```js
@@ -16,6 +16,16 @@ let Complex = require('complex.js');
 
 let c = new Complex("99.3+8i");
 c.mul({re: 3, im: 9}).div(4.9).sub(3, 2);
+```
+
+A classical use case for complex numbers is solving quadratic equations `ax^2 + bx + c = 0` for all `a, b, c ∈ ℝ`:
+
+```
+let a = 1, b = 4, c = 5;
+
+let sqrt = Complex(b * b - 4 * a * c).sqrt()
+let x1 = Complex(-b).add(sqrt).div(2 * a).toString() // -2 + i
+let x2 = Complex(-b).sub(sqrt).div(2 * a).toString() // -2 - i
 ```
 
 Parser
