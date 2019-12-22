@@ -20,12 +20,16 @@ c.mul({re: 3, im: 9}).div(4.9).sub(3, 2);
 
 A classical use case for complex numbers is solving quadratic equations `ax^2 + bx + c = 0` for all `a, b, c ∈ ℝ`:
 
-```
-let a = 1, b = 4, c = 5;
+```js
 
-let sqrt = Complex(b * b - 4 * a * c).sqrt()
-let x1 = Complex(-b).add(sqrt).div(2 * a).toString() // -2 + i
-let x2 = Complex(-b).sub(sqrt).div(2 * a).toString() // -2 - i
+function quadraticRoot(a, b, c) {
+  let sqrt = Complex(b * b - 4 * a * c).sqrt()
+  let x1 = Complex(-b).add(sqrt).div(2 * a)
+  let x2 = Complex(-b).sub(sqrt).div(2 * a)
+  return {x1, x2}
+}
+
+// quadraticRoot(1, 4, 5) -> -2 ± i
 ```
 
 Parser
