@@ -286,7 +286,7 @@ A complex euler number instance
 
 Complex.EPSILON
 ---
-A small epsilon value used for `equals()` comparison in order to circumvent double inprecision.
+A small epsilon value used for `equals()` comparison in order to circumvent double imprecision.
 
 
 Installation
