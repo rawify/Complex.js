@@ -1016,7 +1016,7 @@
     },
 
     /**
-     * Calculate the complex asinh
+     * Calculate the complex acosh
      *
      * @returns {Complex}
      */
