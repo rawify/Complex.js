@@ -18,7 +18,7 @@ let c = new Complex("99.3+8i");
 c.mul({re: 3, im: 9}).div(4.9).sub(3, 2);
 ```
 
-A classical use case for complex numbers is solving quadratic equations `ax^2 + bx + c = 0` for all `a, b, c ∈ ℝ`:
+A classical use case for complex numbers is solving quadratic equations `ax² + bx + c = 0` for all `a, b, c ∈ ℝ`:
 
 ```js
 
