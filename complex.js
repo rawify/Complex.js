@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.11 11/02/2016
+ * @license Complex.js v2.0.12 11/02/2016
  *
  * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -459,7 +459,7 @@
       // If the exponent is real
       if (z['im'] === 0) {
 
-        if (b === 0 && a >= 0) {
+        if (b === 0) {
 
           return new Complex(Math.pow(a, z['re']), 0);
 

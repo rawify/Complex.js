@@ -451,6 +451,11 @@ var functionTests = [{
     fn: "sqrt",
     expect: "1 - 2i"
   }, {
+    set: [-2,0],
+    fn: "pow",
+    param: 2,
+    expect: "4"
+  }, {
     set: {abs: 1, arg: 0},
     fn: "equals",
     param: {re: 1, im: 0},
