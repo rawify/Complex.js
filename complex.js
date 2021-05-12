@@ -1,7 +1,7 @@
 /**
- * @license Complex.js v2.0.12 11/02/2016
+ * @license Complex.js v2.0.13 12/05/2020
  *
- * Copyright (c) 2016, Robert Eisele (robert@xarg.org)
+ * Copyright (c) 2020, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  **/
 
@@ -459,7 +459,7 @@
       // If the exponent is real
       if (z['im'] === 0) {
 
-        if (b === 0) {
+        if (b === 0 && a > 0) {
 
           return new Complex(Math.pow(a, z['re']), 0);
 
@@ -1283,6 +1283,14 @@
         return 'Infinity';
       }
 
+      if (Math.abs(a) < Complex['EPSILON']) {
+        a = 0;
+      }
+
+      if (Math.abs(b) < Complex['EPSILON']) {
+        b = 0;
+      }
+
       // If is real number
       if (b === 0) {
         return ret + a;
@@ -1379,7 +1387,7 @@
   Complex['E'] = new Complex(Math.E, 0);
   Complex['INFINITY'] = new Complex(Infinity, Infinity);
   Complex['NAN'] = new Complex(NaN, NaN);
-  Complex['EPSILON'] = 1e-16;
+  Complex['EPSILON'] = 1e-15;
 
   if (typeof define === 'function' && define['amd']) {
     define([], function() {

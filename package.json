@@ -3,7 +3,7 @@
     "homepage": "https://github.com/infusion/Complex.js",
     "bugs": "https://github.com/infusion/Complex.js/issues",
     "title": "complex.js",
-    "version": "2.0.12",
+    "version": "2.0.13",
     "description": "A complex number library",
     "keywords": [
         "complex numbers",
