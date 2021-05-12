@@ -46,35 +46,46 @@
   };
 
   /**
-   * Calculates cos(x) - 1 using Taylor series if x is small.
+   * Calculates cos(x) - 1 using Taylor series if x is small (-¼π ≤ x ≤ ¼π).
    *
    * @param {number} x
    * @returns {number} cos(x) - 1
    */
-
   var cosm1 = function(x) {
-    var limit = Math.PI/4;
-    if (x < -limit || x > limit) {
-      return (Math.cos(x) - 1.0);
+
+    var b = Math.PI / 4;
+    if (-b > x || x > b) {
+      return Math.cos(x) - 1.0;
     }
 
+    /* Calculate horner form of polynomial of taylor series in Q
+    var fac = 1, alt = 1, pol = {};
+    for (var i = 0; i <= 16; i++) {
+      fac*= i || 1;
+      if (i % 2 == 0) {
+        pol[i] = new Fraction(1, alt * fac);
+        alt = -alt;
+      }
+    }
+    console.log(new Polynomial(pol).toHorner()); // (((((((1/20922789888000x^2-1/87178291200)x^2+1/479001600)x^2-1/3628800)x^2+1/40320)x^2-1/720)x^2+1/24)x^2-1/2)x^2+1
+    */
+
     var xx = x * x;
-    return xx *
-      (-0.5 + xx *
-        (1/24 + xx *
-          (-1/720 + xx *
-            (1/40320 + xx *
-              (-1/3628800 + xx *
-                (1/4790014600 + xx *
-                  (-1/87178291200 + xx *
-                    (1/20922789888000)
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
+    return xx * (
+      xx * (
+        xx * (
+          xx * (
+            xx * (
+              xx * (
+                xx * (
+                  xx / 20922789888000
+                  - 1 / 87178291200)
+                + 1 / 479001600)
+              - 1 / 3628800)
+            + 1 / 40320)
+          - 1 / 720)
+        + 1 / 24)
+      - 1 / 2);
   };
 
   var hypot = function(x, y) {
@@ -160,11 +171,11 @@
 
   var parse = function(a, b) {
 
-    var z = {'re': 0, 'im': 0};
+    var z = { 're': 0, 'im': 0 };
 
     if (a === undefined || a === null) {
       z['re'] =
-              z['im'] = 0;
+      z['im'] = 0;
     } else if (b !== undefined) {
       z['re'] = a;
       z['im'] = b;
@@ -199,7 +210,7 @@
         case 'string':
 
           z['im'] = /* void */
-                  z['re'] = 0;
+          z['re'] = 0;
 
           var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
           var plus = 1;
@@ -303,8 +314,8 @@
       var abs = this['abs']();
 
       return new Complex(
-              this['re'] / abs,
-              this['im'] / abs);
+        this['re'] / abs,
+        this['im'] / abs);
     },
 
     /**
@@ -327,8 +338,8 @@
       }
 
       return new Complex(
-              this['re'] + z['re'],
-              this['im'] + z['im']);
+        this['re'] + z['re'],
+        this['im'] + z['im']);
     },
 
     /**
@@ -351,8 +362,8 @@
       }
 
       return new Complex(
-              this['re'] - z['re'],
-              this['im'] - z['im']);
+        this['re'] - z['re'],
+        this['im'] - z['im']);
     },
 
     /**
@@ -380,8 +391,8 @@
       }
 
       return new Complex(
-              this['re'] * z['re'] - this['im'] * z['im'],
-              this['re'] * z['im'] + this['im'] * z['re']);
+        this['re'] * z['re'] - this['im'] * z['im'],
+        this['re'] * z['im'] + this['im'] * z['re']);
     },
 
     /**
@@ -426,8 +437,8 @@
         t = c * x + d;
 
         return new Complex(
-                (a * x + b) / t,
-                (b * x - a) / t);
+          (a * x + b) / t,
+          (b * x - a) / t);
 
       } else {
 
@@ -435,8 +446,8 @@
         t = d * x + c;
 
         return new Complex(
-                (a + b * x) / t,
-                (b - a * x) / t);
+          (a + b * x) / t,
+          (b - a * x) / t);
       }
     },
 
@@ -507,8 +518,8 @@
       a = Math.exp(z['re'] * loh - z['im'] * arg);
       b = z['im'] * loh + z['re'] * arg;
       return new Complex(
-              a * Math.cos(b),
-              a * Math.sin(b));
+        a * Math.cos(b),
+        a * Math.sin(b));
     },
 
     /**
@@ -557,8 +568,8 @@
         //return new Complex(tmp, 0);
       }
       return new Complex(
-              tmp * Math.cos(this['im']),
-              tmp * Math.sin(this['im']));
+        tmp * Math.cos(this['im']),
+        tmp * Math.sin(this['im']));
     },
 
     /**
@@ -581,8 +592,8 @@
       var b = this['im'];
 
       return new Complex(
-              Math.expm1(a) * Math.cos(b) + cosm1(b),
-              Math.exp(a) * Math.sin(b));
+        Math.expm1(a) * Math.cos(b) + cosm1(b),
+        Math.exp(a) * Math.sin(b));
     },
 
     /**
@@ -600,8 +611,8 @@
       }
 
       return new Complex(
-              logHypot(a, b),
-              Math.atan2(b, a));
+        logHypot(a, b),
+        Math.atan2(b, a));
     },
 
     /**
@@ -637,8 +648,8 @@
       var b = this['im'];
 
       return new Complex(
-              Math.sin(a) * cosh(b),
-              Math.cos(a) * sinh(b));
+        Math.sin(a) * cosh(b),
+        Math.cos(a) * sinh(b));
     },
 
     /**
@@ -654,8 +665,8 @@
       var b = this['im'];
 
       return new Complex(
-              Math.cos(a) * cosh(b),
-              -Math.sin(a) * sinh(b));
+        Math.cos(a) * cosh(b),
+        -Math.sin(a) * sinh(b));
     },
 
     /**
@@ -672,8 +683,8 @@
       var d = Math.cos(a) + cosh(b);
 
       return new Complex(
-              Math.sin(a) / d,
-              sinh(b) / d);
+        Math.sin(a) / d,
+        sinh(b) / d);
     },
 
     /**
@@ -690,8 +701,8 @@
       var d = Math.cos(a) - cosh(b);
 
       return new Complex(
-              -Math.sin(a) / d,
-              sinh(b) / d);
+        -Math.sin(a) / d,
+        sinh(b) / d);
     },
 
     /**
@@ -708,8 +719,8 @@
       var d = 0.5 * cosh(2 * b) + 0.5 * Math.cos(2 * a);
 
       return new Complex(
-              Math.cos(a) * cosh(b) / d,
-              Math.sin(a) * sinh(b) / d);
+        Math.cos(a) * cosh(b) / d,
+        Math.sin(a) * sinh(b) / d);
     },
 
     /**
@@ -726,8 +737,8 @@
       var d = 0.5 * cosh(2 * b) - 0.5 * Math.cos(2 * a);
 
       return new Complex(
-              Math.sin(a) * cosh(b) / d,
-              -Math.cos(a) * sinh(b) / d);
+        Math.sin(a) * cosh(b) / d,
+        -Math.cos(a) * sinh(b) / d);
     },
 
     /**
@@ -743,12 +754,12 @@
       var b = this['im'];
 
       var t1 = new Complex(
-              b * b - a * a + 1,
-              -2 * a * b)['sqrt']();
+        b * b - a * a + 1,
+        -2 * a * b)['sqrt']();
 
       var t2 = new Complex(
-              t1['re'] - b,
-              t1['im'] + a)['log']();
+        t1['re'] - b,
+        t1['im'] + a)['log']();
 
       return new Complex(t2['im'], -t2['re']);
     },
@@ -766,12 +777,12 @@
       var b = this['im'];
 
       var t1 = new Complex(
-              b * b - a * a + 1,
-              -2 * a * b)['sqrt']();
+        b * b - a * a + 1,
+        -2 * a * b)['sqrt']();
 
       var t2 = new Complex(
-              t1['re'] - b,
-              t1['im'] + a)['log']();
+        t1['re'] - b,
+        t1['im'] + a)['log']();
 
       return new Complex(Math.PI / 2 - t2['im'], t2['re']);
     },
@@ -802,8 +813,8 @@
       var d = a * a + (1.0 - b) * (1.0 - b);
 
       var t1 = new Complex(
-              (1 - b * b - a * a) / d,
-              -2 * a / d).log();
+        (1 - b * b - a * a) / d,
+        -2 * a / d).log();
 
       return new Complex(-0.5 * t1['im'], 0.5 * t1['re']);
     },
@@ -826,12 +837,12 @@
 
       var d = a * a + b * b;
       return (d !== 0)
-              ? new Complex(
-                      a / d,
-                      -b / d).atan()
-              : new Complex(
-                      (a !== 0) ? a / 0 : 0,
-                      (b !== 0) ? -b / 0 : 0).atan();
+        ? new Complex(
+          a / d,
+          -b / d).atan()
+        : new Complex(
+          (a !== 0) ? a / 0 : 0,
+          (b !== 0) ? -b / 0 : 0).atan();
     },
 
     /**
@@ -852,12 +863,12 @@
 
       var d = a * a + b * b;
       return (d !== 0)
-              ? new Complex(
-                      a / d,
-                      -b / d).acos()
-              : new Complex(
-                      (a !== 0) ? a / 0 : 0,
-                      (b !== 0) ? -b / 0 : 0).acos();
+        ? new Complex(
+          a / d,
+          -b / d).acos()
+        : new Complex(
+          (a !== 0) ? a / 0 : 0,
+          (b !== 0) ? -b / 0 : 0).acos();
     },
 
     /**
@@ -878,12 +889,12 @@
 
       var d = a * a + b * b;
       return (d !== 0)
-              ? new Complex(
-                      a / d,
-                      -b / d).asin()
-              : new Complex(
-                      (a !== 0) ? a / 0 : 0,
-                      (b !== 0) ? -b / 0 : 0).asin();
+        ? new Complex(
+          a / d,
+          -b / d).asin()
+        : new Complex(
+          (a !== 0) ? a / 0 : 0,
+          (b !== 0) ? -b / 0 : 0).asin();
     },
 
     /**
@@ -899,8 +910,8 @@
       var b = this['im'];
 
       return new Complex(
-              sinh(a) * Math.cos(b),
-              cosh(a) * Math.sin(b));
+        sinh(a) * Math.cos(b),
+        cosh(a) * Math.sin(b));
     },
 
     /**
@@ -916,8 +927,8 @@
       var b = this['im'];
 
       return new Complex(
-              cosh(a) * Math.cos(b),
-              sinh(a) * Math.sin(b));
+        cosh(a) * Math.cos(b),
+        sinh(a) * Math.sin(b));
     },
 
     /**
@@ -934,8 +945,8 @@
       var d = cosh(a) + Math.cos(b);
 
       return new Complex(
-              sinh(a) / d,
-              Math.sin(b) / d);
+        sinh(a) / d,
+        Math.sin(b) / d);
     },
 
     /**
@@ -952,8 +963,8 @@
       var d = cosh(a) - Math.cos(b);
 
       return new Complex(
-              sinh(a) / d,
-              -Math.sin(b) / d);
+        sinh(a) / d,
+        -Math.sin(b) / d);
     },
 
     /**
@@ -970,8 +981,8 @@
       var d = Math.cos(2 * b) - cosh(2 * a);
 
       return new Complex(
-              -2 * sinh(a) * Math.cos(b) / d,
-              2 * cosh(a) * Math.sin(b) / d);
+        -2 * sinh(a) * Math.cos(b) / d,
+        2 * cosh(a) * Math.sin(b) / d);
     },
 
     /**
@@ -988,8 +999,8 @@
       var d = Math.cos(2 * b) + cosh(2 * a);
 
       return new Complex(
-              2 * cosh(a) * Math.cos(b) / d,
-              -2 * sinh(a) * Math.sin(b) / d);
+        2 * cosh(a) * Math.cos(b) / d,
+        -2 * sinh(a) * Math.sin(b) / d);
     },
 
     /**
@@ -1055,12 +1066,12 @@
       var d = oneMinus * oneMinus + b * b;
 
       var x = (d !== 0)
-              ? new Complex(
-                      (onePlus * oneMinus - b * b) / d,
-                      (b * oneMinus + onePlus * b) / d)
-              : new Complex(
-                      (a !== -1) ? (a / 0) : 0,
-                      (b !== 0) ? (b / 0) : 0);
+        ? new Complex(
+          (onePlus * oneMinus - b * b) / d,
+          (b * oneMinus + onePlus * b) / d)
+        : new Complex(
+          (a !== -1) ? (a / 0) : 0,
+          (b !== 0) ? (b / 0) : 0);
 
       var temp = x['re'];
       x['re'] = logHypot(x['re'], x['im']) / 2;
@@ -1089,12 +1100,12 @@
 
       var d = a * a + b * b;
       return (d !== 0)
-              ? new Complex(
-                      a / d,
-                      -b / d).atanh()
-              : new Complex(
-                      (a !== 0) ? a / 0 : 0,
-                      (b !== 0) ? -b / 0 : 0).atanh();
+        ? new Complex(
+          a / d,
+          -b / d).atanh()
+        : new Complex(
+          (a !== 0) ? a / 0 : 0,
+          (b !== 0) ? -b / 0 : 0).atanh();
     },
 
     /**
@@ -1112,19 +1123,19 @@
       if (b === 0) {
 
         return new Complex(
-                (a !== 0)
-                ? Math.log(a + Math.sqrt(a * a + 1))
-                : Infinity, 0);
+          (a !== 0)
+            ? Math.log(a + Math.sqrt(a * a + 1))
+            : Infinity, 0);
       }
 
       var d = a * a + b * b;
       return (d !== 0)
-              ? new Complex(
-                      a / d,
-                      -b / d).asinh()
-              : new Complex(
-                      (a !== 0) ? a / 0 : 0,
-                      (b !== 0) ? -b / 0 : 0).asinh();
+        ? new Complex(
+          a / d,
+          -b / d).asinh()
+        : new Complex(
+          (a !== 0) ? a / 0 : 0,
+          (b !== 0) ? -b / 0 : 0).asinh();
     },
 
     /**
@@ -1145,12 +1156,12 @@
 
       var d = a * a + b * b;
       return (d !== 0)
-              ? new Complex(
-                      a / d,
-                      -b / d).acosh()
-              : new Complex(
-                      (a !== 0) ? a / 0 : 0,
-                      (b !== 0) ? -b / 0 : 0).acosh();
+        ? new Complex(
+          a / d,
+          -b / d).acosh()
+        : new Complex(
+          (a !== 0) ? a / 0 : 0,
+          (b !== 0) ? -b / 0 : 0).acosh();
     },
 
     /**
@@ -1207,8 +1218,8 @@
       places = Math.pow(10, places || 0);
 
       return new Complex(
-              Math.ceil(this['re'] * places) / places,
-              Math.ceil(this['im'] * places) / places);
+        Math.ceil(this['re'] * places) / places,
+        Math.ceil(this['im'] * places) / places);
     },
 
     /**
@@ -1221,8 +1232,8 @@
       places = Math.pow(10, places || 0);
 
       return new Complex(
-              Math.floor(this['re'] * places) / places,
-              Math.floor(this['im'] * places) / places);
+        Math.floor(this['re'] * places) / places,
+        Math.floor(this['im'] * places) / places);
     },
 
     /**
@@ -1235,8 +1246,8 @@
       places = Math.pow(10, places || 0);
 
       return new Complex(
-              Math.round(this['re'] * places) / places,
-              Math.round(this['im'] * places) / places);
+        Math.round(this['re'] * places) / places,
+        Math.round(this['im'] * places) / places);
     },
 
     /**
@@ -1251,7 +1262,7 @@
       var z = new Complex(a, b);
 
       return Math.abs(z['re'] - this['re']) <= Complex['EPSILON'] &&
-              Math.abs(z['im'] - this['im']) <= Complex['EPSILON'];
+        Math.abs(z['im'] - this['im']) <= Complex['EPSILON'];
     },
 
     /**
@@ -1297,22 +1308,22 @@
       }
 
       if (a !== 0) {
-        ret+= a;
-        ret+= " ";
+        ret += a;
+        ret += " ";
         if (b < 0) {
           b = -b;
-          ret+= "-";
+          ret += "-";
         } else {
-          ret+= "+";
+          ret += "+";
         }
-        ret+= " ";
+        ret += " ";
       } else if (b < 0) {
         b = -b;
-        ret+= "-";
+        ret += "-";
       }
 
       if (1 !== b) { // b is the absolute imaginary part
-        ret+= b;
+        ret += b;
       }
       return ret + "i";
     },
@@ -1394,7 +1405,7 @@
       return Complex;
     });
   } else if (typeof exports === 'object') {
-    Object.defineProperty(Complex, "__esModule", {'value': true});
+    Object.defineProperty(Complex, "__esModule", { 'value': true });
     Complex['default'] = Complex;
     Complex['Complex'] = Complex;
     module['exports'] = Complex;
