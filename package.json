@@ -21,10 +21,14 @@
         "example": "examples"
     },
     "readmeFilename": "README.md",
-    "license": "MIT OR GPL-2.0-or-later",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "git://github.com/infusion/Complex.js.git"
+    },
+    "funding": {
+        "type": "patreon",
+        "url": "https://www.patreon.com/infusion"
     },
     "engines": {
         "node": "*"
