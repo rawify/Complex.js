@@ -10,14 +10,40 @@ type AValue =
   | undefined;
 type BValue = number | undefined;
 
+export function Complex(a: AValue, b?: BValue): Complex;
+
 /**
- * @type {Complex}
+ *
+ * This class allows the manipulation of complex numbers.
+ * You can pass a complex number in different formats. Either as object, double, string or two integer parameters.
+ *
+ * Object form
+ * { re: <real>, im: <imaginary> }
+ * { arg: <angle>, abs: <radius> }
+ * { phi: <angle>, r: <radius> }
+ *
+ * Array / Vector form
+ * [ real, imaginary ]
+ *
+ * Double form
+ * 99.3 - Single double value
+ *
+ * String form
+ * '23.1337' - Simple real number
+ * '15+3i' - a simple complex number
+ * '3-i' - a simple complex number
+ *
+ * Example:
+ *
+ * var c = new Complex('99.3+8i');
+ * c.mul({r: 3, i: 9}).div(4.9).sub(3, 2);
+ *
  */
 export class Complex {
   re: number;
   im: number;
 
-  constructor(a: AValue, b: BValue);
+  constructor(a: AValue, b?: BValue);
 
   /**
    * Calculates the sign of a complex number, which is a normalized complex
@@ -28,27 +54,27 @@ export class Complex {
    * Adds two complex numbers
    *
    */
-  add(a: AValue, b: BValue): Complex;
+  add(a: AValue, b?: BValue): Complex;
   /**
    * Subtracts two complex numbers
    *
    */
-  sub(a: AValue, b: BValue): Complex;
+  sub(a: AValue, b?: BValue): Complex;
   /**
    * Multiplies two complex numbers
    *
    */
-  mul(a: AValue, b: BValue): Complex;
+  mul(a: AValue, b?: BValue): Complex;
   /**
    * Divides two complex numbers
    *
    */
-  div(a: AValue, b: BValue): Complex;
+  div(a: AValue, b?: BValue): Complex;
   /**
    * Calculate the power of two complex numbers
    *
    */
-  pow(a: AValue, b: BValue): Complex;
+  pow(a: AValue, b?: BValue): Complex;
   /**
    * Calculate the complex square root
    *
@@ -238,7 +264,7 @@ export class Complex {
    * **Note:** new Complex(Infinity).equals(Infinity) === false
    *
    */
-  equals(a: AValue, b: BValue): boolean;
+  equals(a: AValue, b?: BValue): boolean;
   /**
    * Clones the actual object
    *
