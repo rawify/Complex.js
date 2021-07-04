@@ -16,6 +16,7 @@
     ],
     "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
     "main": "complex",
+    "types": "complex.d.ts",
     "private": false,
     "directories": {
         "example": "examples"
