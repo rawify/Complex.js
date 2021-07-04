@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.14 12/05/2020
+ * @license Complex.js v2.0.15 12/05/2020
  *
  * Copyright (c) 2020, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
