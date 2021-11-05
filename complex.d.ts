@@ -12,6 +12,8 @@ type BValue = number | undefined;
 
 export function Complex(a: AValue, b?: BValue): Complex;
 
+export default Complex;
+
 /**
  *
  * This class allows the manipulation of complex numbers.
