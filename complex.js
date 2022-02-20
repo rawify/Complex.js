@@ -642,7 +642,8 @@
      */
     'sin': function() {
 
-      // sin(c) = (e^b - e^(-b)) / (2i)
+      // sin(z) = ( e^iz - e^-iz ) / 2i 
+      //        = sin(a)cosh(b) + i cos(a)sinh(b)
 
       var a = this['re'];
       var b = this['im'];
@@ -659,7 +660,8 @@
      */
     'cos': function() {
 
-      // cos(z) = (e^b + e^(-b)) / 2
+      // cos(z) = ( e^iz + e^-iz ) / 2 
+      //        = cos(a)cosh(b) - i sin(a)sinh(b)
 
       var a = this['re'];
       var b = this['im'];
@@ -676,7 +678,10 @@
      */
     'tan': function() {
 
-      // tan(c) = (e^(ci) - e^(-ci)) / (i(e^(ci) + e^(-ci)))
+      // tan(z) = sin(z) / cos(z) 
+      //        = ( e^iz - e^-iz ) / ( i( e^iz + e^-iz ) )
+      //        = ( e^2iz - 1 ) / i( e^2iz + 1 )
+      //        = ( sin(2a) + i sinh(2b) ) / ( cos(2a) + cosh(2b) )
 
       var a = 2 * this['re'];
       var b = 2 * this['im'];
