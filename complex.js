@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.0.15 12/05/2020
+ * @license Complex.js v2.1.0 12/05/2020
  *
  * Copyright (c) 2020, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -166,7 +166,10 @@
 
      */
 
-    return Math.log(a / Math.cos(Math.atan2(b, a)));
+     a = a / 2;
+     b = b / 2;
+
+    return 0.5 * Math.log(a * a + b * b) + Math.LN2;
   }
 
   var parse = function(a, b) {

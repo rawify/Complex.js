@@ -633,8 +633,82 @@ var functionTests = [{
   fn: "add",
   param: "i",
   expect: "2i"
-}
-];
+}, {
+  set: Complex(0, 10000000000),
+  fn: "log",
+  param: null,
+  expect: "23.025850929940457 + 1.5707963267948966i"
+}, {
+  set: Complex(0, 1000000000000000),
+  fn: "log",
+  param: null,
+  expect: "34.538776394910684 + 1.5707963267948966i"
+}, {
+  set: Complex(0, 100000000000000000),
+  fn: "log",
+  param: null,
+  expect: "39.14394658089878 + 1.5707963267948966i"
+}, {
+  set: Complex(0, 10000000000000000000),
+  fn: "log",
+  param: null,
+  expect: "43.74911676688687 + 1.5707963267948966i"
+}, {
+  set: Complex(0, 1e+30),
+  fn: "log",
+  param: null,
+  expect: "69.07755278982137 + 1.5707963267948966i"
+}, {
+  set: Complex(1, 10000000000),
+  fn: "log",
+  param: null,
+  expect: "23.025850929940454 + 1.5707963266948965i"
+}, {
+  set: Complex(1, 1000000000000000),
+  fn: "log",
+  param: null,
+  expect: "34.538776394910684 + 1.5707963267948957i"
+}, {
+  set: Complex(1, 100000000000000000),
+  fn: "log",
+  param: null,
+  expect: "39.14394658089878 + 1.5707963267948966i"
+}, {
+  set: Complex(1, 10000000000000000000),
+  fn: "log",
+  param: null,
+  expect: "43.74911676688687 + 1.5707963267948966i"
+}, {
+  set: Complex(1, 1e+30),
+  fn: "log",
+  param: null,
+  expect: "69.07755278982137 + 1.5707963267948966i"
+}, {
+  set: Complex(-1, 10000000000),
+  fn: "log",
+  param: null,
+  expect: "23.025850929940454 + 1.5707963268948968i"
+}, {
+  set: Complex(-1, 1000000000000000),
+  fn: "log",
+  param: null,
+  expect: "34.538776394910684 + 1.5707963267948977i"
+}, {
+  set: Complex(-1, 100000000000000000),
+  fn: "log",
+  param: null,
+  expect: "39.14394658089878 + 1.5707963267948968i"
+}, {
+  set: Complex(-1, 10000000000000000000),
+  fn: "log",
+  param: null,
+  expect: "43.74911676688687 + 1.5707963267948966i"
+}, {
+  set: Complex(-1, 1e+30),
+  fn: "log",
+  param: null,
+  expect: "69.07755278982137 + 1.5707963267948966i"
+}];
 
 var constructorTests = [{
   set: null,
