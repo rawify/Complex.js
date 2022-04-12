@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.1.0 12/05/2020
+ * @license Complex.js v2.1.1 12/05/2020
  *
  * Copyright (c) 2020, Robert Eisele (robert@xarg.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -37,12 +37,12 @@
 
   'use strict';
 
-  var cosh = function(x) {
-    return (Math.exp(x) + Math.exp(-x)) * 0.5;
+  var cosh = Math.cosh || function(x) {
+    return Math.abs(x) < 1e-9 ? 1 - x : (Math.exp(x) + Math.exp(-x)) * 0.5;
   };
 
-  var sinh = function(x) {
-    return (Math.exp(x) - Math.exp(-x)) * 0.5;
+  var sinh = Math.sinh || function(x) {
+    return Math.abs(x) < 1e-9 ? x : (Math.exp(x) - Math.exp(-x)) * 0.5;
   };
 
   /**
