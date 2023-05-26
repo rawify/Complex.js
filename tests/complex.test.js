@@ -1063,4 +1063,17 @@ describe("Complex Details", function () {
     assert.strictEqual(n.toString(), '2 + ' + 4 * Math.PI + "i");
   });
 
+  it('should follow exp rules', function () {
+
+    var a = Math.random() * 10;
+    var b = Math.random() * 10;
+
+    var t1 = Complex({re: a, im: b}).exp();
+    var t2 = Complex(a).exp().mul(Complex.I.mul(b).exp());
+    var t3 = Complex(a).exp().mul(Complex({re:0, im: b}).exp());
+
+    assert.strictEqual(t1.toString(), t2.toString());
+    assert.strictEqual(t2.toString(), t3.toString());
+  });
+
 });
