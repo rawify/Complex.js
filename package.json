@@ -1,6 +1,6 @@
 {
     "name": "complex.js",
-    "homepage": "https://github.com/infusion/Complex.js",
+    "homepage": "https://raw.org/article/complex-numbers-in-javascript/",
     "bugs": "https://github.com/infusion/Complex.js/issues",
     "title": "complex.js",
     "version": "2.1.1",
@@ -14,7 +14,7 @@
         "parser",
         "arithmetic"
     ],
-    "author": "Robert Eisele <robert@xarg.org> (http://www.xarg.org/)",
+    "author": "Robert Eisele <robert@raw.org> (http://raw.org/)",
     "main": "complex",
     "types": "complex.d.ts",
     "private": false,
