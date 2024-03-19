@@ -14,7 +14,11 @@
         "parser",
         "arithmetic"
     ],
-    "author": "Robert Eisele <robert@raw.org> (http://raw.org/)",
+    "author": {
+        "name": "Robert Eisele",
+        "email": "robert@raw.org",
+        "url": "https://raw.org/"
+    },
     "main": "complex",
     "types": "complex.d.ts",
     "private": false,
