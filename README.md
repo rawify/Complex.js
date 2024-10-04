@@ -6,7 +6,7 @@
 Complex.js is a well tested JavaScript library to work with [complex number arithmetic](https://raw.org/book/analysis/complex-numbers/) in JavaScript. It implements every elementary complex number manipulation function and the API is intentionally similar to [Fraction.js](https://github.com/rawify/Fraction.js). Furthermore, it's the basis of [Polynomial.js](https://github.com/infusion/Polynomial.js) and [Math.js](https://github.com/josdejong/mathjs).
 
 
-##Examples
+## Examples
 
 
 ```js
@@ -32,14 +32,14 @@ function quadraticRoot(a, b, c) {
 
 For cubic roots have a look at [RootFinder](https://github.com/rawify/RootFinder.js) which uses Complex.js.
 
-##Parser
+## Parser
 
 
 Any function (see below) as well as the constructor of the *Complex* class parses its input like this.
 
 You can pass either Objects, Doubles or Strings.
 
-###Objects
+### Objects
 
 ```javascript
 new Complex({re: real, im: imaginary});
@@ -49,13 +49,13 @@ new Complex([real, imaginary]); // Vector/Array syntax
 ```
 If there are other attributes on the passed object, they're not getting preserved and have to be merged manually.
 
-###Doubles
+### Doubles
 
 ```javascript
 new Complex(55.4);
 ```
 
-###Strings
+### Strings
 
 ```javascript
 new Complex("123.45");
@@ -63,13 +63,13 @@ new Complex("15+3i");
 new Complex("i");
 ```
 
-###Two arguments
+### Two arguments
 
 ```javascript
 new Complex(3, 2); // 3+2i
 ```
 
-##Attributes
+## Attributes
 
 
 Every complex number object exposes its real and imaginary part as attribute `re` and `im`:
@@ -81,7 +81,7 @@ console.log("Real part:", c.re); // 3
 console.log("Imaginary part:", c.im); // 2
 ```
 
-##Functions
+## Functions
 
 
 Complex sign()
@@ -191,7 +191,7 @@ double valueOf()
 Returns the real part of the number if imaginary part is zero. Otherwise `null`
 
 
-##Trigonometric functions
+## Trigonometric functions
 
 The following trigonometric functions are defined on Complex.js:
 
@@ -205,7 +205,7 @@ The following trigonometric functions are defined on Complex.js:
 | csc()  | acsc()  | csch()       | acsch()            |
 
 
-##Geometric Equivalence
+## Geometric Equivalence
 
 
 Complex numbers can also be seen as a vector in the 2D space. Here is a simple overview of basic operations and how to implement them with complex.js:
@@ -253,7 +253,7 @@ Distance to another vector
 distance(v1, v2):= v1.sub(v2).abs()
 ```
 
-##Constants
+## Constants
 
 
 Complex.ZERO
@@ -289,7 +289,7 @@ Complex.EPSILON
 A small epsilon value used for `equals()` comparison in order to circumvent double imprecision.
 
 
-##Installation
+## Installation
 
 Installing complex.js is as easy as cloning this repo or use one of the following command:
 
@@ -298,7 +298,7 @@ Installing complex.js is as easy as cloning this repo or use one of the followin
 npm install complex.js
 ```
 
-##Using Complex.js with the browser
+## Using Complex.js with the browser
 
 ```html
 <script src="complex.min.js"></script>
@@ -309,11 +309,11 @@ npm install complex.js
 
 
 
-##Coding Style
+## Coding Style
 
 As every library I publish, Complex.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
 
-##Building the library
+## Building the library
 
 After cloning the Git repository run:
 
@@ -322,7 +322,7 @@ npm install
 npm run build
 ```
 
-##Run a test
+## Run a test
 
 Testing the source against the shipped test suite is as easy as
 
