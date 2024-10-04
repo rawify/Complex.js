@@ -1,15 +1,13 @@
 # Complex.js - ℂ in JavaScript
 
-[![NPM Package](https://nodei.co/npm-dl/complex.js.png?months=6&height=1)](https://npmjs.org/package/complex.js)
-
-[![Build Status](https://travis-ci.org/infusion/Complex.js.svg?branch=master)](https://travis-ci.org/infusion/Complex.js)
+[![NPM Package](https://img.shields.io/npm/v/complex.js.svg?style=flat)](https://npmjs.org/package/complex.js "View this project on npm")
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-Complex.js is a well tested JavaScript library to work with [complex number arithmetic](https://www.xarg.org/book/analysis/complex-numbers/) in JavaScript. It implements every elementary complex number manipulation function and the API is intentionally similar to [Fraction.js](https://github.com/infusion/Fraction.js). Furthermore, it's the basis of [Polynomial.js](https://github.com/infusion/Polynomial.js) and [Math.js](https://github.com/josdejong/mathjs).
+Complex.js is a well tested JavaScript library to work with [complex number arithmetic](https://raw.org/book/analysis/complex-numbers/) in JavaScript. It implements every elementary complex number manipulation function and the API is intentionally similar to [Fraction.js](https://github.com/rawify/Fraction.js). Furthermore, it's the basis of [Polynomial.js](https://github.com/infusion/Polynomial.js) and [Math.js](https://github.com/josdejong/mathjs).
 
 
-Examples
-===
+##Examples
+
 
 ```js
 let Complex = require('complex.js');
@@ -32,15 +30,17 @@ function quadraticRoot(a, b, c) {
 // quadraticRoot(1, 4, 5) -> -2 ± i
 ```
 
-Parser
-===
+For cubic roots have a look at [RootFinder](https://github.com/rawify/RootFinder.js) which uses Complex.js.
+
+##Parser
+
 
 Any function (see below) as well as the constructor of the *Complex* class parses its input like this.
 
 You can pass either Objects, Doubles or Strings.
 
-Objects
----
+###Objects
+
 ```javascript
 new Complex({re: real, im: imaginary});
 new Complex({arg: angle, abs: radius});
@@ -49,28 +49,28 @@ new Complex([real, imaginary]); // Vector/Array syntax
 ```
 If there are other attributes on the passed object, they're not getting preserved and have to be merged manually.
 
-Doubles
----
+###Doubles
+
 ```javascript
 new Complex(55.4);
 ```
 
-Strings
----
+###Strings
+
 ```javascript
 new Complex("123.45");
 new Complex("15+3i");
 new Complex("i");
 ```
 
-Two arguments
----
+###Two arguments
+
 ```javascript
 new Complex(3, 2); // 3+2i
 ```
 
-Attributes
-===
+##Attributes
+
 
 Every complex number object exposes its real and imaginary part as attribute `re` and `im`:
 
@@ -81,8 +81,8 @@ console.log("Real part:", c.re); // 3
 console.log("Imaginary part:", c.im); // 2
 ```
 
-Functions
-===
+##Functions
+
 
 Complex sign()
 ---
@@ -191,8 +191,8 @@ double valueOf()
 Returns the real part of the number if imaginary part is zero. Otherwise `null`
 
 
-Trigonometric functions
-===
+##Trigonometric functions
+
 The following trigonometric functions are defined on Complex.js:
 
 | Trig | Arcus | Hyperbolic | Area-Hyperbolic |
@@ -205,8 +205,8 @@ The following trigonometric functions are defined on Complex.js:
 | csc()  | acsc()  | csch()       | acsch()            |
 
 
-Geometric Equivalence
-===
+##Geometric Equivalence
+
 
 Complex numbers can also be seen as a vector in the 2D space. Here is a simple overview of basic operations and how to implement them with complex.js:
 
@@ -253,8 +253,8 @@ Distance to another vector
 distance(v1, v2):= v1.sub(v2).abs()
 ```
 
-Constants
-===
+##Constants
+
 
 Complex.ZERO
 ---
@@ -289,55 +289,48 @@ Complex.EPSILON
 A small epsilon value used for `equals()` comparison in order to circumvent double imprecision.
 
 
-Installation
-===
-Installing complex.js is as easy as cloning this repo or use one of the following commands:
+##Installation
 
-```bash
-bower install complex.js
-```
-or
+Installing complex.js is as easy as cloning this repo or use one of the following command:
+
 
 ```bash
 npm install complex.js
 ```
 
-Using Complex.js with the browser
-===
+##Using Complex.js with the browser
+
 ```html
-<script src="complex.js"></script>
+<script src="complex.min.js"></script>
 <script>
     console.log(Complex("4+3i"));
 </script>
 ```
 
-Using Complex.js with require.js
-===
-```html
-<script src="require.js"></script>
-<script>
-requirejs(['complex.js'],
-function(Complex) {
-    console.log(Complex("4+3i"));
-});
-</script>
+
+
+##Coding Style
+
+As every library I publish, Complex.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
+
+##Building the library
+
+After cloning the Git repository run:
+
+```
+npm install
+npm run build
 ```
 
-Coding Style
-===
-As every library I publish, complex.js is also built to be as small as possible after compressing it with Google Closure Compiler in advanced mode. Thus the coding style orientates a little on maxing-out the compression rate. Please make sure you keep this style if you plan to extend the library.
+##Run a test
 
+Testing the source against the shipped test suite is as easy as
 
-Testing
-===
-If you plan to enhance the library, make sure you add test cases and all the previous tests are passing. You can test the library with
-
-```bash
-npm test
+```
+npm run test
 ```
 
+## Copyright and licensing
 
-Copyright and licensing
-===
-Copyright (c) 2023, [Robert Eisele](https://raw.org/)
-Dual licensed under the MIT or GPL Version 2 licenses.
+Copyright (c) 2025, [Robert Eisele](https://raw.org/)
+Licensed under the MIT license.

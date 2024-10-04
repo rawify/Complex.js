@@ -1,6 +1,6 @@
-var assert = require("assert");
 
-var Complex = require("../complex.js");
+var Complex = require("complex.js");
+var assert = require("assert");
 
 var functionTests = [{
   set: Complex.I,

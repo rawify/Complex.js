@@ -1,9 +1,9 @@
 {
     "name": "complex.js",
+    "title": "Complex.js",
+    "version": "2.2.0",
     "homepage": "https://raw.org/article/complex-numbers-in-javascript/",
-    "bugs": "https://github.com/infusion/Complex.js/issues",
-    "title": "complex.js",
-    "version": "2.1.1",
+    "bugs": "https://github.com/rawify/Complex.js/issues",
     "description": "A complex numbers library",
     "keywords": [
         "complex numbers",
@@ -14,34 +14,47 @@
         "parser",
         "arithmetic"
     ],
+    "private": false,
+    "main": "./dist/complex.js",
+    "module": "./dist/complex.mjs",
+    "types": "./complex.d.ts",
+    "browser": "./dist/complex.min.js",
+    "unpkg": "./dist/complex.min.js",
+    "readmeFilename": "README.md",
+    "exports": {
+        ".": {
+            "types": "./complex.d.ts",
+            "require": "./dist/complex.js",
+            "import": "./dist/complex.mjs"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:rawify/Complex.js.git"
+    },
+    "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/rawify"
+    },
     "author": {
         "name": "Robert Eisele",
         "email": "robert@raw.org",
         "url": "https://raw.org/"
     },
-    "main": "complex",
-    "types": "complex.d.ts",
-    "private": false,
-    "directories": {
-        "example": "examples"
-    },
-    "readmeFilename": "README.md",
     "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/infusion/Complex.js.git"
-    },
-    "funding": {
-        "type": "patreon",
-        "url": "https://www.patreon.com/infusion"
-    },
     "engines": {
         "node": "*"
     },
+    "directories": {
+        "example": "examples",
+        "test": "tests"
+    },
     "scripts": {
+        "build": "crude-build Complex",
         "test": "mocha tests/*.js"
     },
     "devDependencies": {
+        "crude-build": "^0.0.1",
         "mocha": "*"
     }
 }
