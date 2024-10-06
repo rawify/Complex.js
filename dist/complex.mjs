@@ -1400,5 +1400,5 @@ Complex['INFINITY'] = new Complex(Infinity, Infinity);
 Complex['NAN'] = new Complex(NaN, NaN);
 Complex['EPSILON'] = 1e-15;
 export {
-  Complex as default
+  Complex as default, Complex
 };
