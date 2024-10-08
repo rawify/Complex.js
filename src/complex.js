@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.2.3 10/6/2024
+ * @license Complex.js v2.2.4 10/8/2024
  * https://raw.org/article/complex-numbers-in-javascript/
  *
  * Copyright (c) 2024, Robert Eisele (https://raw.org/)
