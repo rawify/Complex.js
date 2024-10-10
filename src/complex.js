@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.2.5 10/9/2024
+ * @license Complex.js v2.2.5 10/10/2024
  * https://raw.org/article/complex-numbers-in-javascript/
  *
  * Copyright (c) 2024, Robert Eisele (https://raw.org/)
@@ -213,6 +213,7 @@ var parse = function (a, b) {
         z['im'] = /* void */
           z['re'] = 0;
 
+        a = a.replace(/_/g, '');
         var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
         var plus = 1;
         var minus = 0;

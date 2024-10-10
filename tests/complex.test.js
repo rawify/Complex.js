@@ -815,6 +815,9 @@ var constructorTests = [{
 }, {
   set: { r: Infinity, phi: NaN },
   expect: "NaN"
+},{
+  set: "1000_000i",
+  expect: "1000000i"
 }
 ];
 
