@@ -54,7 +54,7 @@
         "test": "mocha tests/*.js"
     },
     "devDependencies": {
-        "crude-build": "^0.1.0",
+        "crude-build": "^0.1.1",
         "mocha": "*"
     }
 }
