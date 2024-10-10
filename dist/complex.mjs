@@ -207,8 +207,8 @@ var parse = function (a, b) {
         z['im'] = /* void */
           z['re'] = 0;
 
-        a = a.replace(/_/g, '');
-        var tokens = a.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
+        var tokens = a.replace(/_/g, '')
+          .match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
         var plus = 1;
         var minus = 0;
 
