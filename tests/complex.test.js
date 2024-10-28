@@ -42,7 +42,7 @@ var functionTests = [{
 }, {
   set: "36i",
   fn: "sqrt",
-  expect: "4.242640687119285 + 4.242640687119285i"
+  expect: "4.242640687119285 + 4.242640687119286i"
 }, {
   set: Infinity,
   fn: "mul",
@@ -51,7 +51,7 @@ var functionTests = [{
 }, {
   set: "-36i",
   fn: "sqrt",
-  expect: "4.242640687119285 - 4.242640687119285i"
+  expect: "4.242640687119285 - 4.242640687119286i"
 }, {
   set: "4 + 2i",
   fn: "div",
@@ -942,7 +942,10 @@ describe("Complex Details", function () {
     assert.strictEqual(one.acos().toString(), "0.9045568943023813 - 1.0612750619050355i");
     assert.strictEqual(one.atan().toString(), "1.0172219678978514 + 0.40235947810852507i");
 
-    assert.strictEqual(Complex(3, 4).abs(), 5);
+    var t = Complex(3, 4);
+    assert.strictEqual(t.asinh().toString(), "2.29991404087927 + 0.9176168533514786i");
+
+    assert.strictEqual(t.abs(), 5);
 
     assert.strictEqual(Complex("5i + 3").log().exp().toString(), "3 + 5i")
     assert.strictEqual(Complex("-2i - 1").log().exp().toString(), "-1 - 2i")
