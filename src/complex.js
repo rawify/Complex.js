@@ -1,5 +1,5 @@
 /**
- * @license Complex.js v2.4.0 10/28/2024
+ * @license Complex.js v2.4.1 10/30/2024
  * https://raw.org/article/complex-numbers-in-javascript/
  *
  * Copyright (c) 2024, Robert Eisele (https://raw.org/)
@@ -177,16 +177,16 @@ const parse = function (a, b) {
     z['re'] =
       z['im'] = 0;
   } else if (b !== undefined) {
-    z['re'] = a;
-    z['im'] = b;
+    z['re'] = parseFloat(a);
+    z['im'] = parseFloat(b);
   } else
     switch (typeof a) {
 
       case 'object':
 
         if ('im' in a && 're' in a) {
-          z['re'] = a['re'];
-          z['im'] = a['im'];
+          z['re'] = parseFloat(a['re']);
+          z['im'] = parseFloat(a['im']);
         } else if ('abs' in a && 'arg' in a) {
           if (!isFinite(a['abs']) && isFinite(a['arg'])) {
             return Complex['INFINITY'];
@@ -200,8 +200,8 @@ const parse = function (a, b) {
           z['re'] = a['r'] * Math.cos(a['phi']);
           z['im'] = a['r'] * Math.sin(a['phi']);
         } else if (a.length === 2) { // Quick array check
-          z['re'] = a[0];
-          z['im'] = a[1];
+          z['re'] = parseFloat(a[0]);
+          z['im'] = parseFloat(a[1]);
         } else {
           parser_exit();
         }
@@ -210,7 +210,7 @@ const parse = function (a, b) {
       case 'string':
 
         z['im'] = /* void */
-          z['re'] = 0;
+        z['re'] = 0;
 
         const tokens = a.replace(/_/g, '')
           .match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
