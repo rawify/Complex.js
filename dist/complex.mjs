@@ -171,16 +171,16 @@ const parse = function (a, b) {
     z['re'] =
       z['im'] = 0;
   } else if (b !== undefined) {
-    z['re'] = parseFloat(a);
-    z['im'] = parseFloat(b);
+    z['re'] = a;
+    z['im'] = b;
   } else
     switch (typeof a) {
 
       case 'object':
 
         if ('im' in a && 're' in a) {
-          z['re'] = parseFloat(a['re']);
-          z['im'] = parseFloat(a['im']);
+          z['re'] = a['re'];
+          z['im'] = a['im'];
         } else if ('abs' in a && 'arg' in a) {
           if (!isFinite(a['abs']) && isFinite(a['arg'])) {
             return Complex['INFINITY'];
@@ -194,8 +194,8 @@ const parse = function (a, b) {
           z['re'] = a['r'] * Math.cos(a['phi']);
           z['im'] = a['r'] * Math.sin(a['phi']);
         } else if (a.length === 2) { // Quick array check
-          z['re'] = parseFloat(a[0]);
-          z['im'] = parseFloat(a[1]);
+          z['re'] = a[0];
+          z['im'] = a[1];
         } else {
           parser_exit();
         }

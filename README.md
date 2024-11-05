@@ -49,6 +49,8 @@ new Complex([real, imaginary]); // Vector/Array syntax
 ```
 If there are other attributes on the passed object, they're not getting preserved and have to be merged manually.
 
+**Note:** Object attributes have to be of type Number to avoid undefined behavior.
+
 ### Doubles
 
 ```javascript
