@@ -3,7 +3,7 @@
 [![NPM Package](https://img.shields.io/npm/v/complex.js.svg?style=flat)](https://npmjs.org/package/complex.js "View this project on npm")
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 
-Complex.js is a well tested JavaScript library to work with [complex number arithmetic](https://raw.org/book/analysis/complex-numbers/) in JavaScript. It implements every elementary complex number manipulation function and the API is intentionally similar to [Fraction.js](https://github.com/rawify/Fraction.js). Furthermore, it's the basis of [Polynomial.js](https://github.com/infusion/Polynomial.js) and [Math.js](https://github.com/josdejong/mathjs).
+Complex.js is a well tested JavaScript library to work with [complex number arithmetic](https://raw.org/book/analysis/complex-numbers/) in JavaScript. It implements every elementary complex number manipulation function and the API is intentionally similar to [Fraction.js](https://github.com/rawify/Fraction.js). Furthermore, it's the basis of [Polynomial.js](https://github.com/rawify/Polynomial.js) and [Math.js](https://github.com/josdejong/mathjs).
 
 
 ## Examples
@@ -293,22 +293,46 @@ A small epsilon value used for `equals()` comparison in order to circumvent doub
 
 ## Installation
 
-Installing complex.js is as easy as cloning this repo or use one of the following command:
-
+You can install `Complex.js` via npm:
 
 ```bash
 npm install complex.js
 ```
 
-## Using Complex.js with the browser
+Or with yarn:
+
+```bash
+yarn add complex.js
+```
+
+Alternatively, download or clone the repository:
+
+```bash
+git clone https://github.com/rawify/Complex.js
+```
+
+## Usage
+
+Include the `complex.min.js` file in your project:
 
 ```html
-<script src="complex.min.js"></script>
+<script src="path/to/complex.min.js"></script>
 <script>
     console.log(Complex("4+3i"));
 </script>
 ```
 
+Or in a Node.js project:
+
+```javascript
+const Complex = require('complex.js');
+```
+
+or 
+
+```javascript
+import Complex from 'complex.js';
+```
 
 
 ## Coding Style

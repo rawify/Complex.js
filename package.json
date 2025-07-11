@@ -4,7 +4,7 @@
     "version": "2.4.2",
     "homepage": "https://raw.org/article/complex-numbers-in-javascript/",
     "bugs": "https://github.com/rawify/Complex.js/issues",
-    "description": "A complex numbers library",
+    "description": "The RAW complex numbers library",
     "keywords": [
         "complex numbers",
         "math",
