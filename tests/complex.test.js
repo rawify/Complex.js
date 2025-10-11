@@ -999,6 +999,7 @@ describe("Complex Details", function () {
 
   it('should handle get complex part', function () {
     assert.strictEqual(Complex({ abs: 1, arg: Math.PI / 4 }).im, 0.7071067811865475);
+    assert.strictEqual(Complex({ re: 0.451, im: 0 }).acosh().im, 1.1029108863861707);
   });
 
   it('should handle sum', function () {
