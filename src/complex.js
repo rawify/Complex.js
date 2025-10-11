@@ -1137,7 +1137,7 @@ Complex.prototype = {
 
       return new Complex(
         (a !== 0)
-          ? Math.log(a + Math.sqrt(a * a + 1))
+          ? Math.log(1 / a + Math.sqrt(1 / (a * a) + 1))
           : Infinity, 0);
     }
 
