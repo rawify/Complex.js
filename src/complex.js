@@ -1046,19 +1046,16 @@ Complex.prototype = {
    */
   'acosh': function () {
 
-    // acosh(c) = log(c + sqrt(c^2 - 1))
+    // acosh(c) = log(c + sqrt(c - 1) * sqrt(c + 1))
 
-    const res = this['acos']();
-    if (res['im'] <= 0) {
-      const tmp = res['re'];
-      res['re'] = -res['im'];
-      res['im'] = tmp;
-    } else {
-      const tmp = res['im'];
-      res['im'] = -res['re'];
-      res['re'] = tmp;
-    }
-    return res;
+    const a = this['re'];
+    const b = this['im'];
+    
+    const t1 = new Complex(a + 1, b).sqrt();
+    const t2 = new Complex(a - 1, b).sqrt();
+    return new Complex(
+      a + t1['re'] * t2['re'] - t1['im'] * t2['im'],
+      b + t1['re'] * t2['im'] + t1['im'] * t2['re']).log();
   },
 
   /**
