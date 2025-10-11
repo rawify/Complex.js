@@ -981,7 +981,7 @@ Complex.prototype = {
   },
 
   /**
-   * Calculate the complex coth
+   * Calculate the complex csch
    *
    * @returns {Complex}
    */
