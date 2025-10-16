@@ -206,6 +206,17 @@ The following trigonometric functions are defined on Complex.js:
 | sec()  | asec()  | sech()       | asech()            |
 | csc()  | acsc()  | csch()       | acsch()            |
 
+**Notes on branches & ranges.** Inverse trig on ℂ needs a branch choice. For `acot` there are two real-axis conventions:
+
+* **(Chosen) Textbook range (0, π) on ℝ.**
+  Gives familiar real values (`acot(1)=π/4`, `acot(0)=π/2`, `acot(-1)=3π/4`). With the principal complex branch this **necessarily causes a π jump across the negative real axis** (e.g., near `-1±i0` → `-π/4`, but on `-1` → `3π/4`).
+  **We implement this with `atan2(1, x)`** to select the correct quadrant and handle `x=0`.
+
+* **Alternative range (−π/2, π/2] on ℝ.**
+  Makes `acot(-1) = -π/4` and can avoid that specific jump **only if the entire complex branch is changed to match**. Using plain `atan(1/x)` silently adopts this convention, changes real outputs, is undefined at `x=0`, and still wouldn’t resolve the complex behavior without a broader policy change.
+
+We therefore prefer predictable, textbook real values and robust quadrant handling—hence `atan2(1, x)`-accepting the implied branch cut on ℝ⁻ by design.
+
 
 ## Geometric Equivalence
 
