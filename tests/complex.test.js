@@ -212,7 +212,7 @@ var functionTests = [{
 }, {
   set: "1e-5 + 5i",
   fn: "expm1",
-  expect: "-0.716334977900736 - 0.9589338639538314i"
+  expect: "-0.7163349779007357 - 0.9589338639538314i"
 }, {
   set: "1.2e-7 - 2e-6i",
   fn: "expm1",
@@ -815,7 +815,7 @@ var constructorTests = [{
 }, {
   set: { r: Infinity, phi: NaN },
   expect: "NaN"
-},{
+}, {
   set: "1000_000i",
   expect: "1000000i"
 }
@@ -1001,6 +1001,10 @@ describe("Complex Details", function () {
     assert.strictEqual(Complex({ abs: 1, arg: Math.PI / 4 }).im, 0.7071067811865475);
   });
 
+  it('should calculate the acosh correctly', function () {
+    assert.strictEqual(Complex({ re: 0.451, im: 0 }).acosh().im, 1.1029108863861707);
+  });
+
   it('should handle sum', function () {
     assert.strictEqual(Complex({ abs: 1, arg: 0 }).add({ abs: 1, arg: Math.PI / 2 }).abs(), Math.SQRT2);
     assert.strictEqual(Complex({ abs: 1, arg: 0 }).add({ abs: 1, arg: Math.PI / 2 }).arg(), Math.PI / 4);
@@ -1074,9 +1078,9 @@ describe("Complex Details", function () {
     var a = Math.random() * 10;
     var b = Math.random() * 10;
 
-    var t1 = Complex({re: a, im: b}).exp();
+    var t1 = Complex({ re: a, im: b }).exp();
     var t2 = Complex(a).exp().mul(Complex.I.mul(b).exp());
-    var t3 = Complex(a).exp().mul(Complex({re:0, im: b}).exp());
+    var t3 = Complex(a).exp().mul(Complex({ re: 0, im: b }).exp());
 
     assert.strictEqual(t1.toString(), t2.toString());
     assert.strictEqual(t2.toString(), t3.toString());

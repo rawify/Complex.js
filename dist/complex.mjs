@@ -43,41 +43,10 @@ const sinh = Math.sinh || function (x) {
  * @param {number} x
  * @returns {number} cos(x) - 1
  */
-const cosm1 = function (x) {
-
-  const b = Math.PI / 4;
-  if (-b > x || x > b) {
-    return Math.cos(x) - 1.0;
-  }
-
-  /* Calculate horner form of polynomial of taylor series in Q
-  let fac = 1, alt = 1, pol = {};
-  for (let i = 0; i <= 16; i++) {
-    fac*= i || 1;
-    if (i % 2 == 0) {
-      pol[i] = new Fraction(1, alt * fac);
-      alt = -alt;
-    }
-  }
-  console.log(new Polynomial(pol).toHorner()); // (((((((1/20922789888000x^2-1/87178291200)x^2+1/479001600)x^2-1/3628800)x^2+1/40320)x^2-1/720)x^2+1/24)x^2-1/2)x^2+1
-  */
-
-  const xx = x * x;
-  return xx * (
-    xx * (
-      xx * (
-        xx * (
-          xx * (
-            xx * (
-              xx * (
-                xx / 20922789888000
-                - 1 / 87178291200)
-              + 1 / 479001600)
-            - 1 / 3628800)
-          + 1 / 40320)
-        - 1 / 720)
-      + 1 / 24)
-    - 1 / 2);
+const cosm1 = x => {
+  // cos(x) - 1 = − 2sin^2(x / 2)
+  const s = Math.sin(0.5 * x);
+  return -2 * s * s;
 };
 
 const hypot = function (x, y) {
@@ -204,7 +173,7 @@ const parse = function (a, b) {
       case 'string':
 
         z['im'] = /* void */
-        z['re'] = 0;
+          z['re'] = 0;
 
         const tokens = a.replace(/_/g, '')
           .match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
@@ -975,7 +944,7 @@ Complex.prototype = {
   },
 
   /**
-   * Calculate the complex coth
+   * Calculate the complex csch
    *
    * @returns {Complex}
    */
@@ -1017,20 +986,31 @@ Complex.prototype = {
    */
   'asinh': function () {
 
-    // asinh(c) = log(c + sqrt(c^2 + 1))
+    // asinh(z) = log(z + sqrt(z^2 + 1))
 
-    let tmp = this['im'];
-    this['im'] = -this['re'];
-    this['re'] = tmp;
-    const res = this['asin']();
+    const a = this['re'];
+    const b = this['im'];
 
-    this['re'] = -this['im'];
-    this['im'] = tmp;
-    tmp = res['re'];
+    if (b === 0) {
 
-    res['re'] = -res['im'];
-    res['im'] = tmp;
-    return res;
+      if (a === 0) {
+        return new Complex(0, 0);
+      }
+
+      // Use |a| to keep asinh(-a) = -asinh(a) and avoid cancellation for large -a
+      const x = Math.abs(a);
+      const r = Math.log(x + Math.sqrt(x * x + 1));
+
+      return new Complex(a < 0 ? -r : r, 0);
+    }
+
+    // z^2 + 1 = (a^2 - b^2 + 1) + i (2ab)
+    const re2 = a * a - b * b + 1;
+    const im2 = 2 * a * b;
+
+    const t = new Complex(re2, im2)['sqrt'](); // sqrt(z^2 + 1)
+
+    return new Complex(a + t['re'], b + t['im'])['log']();
   },
 
   /**
@@ -1040,19 +1020,38 @@ Complex.prototype = {
    */
   'acosh': function () {
 
-    // acosh(c) = log(c + sqrt(c^2 - 1))
+    // acosh(z)= log(z + sqrt(z^2 - 1)) = log(z + sqrt(z - 1) * sqrt(z + 1))
 
-    const res = this['acos']();
-    if (res['im'] <= 0) {
-      const tmp = res['re'];
-      res['re'] = -res['im'];
-      res['im'] = tmp;
-    } else {
-      const tmp = res['im'];
-      res['im'] = -res['re'];
-      res['re'] = tmp;
+    const a = this['re'];
+    const b = this['im'];
+
+    if (b === 0) {
+
+      // z = a is real
+      if (a > 1) {
+        // acosh(a) = log(a + sqrt(a - 1) * sqrt(a + 1)),  a > 1
+        return new Complex(
+          Math.log(a + Math.sqrt(a - 1) * Math.sqrt(a + 1)), 0);
+      }
+
+      if (a < -1) {
+        // acosh(a) = log(-a + sqrt(a^2 - 1)) + i*pi,  a < -1
+        const t = Math.sqrt(a * a - 1);
+        return new Complex(Math.log(-a + t), Math.PI);
+      }
+
+      // -1 <= a <= 1 : purely imaginary
+      // acosh(a) = i * acos(a)
+      return new Complex(0, Math.acos(a));
     }
-    return res;
+
+    const t1 = new Complex(a - 1, b)['sqrt'](); // sqrt(z - 1)
+    const t2 = new Complex(a + 1, b)['sqrt'](); // sqrt(z + 1)
+
+    return new Complex(
+      a + t1['re'] * t2['re'] - t1['im'] * t2['im'],
+      b + t1['re'] * t2['im'] + t1['im'] * t2['re']
+    )['log']();
   },
 
   /**
@@ -1062,31 +1061,75 @@ Complex.prototype = {
    */
   'atanh': function () {
 
-    // atanh(c) = log((1+c) / (1-c)) / 2
+    // atanh(z) = log((1 + z) / (1 - z)) / 2
 
     const a = this['re'];
     const b = this['im'];
 
-    const noIM = a > 1 && b === 0;
+    if (b === 0) {
+
+      if (a === 0) {
+        return new Complex(0, 0);
+      }
+
+      if (a === 1) {
+        // limit x -> 1^- atanh(x) = +Infinity
+        return new Complex(Infinity, 0);
+      }
+
+      if (a === -1) {
+        // limit x -> -1^+ atanh(x) = -Infinity
+        return new Complex(-Infinity, 0);
+      }
+
+      if (-1 < a && a < 1) {
+        // Purely real
+        return new Complex(
+          0.5 * Math.log((1 + a) / (1 - a)),
+          0
+        );
+      }
+
+      if (a > 1) {
+        // Our branch: Im(atanh(a)) = -π/2 for a > 1
+        const t = (a + 1) / (a - 1); // > 0
+        return new Complex(
+          0.5 * Math.log(t),
+          -Math.PI / 2
+        );
+      }
+
+      // a < -1: Im(atanh(a)) = +π/2
+      const t = (1 + a) / (1 - a); // < 0
+      return new Complex(
+        0.5 * Math.log(-t), // log((1 - a)/(1 + a))
+        Math.PI / 2
+      );
+    }
+
+    // Use atanh(z) = 0.5 * Log((1+z)/(1-z)) with principal Log.
     const oneMinus = 1 - a;
     const onePlus = 1 + a;
-    const d = oneMinus * oneMinus + b * b;
+    const d = oneMinus * oneMinus + b * b; // |1 - z|^2
 
-    const x = (d !== 0)
-      ? new Complex(
-        (onePlus * oneMinus - b * b) / d,
-        (b * oneMinus + onePlus * b) / d)
-      : new Complex(
+    if (d === 0) {
+      // (1 - z) == 0 for finite z only at z = 1+0i, already handled above.
+      // If we ever get here, just propagate infinities consistently:
+      return new Complex(
         (a !== -1) ? (a / 0) : 0,
-        (b !== 0) ? (b / 0) : 0);
-
-    const temp = x['re'];
-    x['re'] = logHypot(x['re'], x['im']) / 2;
-    x['im'] = Math.atan2(x['im'], temp) / 2;
-    if (noIM) {
-      x['im'] = -x['im'];
+        (b !== 0) ? (b / 0) : 0
+      );
     }
-    return x;
+
+    // (1 + z) / (1 - z) with a single complex division
+    const xr = (onePlus * oneMinus - b * b) / d;
+    const xi = (b * oneMinus + onePlus * b) / d;
+
+    // 0.5 * log(xr + i xi)
+    return new Complex(
+      logHypot(xr, xi) / 2,
+      Math.atan2(xi, xr) / 2
+    );
   },
 
   /**
@@ -1096,23 +1139,28 @@ Complex.prototype = {
    */
   'acoth': function () {
 
-    // acoth(c) = log((c+1) / (c-1)) / 2
+    // acoth(z) = log((z + 1) / (z - 1)) / 2 = atanh(1 / z)
 
     const a = this['re'];
     const b = this['im'];
 
+    // z = 0 -> acoth(0) = i * π / 2  (log((1+0)/(1-0))/2 = log(-1)/2)
     if (a === 0 && b === 0) {
       return new Complex(0, Math.PI / 2);
     }
 
     const d = a * a + b * b;
-    return (d !== 0)
-      ? new Complex(
-        a / d,
-        -b / d).atanh()
-      : new Complex(
-        (a !== 0) ? a / 0 : 0,
-        (b !== 0) ? -b / 0 : 0).atanh();
+
+    if (d !== 0) {
+      // 1 / z = (a - i b) / (a^2 + b^2)
+      return new Complex(a / d, -b / d)['atanh']();
+    }
+
+    // Fallback for weird infinities/NaNs: mirror other functions' style
+    return new Complex(
+      (a !== 0) ? a / 0 : 0,
+      (b !== 0) ? -b / 0 : 0
+    )['atanh']();
   },
 
   /**
@@ -1122,27 +1170,38 @@ Complex.prototype = {
    */
   'acsch': function () {
 
-    // acsch(c) = log((1+sqrt(1+c^2))/c)
+    // acsch(c) = log((1+sqrt(1+c^2))/c) = = asinh(1 / z)
 
     const a = this['re'];
     const b = this['im'];
 
     if (b === 0) {
 
+      // z = a real
+      if (a === 0) {
+        // acsch(0) -> +/- Infinity, we keep your previous behavior
+        return new Complex(Infinity, 0);
+      }
+
+      // acsch(a) = asinh(1/a) = log(1/a + sqrt(1/a^2 + 1))
+      const inv = 1 / a;
       return new Complex(
-        (a !== 0)
-          ? Math.log(a + Math.sqrt(a * a + 1))
-          : Infinity, 0);
+        Math.log(inv + Math.sqrt(inv * inv + 1)),
+        0
+      );
     }
 
     const d = a * a + b * b;
-    return (d !== 0)
-      ? new Complex(
-        a / d,
-        -b / d).asinh()
-      : new Complex(
-        (a !== 0) ? a / 0 : 0,
-        (b !== 0) ? -b / 0 : 0).asinh();
+
+    if (d !== 0) {
+      // 1/z = (a - i b) / (a^2 + b^2)
+      return new Complex(a / d, -b / d)['asinh']();
+    }
+
+    // Handle 0 + 0i or infinities in the same spirit as your existing code
+    return new Complex(
+      (a !== 0) ? a / 0 : 0,
+      (b !== 0) ? -b / 0 : 0)['asinh']();
   },
 
   /**
@@ -1152,23 +1211,27 @@ Complex.prototype = {
    */
   'asech': function () {
 
-    // asech(c) = log((1+sqrt(1-c^2))/c)
+    // asech(z) = acosh(1 / z)
 
     const a = this['re'];
     const b = this['im'];
 
     if (this['isZero']()) {
+      // asech(0) = acosh(∞) -> ∞
       return Complex['INFINITY'];
     }
 
     const d = a * a + b * b;
-    return (d !== 0)
-      ? new Complex(
-        a / d,
-        -b / d).acosh()
-      : new Complex(
-        (a !== 0) ? a / 0 : 0,
-        (b !== 0) ? -b / 0 : 0).acosh();
+
+    if (d !== 0) {
+      // 1 / z = (a - i b) / (a^2 + b^2)
+      return new Complex(a / d, -b / d)['acosh']();
+    }
+
+    // Fallback for weird infinities/NaNs
+    return new Complex(
+      (a !== 0) ? a / 0 : 0,
+      (b !== 0) ? -b / 0 : 0)['acosh']();
   },
 
   /**

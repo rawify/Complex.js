@@ -1,7 +1,7 @@
 {
     "name": "complex.js",
     "title": "Complex.js",
-    "version": "2.4.2",
+    "version": "2.4.3",
     "homepage": "https://raw.org/article/complex-numbers-in-javascript/",
     "bugs": "https://github.com/rawify/Complex.js/issues",
     "description": "The RAW complex numbers library",
