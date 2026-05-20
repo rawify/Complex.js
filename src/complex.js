@@ -1,8 +1,8 @@
 /**
- * @license Complex.js v2.4.3 11/13/2025
+ * @license Complex.js v2.4.3 5/20/2026
  * https://raw.org/article/complex-numbers-in-javascript/
  *
- * Copyright (c) 2025, Robert Eisele (https://raw.org/)
+ * Copyright (c) 2026, Robert Eisele (https://raw.org/)
  * Licensed under the MIT license.
  **/
 
@@ -137,49 +137,44 @@ function logHypot(a, b) {
   return 0.5 * Math.log(a * a + b * b) + Math.LN2;
 }
 
-const P = { 're': 0, 'im': 0 };
 const parse = function (a, b) {
 
-  const z = P;
-
   if (a === undefined || a === null) {
-    z['re'] =
-      z['im'] = 0;
+    return [0, 0];
   } else if (b !== undefined) {
-    z['re'] = a;
-    z['im'] = b;
+    return [a, b];
   } else
     switch (typeof a) {
 
       case 'object':
 
         if ('im' in a && 're' in a) {
-          z['re'] = a['re'];
-          z['im'] = a['im'];
+          return [a['re'], a['im']];
         } else if ('abs' in a && 'arg' in a) {
           if (!isFinite(a['abs']) && isFinite(a['arg'])) {
-            return Complex['INFINITY'];
+            return [Infinity, Infinity];
           }
-          z['re'] = a['abs'] * Math.cos(a['arg']);
-          z['im'] = a['abs'] * Math.sin(a['arg']);
+          return [
+            a['abs'] * Math.cos(a['arg']),
+            a['abs'] * Math.sin(a['arg'])
+          ];
         } else if ('r' in a && 'phi' in a) {
           if (!isFinite(a['r']) && isFinite(a['phi'])) {
-            return Complex['INFINITY'];
+            return [Infinity, Infinity];
           }
-          z['re'] = a['r'] * Math.cos(a['phi']);
-          z['im'] = a['r'] * Math.sin(a['phi']);
+          return [
+            a['r'] * Math.cos(a['phi']),
+            a['r'] * Math.sin(a['phi'])
+          ];
         } else if (a.length === 2) { // Quick array check
-          z['re'] = a[0];
-          z['im'] = a[1];
+          return [a[0], a[1]];
         } else {
           parser_exit();
         }
-        break;
 
       case 'string':
 
-        z['im'] = /* void */
-        z['re'] = 0;
+        let re = 0, im = 0;
 
         const tokens = a.replace(/_/g, '')
           .match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
@@ -207,10 +202,10 @@ const parse = function (a, b) {
             }
 
             if (tokens[i + 1] !== ' ' && !isNaN(tokens[i + 1])) {
-              z['im'] += parseFloat((minus % 2 ? '-' : '') + tokens[i + 1]);
+              im += parseFloat((minus % 2 ? '-' : '') + tokens[i + 1]);
               i++;
             } else {
-              z['im'] += parseFloat((minus % 2 ? '-' : '') + '1');
+              im += parseFloat((minus % 2 ? '-' : '') + '1');
             }
             plus = minus = 0;
 
@@ -221,10 +216,10 @@ const parse = function (a, b) {
             }
 
             if (tokens[i + 1] === 'i' || tokens[i + 1] === 'I') {
-              z['im'] += parseFloat((minus % 2 ? '-' : '') + c);
+              im += parseFloat((minus % 2 ? '-' : '') + c);
               i++;
             } else {
-              z['re'] += parseFloat((minus % 2 ? '-' : '') + c);
+              re += parseFloat((minus % 2 ? '-' : '') + c);
             }
             plus = minus = 0;
           }
@@ -234,23 +229,14 @@ const parse = function (a, b) {
         if (plus + minus > 0) {
           parser_exit();
         }
-        break;
+        return [re, im];
 
       case 'number':
-        z['im'] = 0;
-        z['re'] = a;
-        break;
+        return [a, 0];
 
       default:
         parser_exit();
     }
-
-  if (isNaN(z['re']) || isNaN(z['im'])) {
-    // If a calculation is NaN, we treat it as NaN and don't throw
-    //parser_exit();
-  }
-
-  return z;
 };
 
 /**
@@ -263,10 +249,10 @@ function Complex(a, b) {
     return new Complex(a, b);
   }
 
-  const z = parse(a, b);
+  const [re, im] = parse(a, b);
 
-  this['re'] = z['re'];
-  this['im'] = z['im'];
+  this['re'] = re;
+  this['im'] = im;
 }
 
 Complex.prototype = {
@@ -295,10 +281,10 @@ Complex.prototype = {
    */
   'add': function (a, b) {
 
-    const z = parse(a, b);
+    const [re, im] = parse(a, b);
 
     const tInfin = this['isInfinite']();
-    const zInfin = !(isFinite(z['re']) && isFinite(z['im']));
+    const zInfin = !(isFinite(re) && isFinite(im));
 
     if (tInfin || zInfin) {
 
@@ -311,8 +297,8 @@ Complex.prototype = {
     }
 
     return new Complex(
-      this['re'] + z['re'],
-      this['im'] + z['im']);
+      this['re'] + re,
+      this['im'] + im);
   },
 
   /**
@@ -322,10 +308,10 @@ Complex.prototype = {
    */
   'sub': function (a, b) {
 
-    const z = parse(a, b);
+    const [re, im] = parse(a, b);
 
     const tInfin = this['isInfinite']();
-    const zInfin = !(isFinite(z['re']) && isFinite(z['im']));
+    const zInfin = !(isFinite(re) && isFinite(im));
 
     if (tInfin || zInfin) {
 
@@ -338,8 +324,8 @@ Complex.prototype = {
     }
 
     return new Complex(
-      this['re'] - z['re'],
-      this['im'] - z['im']);
+      this['re'] - re,
+      this['im'] - im);
   },
 
   /**
@@ -349,12 +335,12 @@ Complex.prototype = {
    */
   'mul': function (a, b) {
 
-    const z = parse(a, b);
+    const [re, im] = parse(a, b);
 
     const tInfin = this['isInfinite']();
-    const zInfin = !(isFinite(z['re']) && isFinite(z['im']));
+    const zInfin = !(isFinite(re) && isFinite(im));
     const tIsZero = this['re'] === 0 && this['im'] === 0;
-    const zIsZero = z['re'] === 0 && z['im'] === 0;
+    const zIsZero = re === 0 && im === 0;
 
     // Infinity * 0 = NaN
     if (tInfin && zIsZero || zInfin && tIsZero) {
@@ -367,13 +353,13 @@ Complex.prototype = {
     }
 
     // Shortcut for real values
-    if (z['im'] === 0 && this['im'] === 0) {
-      return new Complex(this['re'] * z['re'], 0);
+    if (im === 0 && this['im'] === 0) {
+      return new Complex(this['re'] * re, 0);
     }
 
     return new Complex(
-      this['re'] * z['re'] - this['im'] * z['im'],
-      this['re'] * z['im'] + this['im'] * z['re']);
+      this['re'] * re - this['im'] * im,
+      this['re'] * im + this['im'] * re);
   },
 
   /**
@@ -383,12 +369,12 @@ Complex.prototype = {
    */
   'div': function (a, b) {
 
-    const z = parse(a, b);
+    const [re, im] = parse(a, b);
 
     const tInfin = this['isInfinite']();
-    const zInfin = !(isFinite(z['re']) && isFinite(z['im']));
+    const zInfin = !(isFinite(re) && isFinite(im));
     const tIsZero = this['re'] === 0 && this['im'] === 0;
-    const zIsZero = z['re'] === 0 && z['im'] === 0;
+    const zIsZero = re === 0 && im === 0;
 
     // 0 / 0 = NaN and Infinity / Infinity = NaN
     if (tIsZero && zIsZero || tInfin && zInfin) {
@@ -405,15 +391,15 @@ Complex.prototype = {
       return Complex['ZERO'];
     }
 
-    if (0 === z['im']) {
+    if (im === 0) {
       // Divisor is real
-      return new Complex(this['re'] / z['re'], this['im'] / z['re']);
+      return new Complex(this['re'] / re, this['im'] / re);
     }
 
-    if (Math.abs(z['re']) < Math.abs(z['im'])) {
+    if (Math.abs(re) < Math.abs(im)) {
 
-      const x = z['re'] / z['im'];
-      const t = z['re'] * x + z['im'];
+      const x = re / im;
+      const t = re * x + im;
 
       return new Complex(
         (this['re'] * x + this['im']) / t,
@@ -421,8 +407,8 @@ Complex.prototype = {
 
     } else {
 
-      const x = z['im'] / z['re'];
-      const t = z['im'] * x + z['re'];
+      const x = im / re;
+      const t = im * x + re;
 
       return new Complex(
         (this['re'] + this['im'] * x) / t,
@@ -437,33 +423,33 @@ Complex.prototype = {
    */
   'pow': function (a, b) {
 
-    const z = parse(a, b);
+    const [re, im] = parse(a, b);
 
     const tIsZero = this['re'] === 0 && this['im'] === 0;
-    const zIsZero = z['re'] === 0 && z['im'] === 0;
+    const zIsZero = re === 0 && im === 0;
 
     if (zIsZero) {
       return Complex['ONE'];
     }
 
     // If the exponent is real
-    if (z['im'] === 0) {
+    if (im === 0) {
 
       if (this['im'] === 0 && this['re'] > 0) {
 
-        return new Complex(Math.pow(this['re'], z['re']), 0);
+        return new Complex(Math.pow(this['re'], re), 0);
 
       } else if (this['re'] === 0) { // If base is fully imaginary
 
-        switch ((z['re'] % 4 + 4) % 4) {
+        switch ((re % 4 + 4) % 4) {
           case 0:
-            return new Complex(Math.pow(this['im'], z['re']), 0);
+            return new Complex(Math.pow(this['im'], re), 0);
           case 1:
-            return new Complex(0, Math.pow(this['im'], z['re']));
+            return new Complex(0, Math.pow(this['im'], re));
           case 2:
-            return new Complex(-Math.pow(this['im'], z['re']), 0);
+            return new Complex(-Math.pow(this['im'], re), 0);
           case 3:
-            return new Complex(0, -Math.pow(this['im'], z['re']));
+            return new Complex(0, -Math.pow(this['im'], re));
         }
       }
     }
@@ -487,18 +473,18 @@ Complex.prototype = {
      *
      */
 
-    if (tIsZero && z['re'] > 0) { // Same behavior as Wolframalpha, Zero if real part is zero
+    if (tIsZero && re > 0) { // Same behavior as Wolframalpha, Zero if real part is zero
       return Complex['ZERO'];
     }
 
     const arg = Math.atan2(this['im'], this['re']);
     const loh = logHypot(this['re'], this['im']);
 
-    let re = Math.exp(z['re'] * loh - z['im'] * arg);
-    let im = z['im'] * loh + z['re'] * arg;
+    let r = Math.exp(re * loh - im * arg);
+    let theta = im * loh + re * arg;
     return new Complex(
-      re * Math.cos(im),
-      re * Math.sin(im));
+      r * Math.cos(theta),
+      r * Math.sin(theta));
   },
 
   /**
@@ -1335,10 +1321,10 @@ Complex.prototype = {
    */
   'equals': function (a, b) {
 
-    const z = parse(a, b);
+    const [re, im] = parse(a, b);
 
-    return Math.abs(z['re'] - this['re']) <= Complex['EPSILON'] &&
-      Math.abs(z['im'] - this['im']) <= Complex['EPSILON'];
+    return Math.abs(re - this['re']) <= Complex['EPSILON'] &&
+      Math.abs(im - this['im']) <= Complex['EPSILON'];
   },
 
   /**
