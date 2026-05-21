@@ -526,7 +526,7 @@ var functionTests = [{
 }, {
   set: { re: 1, im: 3 },
   fn: "tanh",
-  expect: "0.7680176472869112 - 0.059168539566050726i"
+  expect: "0.7680176472869112 - 0.05916853956605073i"
 }, {
   set: { re: 1, im: 3 },
   fn: "inverse",
@@ -1003,6 +1003,17 @@ describe("Complex Details", function () {
 
   it('should calculate the acosh correctly', function () {
     assert.strictEqual(Complex({ re: 0.451, im: 0 }).acosh().im, 1.1029108863861707);
+  });
+
+  it('should calculate the tanh correctly', function () {
+
+    var a = new Complex(1, 1).tanh();
+    var b = new Complex(100, 100).tanh();
+    var c = new Complex(1000, 1000).tanh();
+
+    assert.strictEqual(a.toString(), "1.0839233273386946 + 0.27175258531951174i");
+    assert.strictEqual(b.toString(), "1");
+    assert.strictEqual(c.toString(), "1");
   });
 
   it('should handle sum', function () {

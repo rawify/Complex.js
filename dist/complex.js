@@ -173,7 +173,7 @@ const parse = function (a, b) {
       case 'string':
 
         z['im'] = /* void */
-          z['re'] = 0;
+        z['re'] = 0;
 
         const tokens = a.replace(/_/g, '')
           .match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
@@ -918,11 +918,10 @@ Complex.prototype = {
 
     const a = 2 * this['re'];
     const b = 2 * this['im'];
-    const d = cosh(a) + Math.cos(b);
 
     return new Complex(
-      sinh(a) / d,
-      Math.sin(b) / d);
+      Math.tanh(a) / (1 + Math.cos(b) / cosh(a)),
+      Math.tan(b) / (1 + cosh(a) / Math.cos(b)));
   },
 
   /**

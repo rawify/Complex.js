@@ -1,8 +1,8 @@
 /**
- * @license Complex.js v2.4.3 11/13/2025
+ * @license Complex.js v2.4.3 5/21/2026
  * https://raw.org/article/complex-numbers-in-javascript/
  *
- * Copyright (c) 2025, Robert Eisele (https://raw.org/)
+ * Copyright (c) 2026, Robert Eisele (https://raw.org/)
  * Licensed under the MIT license.
  **/
 
@@ -924,11 +924,10 @@ Complex.prototype = {
 
     const a = 2 * this['re'];
     const b = 2 * this['im'];
-    const d = cosh(a) + Math.cos(b);
 
     return new Complex(
-      sinh(a) / d,
-      Math.sin(b) / d);
+      Math.tanh(a) / (1 + Math.cos(b) / cosh(a)),
+      Math.tan(b) / (1 + cosh(a) / Math.cos(b)));
   },
 
   /**
