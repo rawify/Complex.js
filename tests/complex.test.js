@@ -614,11 +614,11 @@ var functionTests = [{
 }, {
   set: "3.14-4i",
   fn: "coth",
-  expect: "0.9994481238383576 + 0.0037048958915019857i"
+  expect: "0.9994481238383578 + 0.0037048958915019865i"
 }, {
   set: "8i-31",
   fn: "cot",
-  expect: "1.6636768291213935e-7 - 1.0000001515864902i"
+  expect: "1.6636768291213932e-7 - 1.00000015158649i"
 }, {
   set: Complex(1, 1).sub(0, 1), // Distance
   fn: "abs",
@@ -1086,4 +1086,44 @@ describe("Complex Details", function () {
     assert.strictEqual(t2.toString(), t3.toString());
   });
 
+});
+
+describe("Reciprocal trig near poles", function () {
+
+  // Near their poles the denominators cos(2a) - cosh(2b) (and friends) are a
+  // difference of two values both close to 1, so a naive evaluation loses all
+  // significance and eventually divides by an exactly-zero denominator,
+  // producing NaN. Reference values below come from mpmath at 25 digits.
+
+  function assertClose(actual, expRe, expIm) {
+    var mag = Math.hypot(expRe, expIm) || 1;
+    assert.ok(isFinite(actual["re"]) && isFinite(actual["im"]),
+      "expected finite result but got " + actual.toString());
+    assert.ok(Math.abs(actual["re"] - expRe) <= 1e-12 * mag,
+      "re: got " + actual["re"] + ", expected ~" + expRe);
+    assert.ok(Math.abs(actual["im"] - expIm) <= 1e-12 * mag,
+      "im: got " + actual["im"] + ", expected ~" + expIm);
+  }
+
+  it("cot stays accurate near the pole", function () {
+    assertClose(Complex(0, 1e-8).cot(), 0, -100000000.000000001);
+    assertClose(Complex(0, 1e-10).cot(), 0, -9999999999.99999964);
+    assertClose(Complex(1e-7, 0).cot(), 9999999.99999996712, 0);
+  });
+
+  it("coth stays accurate near the pole", function () {
+    assertClose(Complex(1e-8, 0).coth(), 100000000.000000001, 0);
+    assertClose(Complex(1e-10, 0).coth(), 9999999999.99999964, 0);
+    assertClose(Complex(0, 1e-7).coth(), 0, -9999999.99999996712);
+  });
+
+  it("csc stays accurate near the pole", function () {
+    assertClose(Complex(1e-8, 0).csc(), 99999999.9999999996, 0);
+    assertClose(Complex(1e-10, 0).csc(), 9999999999.99999964, 0);
+  });
+
+  it("csch stays accurate near the pole", function () {
+    assertClose(Complex(1e-8, 0).csch(), 99999999.9999999962, 0);
+    assertClose(Complex(1e-10, 0).csch(), 9999999999.99999964, 0);
+  });
 });
