@@ -680,7 +680,12 @@ Complex.prototype = {
 
     const a = 2 * this['re'];
     const b = 2 * this['im'];
-    const d = Math.cos(a) - cosh(b);
+    // d = cos(a) - cosh(b), rewritten via cos(2x) - 1 = -2sin(x)^2 and
+    // cosh(2x) - 1 = 2sinh(x)^2 to avoid catastrophic cancellation near the
+    // pole (a, b -> 0), where cos(a) and cosh(b) both approach 1.
+    const sa = Math.sin(this['re']);
+    const sb = sinh(this['im']);
+    const d = -2 * (sa * sa + sb * sb);
 
     return new Complex(
       -Math.sin(a) / d,
@@ -716,7 +721,12 @@ Complex.prototype = {
 
     const a = this['re'];
     const b = this['im'];
-    const d = 0.5 * cosh(2 * b) - 0.5 * Math.cos(2 * a);
+    // d = (cosh(2b) - cos(2a)) / 2, rewritten via cosh(2x) - 1 = 2sinh(x)^2
+    // and 1 - cos(2x) = 2sin(x)^2 to avoid catastrophic cancellation near the
+    // pole (a, b -> 0), where cosh(2b) and cos(2a) both approach 1.
+    const sa = Math.sin(a);
+    const sb = sinh(b);
+    const d = sa * sa + sb * sb;
 
     return new Complex(
       Math.sin(a) * cosh(b) / d,
@@ -942,7 +952,12 @@ Complex.prototype = {
 
     const a = 2 * this['re'];
     const b = 2 * this['im'];
-    const d = cosh(a) - Math.cos(b);
+    // d = cosh(a) - cos(b), rewritten via cosh(2x) - 1 = 2sinh(x)^2 and
+    // 1 - cos(2x) = 2sin(x)^2 to avoid catastrophic cancellation near the
+    // pole (a, b -> 0), where cosh(a) and cos(b) both approach 1.
+    const sa = sinh(this['re']);
+    const sb = Math.sin(this['im']);
+    const d = 2 * (sa * sa + sb * sb);
 
     return new Complex(
       sinh(a) / d,
@@ -960,7 +975,12 @@ Complex.prototype = {
 
     const a = this['re'];
     const b = this['im'];
-    const d = Math.cos(2 * b) - cosh(2 * a);
+    // d = cos(2b) - cosh(2a), rewritten via 1 - cos(2x) = 2sin(x)^2 and
+    // cosh(2x) - 1 = 2sinh(x)^2 to avoid catastrophic cancellation near the
+    // pole (a, b -> 0), where cos(2b) and cosh(2a) both approach 1.
+    const sa = sinh(a);
+    const sb = Math.sin(b);
+    const d = -2 * (sb * sb + sa * sa);
 
     return new Complex(
       -2 * sinh(a) * Math.cos(b) / d,
