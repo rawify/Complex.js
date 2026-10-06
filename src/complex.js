@@ -67,8 +67,8 @@ const hypot = function (x, y) {
   // Below 1e-154, the squares lose digits or underflow to zero.
   if (x < 1e8 && x > 1e-154) return Math.sqrt(x * x + y * y);
 
-  // Avoid 0 / 0 below
-  if (x === 0) return 0;
+  // Avoid 0 / 0 and Infinity / Infinity below
+  if (x === 0 || x === Infinity) return x;
 
   // For larger and smaller values, scale to avoid overflow and underflow
   y /= x;
@@ -783,20 +783,29 @@ Complex.prototype = {
    */
   'asin': function () {
 
-    // asin(c) = -i * log(ci + sqrt(1 - c^2))
+    // asin(c) = -i * log(ci + sqrt(1 - c^2)) loses digits: for large |c| the
+    // two terms of the sum can almost cancel, and near the real axis the log
+    // is close to 0. Kahan's formulas avoid this, because the products of
+    // sqrt(1 - c) and sqrt(1 + c) below add terms of the same sign:
+    //
+    //   Re asin(c) = atan(Re c / Re(sqrt(1 - c) * sqrt(1 + c)))
+    //   Im asin(c) = asinh(Im(conj(sqrt(1 - c)) * sqrt(1 + c)))
+    //
+    // W. Kahan, "Branch Cuts for Complex Elementary Functions" (1987)
 
     const a = this['re'];
     const b = this['im'];
 
-    const t1 = new Complex(
-      b * b - a * a + 1,
-      -2 * a * b)['sqrt']();
+    if (b === 0 && Math.abs(a) <= 1) {
+      return new Complex(Math.asin(a), 0);
+    }
 
-    const t2 = new Complex(
-      t1['re'] - b,
-      t1['im'] + a)['log']();
+    const s1 = new Complex(1 - a, -b)['sqrt'](); // sqrt(1 - c)
+    const s2 = new Complex(1 + a, b)['sqrt'](); // sqrt(1 + c)
 
-    return new Complex(t2['im'], -t2['re']);
+    return new Complex(
+      Math.atan2(a, s1['re'] * s2['re'] - s1['im'] * s2['im']),
+      Math.asinh(s1['re'] * s2['im'] - s1['im'] * s2['re']));
   },
 
   /**
@@ -806,20 +815,25 @@ Complex.prototype = {
    */
   'acos': function () {
 
-    // acos(c) = i * log(c - i * sqrt(1 - c^2))
+    // acos(c) = i * log(c - i * sqrt(1 - c^2)) loses digits as asin() does.
+    // Kahan's formulas avoid this:
+    //
+    //   Re acos(c) = 2 atan(Re sqrt(1 - c) / Re sqrt(1 + c))
+    //   Im acos(c) = asinh(Im(conj(sqrt(1 + c)) * sqrt(1 - c)))
 
     const a = this['re'];
     const b = this['im'];
 
-    const t1 = new Complex(
-      b * b - a * a + 1,
-      -2 * a * b)['sqrt']();
+    if (b === 0 && Math.abs(a) <= 1) {
+      return new Complex(Math.acos(a), 0);
+    }
 
-    const t2 = new Complex(
-      t1['re'] - b,
-      t1['im'] + a)['log']();
+    const s1 = new Complex(1 - a, -b)['sqrt'](); // sqrt(1 - c)
+    const s2 = new Complex(1 + a, b)['sqrt'](); // sqrt(1 + c)
 
-    return new Complex(Math.PI / 2 - t2['im'], t2['re']);
+    return new Complex(
+      2 * Math.atan2(s1['re'], s2['re']),
+      Math.asinh(s2['re'] * s1['im'] - s2['im'] * s1['re']));
   },
 
   /**
@@ -834,6 +848,10 @@ Complex.prototype = {
     const a = this['re'];
     const b = this['im'];
 
+    if (b === 0) {
+      return new Complex(Math.atan(a), 0);
+    }
+
     if (a === 0) {
 
       if (b === 1) {
@@ -845,7 +863,11 @@ Complex.prototype = {
       }
     }
 
-    const d = a * a + (1.0 - b) * (1.0 - b); // |i - z|^2
+    // Use atan(conj(z)) = conj(atan(z)), so that the formulas below see
+    // y = |b| >= 0. Then 4y / d >= 0, and log1p() has no cancellation.
+    const y = Math.abs(b);
+    const oneMinus = 1 - y;
+    const d = a * a + oneMinus * oneMinus; // |i - (a + yi)|^2
 
     if (d === Infinity) {
       // d overflows only for |z| > 1.3e154. There, atan(z) = ±π/2 - 1/z to
@@ -857,19 +879,25 @@ Complex.prototype = {
         -w['im']);
     }
 
-    if (d < 1e-308) {
-      // z is within 1e-154 of i, so d has lost digits or is zero. Here
-      // (i + z) / (i - z) = 2i / (i - z) to double precision.
+    if (d < 1e-300) {
+      // z is within 1e-150 of i or -i, so d has lost digits or 4y / d can
+      // overflow. Here (i + z) / (i - z) = 2i / (i - z) to double precision.
+      const im = 0.5 * (Math.LN2 - logHypot(a, oneMinus));
       return new Complex(
-        -0.5 * Math.atan2(-a, 1 - b),
-        0.5 * (Math.LN2 - logHypot(a, 1 - b)));
+        -0.5 * Math.atan2(-a, oneMinus),
+        b < 0 ? -im : im);
     }
 
-    const t1 = new Complex(
-      (1 - b * b - a * a) / d,
-      -2 * a / d).log();
+    // atan(z) = i / 2 * log((i + z) / (i - z)), with the real and imaginary
+    // parts of the log written so that they keep their digits for small z:
+    //
+    //   Re atan(z) = arg((1 - y^2 - a^2) + 2ai) / 2
+    //   Im atan(z) = log(|i + z|^2 / |i - z|^2) / 4 = log1p(4y / d) / 4
+    const im = 0.25 * Math.log1p(4 * y / d);
 
-    return new Complex(-0.5 * t1['im'], 0.5 * t1['re']);
+    return new Complex(
+      0.5 * Math.atan2(2 * a, oneMinus * (1 + y) - a * a),
+      b < 0 ? -im : im);
   },
 
   /**
@@ -1042,31 +1070,19 @@ Complex.prototype = {
    */
   'asinh': function () {
 
-    // asinh(z) = log(z + sqrt(z^2 + 1))
+    // asinh(z) = log(z + sqrt(z^2 + 1)) can cancel for large |z| and loses
+    // digits for small |z|, so use asinh(z) = -i * asin(iz) instead
 
     const a = this['re'];
     const b = this['im'];
 
     if (b === 0) {
-
-      if (a === 0) {
-        return new Complex(0, 0);
-      }
-
-      // Use |a| to keep asinh(-a) = -asinh(a) and avoid cancellation for large -a
-      const x = Math.abs(a);
-      const r = Math.log(x + Math.sqrt(x * x + 1));
-
-      return new Complex(a < 0 ? -r : r, 0);
+      return new Complex(Math.asinh(a), 0);
     }
 
-    // z^2 + 1 = (a^2 - b^2 + 1) + i (2ab)
-    const re2 = a * a - b * b + 1;
-    const im2 = 2 * a * b;
+    const t = new Complex(-b, a)['asin']();
 
-    const t = new Complex(re2, im2)['sqrt'](); // sqrt(z^2 + 1)
-
-    return new Complex(a + t['re'], b + t['im'])['log']();
+    return new Complex(t['im'], -t['re']);
   },
 
   /**
@@ -1085,15 +1101,12 @@ Complex.prototype = {
 
       // z = a is real
       if (a > 1) {
-        // acosh(a) = log(a + sqrt(a - 1) * sqrt(a + 1)),  a > 1
-        return new Complex(
-          Math.log(a + Math.sqrt(a - 1) * Math.sqrt(a + 1)), 0);
+        return new Complex(Math.acosh(a), 0);
       }
 
       if (a < -1) {
-        // acosh(a) = log(-a + sqrt(a^2 - 1)) + i*pi,  a < -1
-        const t = Math.sqrt(a * a - 1);
-        return new Complex(Math.log(-a + t), Math.PI);
+        // acosh(a) = acosh(-a) + i*pi,  a < -1
+        return new Complex(Math.acosh(-a), Math.PI);
       }
 
       // -1 <= a <= 1 : purely imaginary
@@ -1104,10 +1117,19 @@ Complex.prototype = {
     const t1 = new Complex(a - 1, b)['sqrt'](); // sqrt(z - 1)
     const t2 = new Complex(a + 1, b)['sqrt'](); // sqrt(z + 1)
 
+    // The real part, log|z + sqrt(z - 1) * sqrt(z + 1)|, loses digits when
+    // the modulus is close to 1, which is the case near the segment [-1, 1].
+    // So use Kahan's formula for it, which adds terms of the same sign:
+    //
+    //   Re acosh(z) = asinh(Re(conj(sqrt(z - 1)) * sqrt(z + 1)))
+    //
+    // The imaginary part, the argument of z + sqrt(z - 1) * sqrt(z + 1),
+    // keeps its digits.
     return new Complex(
-      a + t1['re'] * t2['re'] - t1['im'] * t2['im'],
-      b + t1['re'] * t2['im'] + t1['im'] * t2['re']
-    )['log']();
+      Math.asinh(t1['re'] * t2['re'] + t1['im'] * t2['im']),
+      Math.atan2(
+        b + t1['re'] * t2['im'] + t1['im'] * t2['re'],
+        a + t1['re'] * t2['re'] - t1['im'] * t2['im']));
   },
 
   /**
@@ -1140,33 +1162,28 @@ Complex.prototype = {
 
       if (-1 < a && a < 1) {
         // Purely real
-        return new Complex(
-          0.5 * Math.log((1 + a) / (1 - a)),
-          0
-        );
+        return new Complex(Math.atanh(a), 0);
       }
+
+      // |a| > 1: Re(atanh(a)) = log((|a| + 1) / (|a| - 1)) / 2 with the sign
+      // of a. log1p() keeps the digits for large |a|, and |a| - 1 is exact
+      // for |a| close to 1.
+      const re = 0.5 * Math.log1p(2 / (Math.abs(a) - 1));
 
       if (a > 1) {
         // Our branch: Im(atanh(a)) = -π/2 for a > 1
-        const t = (a + 1) / (a - 1); // > 0
-        return new Complex(
-          0.5 * Math.log(t),
-          -Math.PI / 2
-        );
+        return new Complex(re, -Math.PI / 2);
       }
 
       // a < -1: Im(atanh(a)) = +π/2
-      const t = (1 + a) / (1 - a); // < 0
-      return new Complex(
-        0.5 * Math.log(-t), // log((1 - a)/(1 + a))
-        Math.PI / 2
-      );
+      return new Complex(-re, Math.PI / 2);
     }
 
-    // Use atanh(z) = 0.5 * Log((1+z)/(1-z)) with principal Log.
-    const oneMinus = 1 - a;
-    const onePlus = 1 + a;
-    const d = oneMinus * oneMinus + b * b; // |1 - z|^2
+    // Use atanh(-z) = -atanh(z), so that the formulas below see x = |a| >= 0.
+    // Then 4x / d >= 0, and log1p() has no cancellation.
+    const x = Math.abs(a);
+    const oneMinus = 1 - x;
+    const d = oneMinus * oneMinus + b * b; // |1 - (x + bi)|^2
 
     if (d === Infinity) {
       // d overflows only for |z| > 1.3e154. There, atanh(z) = 1/z ± iπ/2 to
@@ -1177,23 +1194,27 @@ Complex.prototype = {
         (b > 0 ? Math.PI : -Math.PI) / 2 + w['im']);
     }
 
-    if (d < 1e-308) {
-      // z is within 1e-154 of 1, so d has lost digits or is zero. Here
-      // (1 + z) / (1 - z) = 2 / (1 - z) to double precision.
+    if (d < 1e-300) {
+      // z is within 1e-150 of 1 or -1, so d has lost digits or 4x / d can
+      // overflow. Here (1 + z) / (1 - z) = 2 / (1 - z) to double precision.
+      const re = 0.5 * (Math.LN2 - logHypot(oneMinus, b));
       return new Complex(
-        0.5 * (Math.LN2 - logHypot(oneMinus, b)),
+        a < 0 ? -re : re,
         0.5 * Math.atan2(b, oneMinus));
     }
 
-    // (1 + z) / (1 - z) with a single complex division
-    const xr = (onePlus * oneMinus - b * b) / d;
-    const xi = (b * oneMinus + onePlus * b) / d;
+    // atanh(z) = log((1 + z) / (1 - z)) / 2, with the real and imaginary
+    // parts of the log written so that they keep their digits for small z.
+    // The imaginary part uses 2b, because b(1 - x) + (1 + x)b cancels for
+    // large x and can get the wrong sign.
+    //
+    //   Re atanh(z) = log(|1 + z|^2 / |1 - z|^2) / 4 = log1p(4x / d) / 4
+    //   Im atanh(z) = arg((1 - x^2 - b^2) + 2bi) / 2
+    const re = 0.25 * Math.log1p(4 * x / d);
 
-    // 0.5 * log(xr + i xi)
     return new Complex(
-      logHypot(xr, xi) / 2,
-      Math.atan2(xi, xr) / 2
-    );
+      a < 0 ? -re : re,
+      0.5 * Math.atan2(2 * b, oneMinus * (1 + x) - b * b));
   },
 
   /**
@@ -1236,12 +1257,8 @@ Complex.prototype = {
         return new Complex(Infinity, 0);
       }
 
-      // acsch(a) = asinh(1/a) = log(1/a + sqrt(1/a^2 + 1))
-      const inv = 1 / a;
-      return new Complex(
-        Math.log(inv + Math.sqrt(inv * inv + 1)),
-        0
-      );
+      // acsch(a) = asinh(1/a)
+      return new Complex(Math.asinh(1 / a), 0);
     }
 
     return reciprocal(a, b)['asinh']();

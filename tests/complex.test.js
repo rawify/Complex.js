@@ -506,7 +506,7 @@ var functionTests = [{
 }, {
   set: "i",
   fn: "acos",
-  expect: "1.5707963267948966 - 0.8813735870195428i"
+  expect: "1.5707963267948966 - 0.881373587019543i"
 }, {
   set: { re: 1, im: 2 },
   fn: "cos",
@@ -938,12 +938,12 @@ describe("Complex Details", function () {
     assert.strictEqual(one.sin().toString(), "1.2984575814159773 + 0.6349639147847361i");
     assert.strictEqual(one.cos().toString(), "0.8337300251311491 - 0.9888977057628651i");
     assert.strictEqual(one.tan().toString(), "0.27175258531951174 + 1.0839233273386948i");
-    assert.strictEqual(one.asin().toString(), "0.6662394324925153 + 1.0612750619050355i");
-    assert.strictEqual(one.acos().toString(), "0.9045568943023813 - 1.0612750619050355i");
+    assert.strictEqual(one.asin().toString(), "0.6662394324925153 + 1.0612750619050357i");
+    assert.strictEqual(one.acos().toString(), "0.9045568943023813 - 1.0612750619050357i");
     assert.strictEqual(one.atan().toString(), "1.0172219678978514 + 0.40235947810852507i");
 
     var t = Complex(3, 4);
-    assert.strictEqual(t.asinh().toString(), "2.29991404087927 + 0.9176168533514786i");
+    assert.strictEqual(t.asinh().toString(), "2.2999140408792695 + 0.9176168533514787i");
 
     assert.strictEqual(t.abs(), 5);
 
@@ -1119,6 +1119,90 @@ describe("Complex Details", function () {
 
       assert(err <= tolerance, "test " + i + ": got " + actual.re + " + " + actual.im + "i, relative error " + err);
     }
+  });
+
+  it('should be accurate for inverse trigonometric functions', function () {
+
+    // Each entry is [actual, expected]. The expected values are from mpmath
+    // (2000 bits), rounded to double. Each part must have a relative error of
+    // at most 4 * Number.EPSILON, so a part that is 0 must be exactly 0. The
+    // signs of the zero imaginary or real parts on a branch cut select the
+    // same side as before: atan() uses the sign of a zero real part, and the
+    // other functions ignore the sign of zero.
+    var tests = [
+      // Large |z|: the old formulas cancelled and returned Infinity
+      [Complex(2.3e9, 0.0004).asin(), Complex(1.5707963267947227, 22.24932214044146)],
+      [Complex(2.3e9, 0.0004).acos(), Complex(1.7391304347826087e-13, -22.24932214044146)],
+      [Complex(-2.3e9, 0.0004).asinh(), Complex(-22.24932214044146, 1.7391304347826087e-13)],
+      [Complex(-1e8, 0).asin(), Complex(-1.5707963267948966, 19.11382792451231)],
+      [Complex(1e-9, -1e-9).asec(), Complex(0.7853981633974483, -21.069839427226384)],
+      [Complex(4e-10, -1e-12).acsc(), Complex(1.5682963320032104, 22.332700624390277)],
+      [Complex(-4e-10, -1e-12).acsch(), Complex(-22.332700624390277, 0.0024999947916861977)],
+      [Complex(1e200, 0).asinh(), Complex(461.2101657793691, 0)],
+      [Complex(-1e200, 0).acosh(), Complex(461.2101657793691, 3.141592653589793)],
+      [Complex(1e-200, 0).acsch(), Complex(461.2101657793691, 0)],
+      [Complex(-1e-10, 0).acsch(), Complex(-23.7189981105004, 0)],
+      // Small arguments: the old formulas lost digits or returned 0
+      [Complex(1e-20, 0).asinh(), Complex(1e-20, 0)],
+      [Complex(1e-20, 1e-20).asinh(), Complex(1e-20, 1e-20)],
+      [Complex(1e-20, 1e-20).asin(), Complex(1e-20, 1e-20)],
+      [Complex(0.5, 1e-10).asin(), Complex(0.5235987755982989, 1.1547005383792516e-10)],
+      [Complex(0.5, 1e-10).acos(), Complex(1.0471975511965979, -1.1547005383792516e-10)],
+      [Complex(0, 1e-20).atan(), Complex(0, 1e-20)],
+      [Complex(1e-20, 1e-20).atan(), Complex(1e-20, 1e-20)],
+      [Complex(4.65e-12, 0).atanh(), Complex(4.65e-12, 0)],
+      [Complex(1e-20, 1e-20).atanh(), Complex(1e-20, 1e-20)],
+      [Complex(1e10, 0).atanh(), Complex(1e-10, -1.5707963267948966)],
+      [Complex(1, 1e-10).acosh(), Complex(1.0000000000083334e-05, 9.999999999916666e-06)],
+      // atanh(z) for large Re(z): the old formula could get the wrong sign
+      [Complex(1e17, -1).atanh(), Complex(1e-17, -1.5707963267948966)],
+      [Complex(-1e17, 1).atanh(), Complex(-1e-17, 1.5707963267948966)],
+      // Branch cuts: values on the cut and next to it, on both sides
+      [Complex(2, 0).asin(), Complex(1.5707963267948966, -1.3169578969248168)],
+      [Complex(2, 1e-300).asin(), Complex(1.5707963267948966, 1.3169578969248168)],
+      [Complex(2, -1e-300).asin(), Complex(1.5707963267948966, -1.3169578969248168)],
+      [Complex(-2, 0).asin(), Complex(-1.5707963267948966, 1.3169578969248168)],
+      [Complex(-2, -1e-300).asin(), Complex(-1.5707963267948966, -1.3169578969248168)],
+      [Complex(2, 0).acos(), Complex(0, 1.3169578969248168)],
+      [Complex(2, 1e-300).acos(), Complex(5.773502691896257e-301, -1.3169578969248168)],
+      [Complex(-2, 0).acos(), Complex(3.141592653589793, -1.3169578969248168)],
+      [Complex(-2, -1e-300).acos(), Complex(3.141592653589793, 1.3169578969248168)],
+      [Complex(0, 2).asinh(), Complex(1.3169578969248168, 1.5707963267948966)],
+      [Complex(-1e-300, 2).asinh(), Complex(-1.3169578969248168, 1.5707963267948966)],
+      [Complex(0, -2).asinh(), Complex(-1.3169578969248168, -1.5707963267948966)],
+      [Complex(1e-300, -2).asinh(), Complex(1.3169578969248168, -1.5707963267948966)],
+      [Complex(-2, 0).acosh(), Complex(1.3169578969248168, 3.141592653589793)],
+      [Complex(-2, -1e-300).acosh(), Complex(1.3169578969248168, -3.141592653589793)],
+      [Complex(0.5, 0).acosh(), Complex(0, 1.0471975511965979)],
+      [Complex(0.5, -1e-300).acosh(), Complex(1.1547005383792515e-300, -1.0471975511965979)],
+      [Complex(0, 2).atan(), Complex(1.5707963267948966, 0.5493061443340549)],
+      [Complex(-0, 2).atan(), Complex(-1.5707963267948966, 0.5493061443340549)],
+      [Complex(0, -2).atan(), Complex(1.5707963267948966, -0.5493061443340549)],
+      [Complex(-0, -2).atan(), Complex(-1.5707963267948966, -0.5493061443340549)],
+      [Complex(1e-300, -2).atan(), Complex(1.5707963267948966, -0.5493061443340549)],
+      [Complex(2, 0).atanh(), Complex(0.5493061443340549, -1.5707963267948966)],
+      [Complex(2, 1e-300).atanh(), Complex(0.5493061443340549, 1.5707963267948966)],
+      [Complex(-2, 0).atanh(), Complex(-0.5493061443340549, 1.5707963267948966)],
+      [Complex(-2, -1e-300).atanh(), Complex(-0.5493061443340549, -1.5707963267948966)]
+    ];
+
+    // Relative error of each part, computed with plain numbers so that it
+    // does not depend on the functions under test
+    var close = function (x, y) {
+      return x === y || Math.abs(x - y) <= 4 * Number.EPSILON * Math.abs(y);
+    };
+
+    for (var i = 0; i < tests.length; i++) {
+
+      var actual = Complex(tests[i][0]);
+      var expected = Complex(tests[i][1]);
+
+      assert(close(actual.re, expected.re) && close(actual.im, expected.im),
+        "test " + i + ": got " + actual.re + " + " + actual.im + "i, expected " + expected.re + " + " + expected.im + "i");
+    }
+
+    // |Infinity + Infinity i| was Infinity / Infinity = NaN
+    assert.strictEqual(Complex.INFINITY.abs(), Infinity);
   });
 
   it('should follow exp rules', function () {
