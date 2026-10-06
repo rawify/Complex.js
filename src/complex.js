@@ -63,10 +63,14 @@ const hypot = function (x, y) {
   // Ensure `x` is the larger value
   if (x < y) [x, y] = [y, x];
 
-  // If both are below the threshold, use straightforward Pythagoras
-  if (x < 1e8) return Math.sqrt(x * x + y * y);
+  // If the larger value is in a safe range, use straightforward Pythagoras.
+  // Below 1e-154, the squares lose digits or underflow to zero.
+  if (x < 1e8 && x > 1e-154) return Math.sqrt(x * x + y * y);
 
-  // For larger values, scale to avoid overflow
+  // Avoid 0 / 0 below
+  if (x === 0) return 0;
+
+  // For larger and smaller values, scale to avoid overflow and underflow
   y /= x;
   return x * Math.sqrt(1 + y * y);
 };
@@ -76,7 +80,7 @@ const parser_exit = function () {
 };
 
 /**
- * Calculates log(sqrt(a^2+b^2)) in a way to avoid overflows
+ * Calculates log(sqrt(a^2+b^2)) in a way to avoid overflows and underflows
  *
  * @param {number} a
  * @param {number} b
@@ -93,6 +97,20 @@ function logHypot(a, b) {
 
   if (b === 0) {
     return Math.log(_a);
+  }
+
+  if (_a < 1e-154 && _b < 1e-154) {
+    // The squares would underflow, so scale up by 2^600 (exact) first
+    a *= 4.149515568880993e180;
+    b *= 4.149515568880993e180;
+    return 0.5 * Math.log(a * a + b * b) - 600 * Math.LN2;
+  }
+
+  if (_a > 1e154 || _b > 1e154) {
+    // The squares would overflow, so scale down by 2^-600 (exact) first
+    a *= 2.409919865102884e-181;
+    b *= 2.409919865102884e-181;
+    return 0.5 * Math.log(a * a + b * b) + 600 * Math.LN2;
   }
 
   if (_a < 3000 && _b < 3000) {
@@ -135,6 +153,40 @@ function logHypot(a, b) {
   b = b * 0.5;
 
   return 0.5 * Math.log(a * a + b * b) + Math.LN2;
+}
+
+/**
+ * Calculates 1 / (a + bi) in a way to avoid overflows and underflows
+ *
+ * @param {number} a
+ * @param {number} b
+ * @returns {Complex}
+ */
+function reciprocal(a, b) {
+
+  const d = a * a + b * b;
+
+  // If a^2 + b^2 has full precision, use (a - bi) / (a^2 + b^2)
+  if (1e-308 < d && d < Infinity) {
+    return new Complex(a / d, -b / d);
+  }
+
+  // Otherwise a^2 + b^2 has overflowed, underflowed or lost digits, so use
+  // Smith's method, as div() does
+  if (Math.abs(a) < Math.abs(b)) {
+
+    const x = a / b;
+    const t = a * x + b;
+
+    return new Complex(x / t, -1 / t);
+
+  } else {
+
+    const x = b / a;
+    const t = b * x + a;
+
+    return new Complex(1 / t, -x / t);
+  }
 }
 
 const P = { 're': 0, 'im': 0 };
@@ -522,7 +574,8 @@ Complex.prototype = {
 
     const r = hypot(a, b);
 
-    let re = Math.sqrt(0.5 * (r + Math.abs(a))); // sqrt(2x) / 2 = sqrt(x / 2)
+    // Halve r and |a| before the addition, because r + |a| can overflow
+    let re = Math.sqrt(0.5 * r + 0.5 * Math.abs(a)); // sqrt(2x) / 2 = sqrt(x / 2)
     let im = Math.abs(b) / (2 * re);
 
     if (a >= 0) {
@@ -792,7 +845,25 @@ Complex.prototype = {
       }
     }
 
-    const d = a * a + (1.0 - b) * (1.0 - b);
+    const d = a * a + (1.0 - b) * (1.0 - b); // |i - z|^2
+
+    if (d === Infinity) {
+      // d overflows only for |z| > 1.3e154. There, atan(z) = ±π/2 - 1/z to
+      // double precision. The sign is the sign of a; a = -0 counts as
+      // negative, as in the formula below.
+      const w = reciprocal(a, b);
+      return new Complex(
+        (a < 0 || 1 / a < 0 ? -Math.PI : Math.PI) / 2 - w['re'],
+        -w['im']);
+    }
+
+    if (d < 1e-308) {
+      // z is within 1e-154 of i, so d has lost digits or is zero. Here
+      // (i + z) / (i - z) = 2i / (i - z) to double precision.
+      return new Complex(
+        -0.5 * Math.atan2(-a, 1 - b),
+        0.5 * (Math.LN2 - logHypot(a, 1 - b)));
+    }
 
     const t1 = new Complex(
       (1 - b * b - a * a) / d,
@@ -817,14 +888,7 @@ Complex.prototype = {
       return new Complex(Math.atan2(1, a), 0);
     }
 
-    const d = a * a + b * b;
-    return (d !== 0)
-      ? new Complex(
-        a / d,
-        -b / d).atan()
-      : new Complex(
-        (a !== 0) ? a / 0 : 0,
-        (b !== 0) ? -b / 0 : 0).atan();
+    return reciprocal(a, b).atan();
   },
 
   /**
@@ -843,14 +907,7 @@ Complex.prototype = {
       return new Complex(0, Infinity);
     }
 
-    const d = a * a + b * b;
-    return (d !== 0)
-      ? new Complex(
-        a / d,
-        -b / d).acos()
-      : new Complex(
-        (a !== 0) ? a / 0 : 0,
-        (b !== 0) ? -b / 0 : 0).acos();
+    return reciprocal(a, b).acos();
   },
 
   /**
@@ -869,14 +926,7 @@ Complex.prototype = {
       return new Complex(Math.PI / 2, Infinity);
     }
 
-    const d = a * a + b * b;
-    return (d !== 0)
-      ? new Complex(
-        a / d,
-        -b / d).asin()
-      : new Complex(
-        (a !== 0) ? a / 0 : 0,
-        (b !== 0) ? -b / 0 : 0).asin();
+    return reciprocal(a, b).asin();
   },
 
   /**
@@ -1118,13 +1168,21 @@ Complex.prototype = {
     const onePlus = 1 + a;
     const d = oneMinus * oneMinus + b * b; // |1 - z|^2
 
-    if (d === 0) {
-      // (1 - z) == 0 for finite z only at z = 1+0i, already handled above.
-      // If we ever get here, just propagate infinities consistently:
+    if (d === Infinity) {
+      // d overflows only for |z| > 1.3e154. There, atanh(z) = 1/z ± iπ/2 to
+      // double precision, with the sign of b (b is not zero here).
+      const w = reciprocal(a, b);
       return new Complex(
-        (a !== -1) ? (a / 0) : 0,
-        (b !== 0) ? (b / 0) : 0
-      );
+        w['re'],
+        (b > 0 ? Math.PI : -Math.PI) / 2 + w['im']);
+    }
+
+    if (d < 1e-308) {
+      // z is within 1e-154 of 1, so d has lost digits or is zero. Here
+      // (1 + z) / (1 - z) = 2 / (1 - z) to double precision.
+      return new Complex(
+        0.5 * (Math.LN2 - logHypot(oneMinus, b)),
+        0.5 * Math.atan2(b, oneMinus));
     }
 
     // (1 + z) / (1 - z) with a single complex division
@@ -1155,18 +1213,7 @@ Complex.prototype = {
       return new Complex(0, Math.PI / 2);
     }
 
-    const d = a * a + b * b;
-
-    if (d !== 0) {
-      // 1 / z = (a - i b) / (a^2 + b^2)
-      return new Complex(a / d, -b / d)['atanh']();
-    }
-
-    // Fallback for weird infinities/NaNs: mirror other functions' style
-    return new Complex(
-      (a !== 0) ? a / 0 : 0,
-      (b !== 0) ? -b / 0 : 0
-    )['atanh']();
+    return reciprocal(a, b)['atanh']();
   },
 
   /**
@@ -1197,17 +1244,7 @@ Complex.prototype = {
       );
     }
 
-    const d = a * a + b * b;
-
-    if (d !== 0) {
-      // 1/z = (a - i b) / (a^2 + b^2)
-      return new Complex(a / d, -b / d)['asinh']();
-    }
-
-    // Handle 0 + 0i or infinities in the same spirit as your existing code
-    return new Complex(
-      (a !== 0) ? a / 0 : 0,
-      (b !== 0) ? -b / 0 : 0)['asinh']();
+    return reciprocal(a, b)['asinh']();
   },
 
   /**
@@ -1227,17 +1264,7 @@ Complex.prototype = {
       return Complex['INFINITY'];
     }
 
-    const d = a * a + b * b;
-
-    if (d !== 0) {
-      // 1 / z = (a - i b) / (a^2 + b^2)
-      return new Complex(a / d, -b / d)['acosh']();
-    }
-
-    // Fallback for weird infinities/NaNs
-    return new Complex(
-      (a !== 0) ? a / 0 : 0,
-      (b !== 0) ? -b / 0 : 0)['acosh']();
+    return reciprocal(a, b)['acosh']();
   },
 
   /**
@@ -1256,12 +1283,7 @@ Complex.prototype = {
       return Complex['ZERO'];
     }
 
-    const a = this['re'];
-    const b = this['im'];
-
-    const d = a * a + b * b;
-
-    return new Complex(a / d, -b / d);
+    return reciprocal(this['re'], this['im']);
   },
 
   /**

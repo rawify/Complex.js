@@ -1073,6 +1073,54 @@ describe("Complex Details", function () {
     assert.strictEqual(n.toString(), '2 + ' + 4 * Math.PI + "i");
   });
 
+  it('should handle extreme magnitudes', function () {
+
+    // Each entry is [actual, expected, tolerance]. The expected values are from
+    // mpmath (800 digits), rounded to double. Squaring the parts of these
+    // numbers overflows or underflows, so the formulas must scale. pow() gets a
+    // wider tolerance, because it multiplies the rounding error of log(|z|)
+    // (about 460 here) by the exponent.
+    var tests = [
+      [Complex(3e-200, 4e-200).abs(), 5e-200],
+      [Complex(1e-160, 0).abs(), 1e-160],
+      [Complex(1e-160, 1e-161).abs(), 1.004987562112089e-160],
+      [Complex(1e308, 1e308).abs(), 1.4142135623730951e+308],
+      [Complex(3e-200, 4e-200).sign(), Complex(0.6, 0.8)],
+      [Complex(3e-200, 4e-200).sqrt(), Complex(2e-100, 1e-100)],
+      [Complex(1e308, 1e308).sqrt(), Complex(1.09868411346781e+154, 4.5508986056222734e+153)],
+      [Complex(1e-200, 1e-200).log(), Complex(-460.17044500852916, 0.7853981633974483)],
+      [Complex(1e200, 1e200).log(), Complex(460.8635921890891, 0.7853981633974483)],
+      [Complex(1e308, 1e308).log(), Complex(709.542782232446, 0.7853981633974483)],
+      [Complex(5e-324, 5e-324).log(), Complex(-744.0934983311013, 0.7853981633974483)],
+      [Complex(1e-200, 1e-200).pow(0.5), Complex(1.09868411346781e-100, 4.550898605622273e-101), 1e-13],
+      [Complex(1e200, 1e200).pow(0.5), Complex(1.09868411346781e+100, 4.550898605622274e+99), 1e-13],
+      [Complex(1e-200, 1e-200).inverse(), Complex(5e+199, -5e+199)],
+      [Complex(1e200, 1e200).inverse(), Complex(5e-201, -5e-201)],
+      [Complex(1e200, 1e200).atan(), Complex(1.5707963267948966, 5e-201)],
+      [Complex(1e-200, 1).atan(), Complex(0.7853981633974483, 230.60508288968455)],
+      [Complex(1e200, 1e200).atanh(), Complex(5e-201, 1.5707963267948966)],
+      [Complex(1, 1e-200).atanh(), Complex(230.60508288968455, 0.7853981633974483)],
+      [Complex(1e-200, 1e-200).acot(), Complex(1.5707963267948966, -1e-200)],
+      [Complex(1e-200, 1e-200).acoth(), Complex(1e-200, -1.5707963267948966)],
+      [Complex(1e-200, 1e-200).asech(), Complex(460.8635921890891, -0.7853981633974483)]
+    ];
+
+    for (var i = 0; i < tests.length; i++) {
+
+      var actual = Complex(tests[i][0]);
+      var expected = Complex(tests[i][1]);
+
+      // Relative error, computed with plain numbers so that it does not
+      // depend on the functions under test
+      var err = Math.max(Math.abs(actual.re - expected.re), Math.abs(actual.im - expected.im)) /
+        Math.max(Math.abs(expected.re), Math.abs(expected.im));
+
+      var tolerance = tests[i][2] || 4 * Number.EPSILON;
+
+      assert(err <= tolerance, "test " + i + ": got " + actual.re + " + " + actual.im + "i, relative error " + err);
+    }
+  });
+
   it('should follow exp rules', function () {
 
     var a = Math.random() * 10;
