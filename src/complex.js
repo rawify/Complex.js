@@ -453,6 +453,10 @@ Complex.prototype = {
 
         return new Complex(Math.pow(this['re'], z['re']), 0);
 
+      } else if (this['im'] === 0 && this['re'] < 0 && isFinite(this['re']) && z['re'] % 1 === 0) {
+
+        return new Complex(Math.pow(this['re'], z['re']), 0);
+
       } else if (this['re'] === 0) { // If base is fully imaginary
 
         switch ((z['re'] % 4 + 4) % 4) {
