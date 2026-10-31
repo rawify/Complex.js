@@ -902,6 +902,43 @@ describe("Complex constructor", function () {
   }
 });
 
+describe("Negative real integer powers", function () {
+
+  [
+    [-2, 2, 4],
+    [-2, 3, -8],
+    [-2, -2, 0.25],
+    [-2, -3, -0.125],
+    [-0.5, 2, 0.25],
+    [-0.5, 3, -0.125],
+    [-1, 9007199254740991, -1],
+    [-1, 1e100, 1],
+    [-2, 1024, Infinity],
+    [-2, -1075, -0]
+  ].forEach(function (test) {
+    it("keeps (" + test[0] + ")^" + test[1] + " exactly real", function () {
+      var result = new Complex(test[0]).pow(test[1]);
+
+      assert.strictEqual(result.re, test[2]);
+      assert.strictEqual(result.im, 0);
+    });
+  });
+
+  it("preserves fractional and complex exponent paths", function () {
+    assert.strictEqual(new Complex(-4).pow(0.5).toString(), "2i");
+    assert.strictEqual(new Complex(-4).pow(-0.5).toString(), "-0.5i");
+    assert.notStrictEqual(new Complex(-2).pow(2.0000000000000004).im, 0);
+    assert.notStrictEqual(new Complex(-2).pow(2, 1).im, 0);
+  });
+
+  it("preserves zero and purely imaginary base shortcuts", function () {
+    assert.strictEqual(new Complex(-0, 0).pow(2).toString(), "0");
+    assert.strictEqual(new Complex(0).pow(0).toString(), "1");
+    var result = new Complex(0, -2).pow(2);
+    assert.deepStrictEqual([result.re, result.im], [-4, 0]);
+  });
+});
+
 describe("Complex Details", function () {
 
   it("should work with different params", function () {
